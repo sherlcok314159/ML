@@ -22,3 +22,24 @@ print(data)
 ### Min-Max
 
 ![](https://github.com/sherlcok314159/ML/blob/main/Images/eeaead2149745b81f52ea0ba53f75f5.png)
+
+```python
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+from scipy import stats
+import warnings
+
+warnings.filterwarnings("ignore")
+
+data = np.array([[23, 140, 11, 340, 12], [12, 222, 353, 132, 23]], dtype=float)
+
+max_ = np.max(data, axis=1, keepdims=True)
+min_ = np.min(data, axis=1, keepdims=True)
+data = (data - min_) / (max_ - min_)
+sns.distplot(data, fit=stats.norm)
+plt.xlabel("Changed data")
+plt.show()
+```
+
