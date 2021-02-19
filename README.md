@@ -8,7 +8,7 @@
 ****
 ## <div id='courses'>线上课程</div>
 
-- ### [李宏毅](https://www.youtube.com/watch?v=CXgbekl66jc&list=PLJV_el3uVTsPy9oCRY30oBPNLCo89yu49&index=1) 
+- ### [李宏毅](https://www.youtube.com/watch?v=CXgbekl66jc&list=PLJV_el3uVTsPy9oCRY30oBPNLCo89yu49&index=1) （入门极荐）
 
 ****
 ## <div id='basic'>基础知识</div>
