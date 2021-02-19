@@ -21,7 +21,7 @@ print(data)
 
 ### Min-Max
 
-![](https://github.com/sherlcok314159/ML/blob/main/Images/eeaead2149745b81f52ea0ba53f75f5.png)
+![](https://github.com/sherlcok314159/ML/blob/main/Images/min_max.png)
 
 ```python
 import pandas as pd
