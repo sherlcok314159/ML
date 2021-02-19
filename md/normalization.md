@@ -21,4 +21,4 @@ print(data)
 
 ### Min-Max
 
-![](http://latex.codecogs.com/gif.latex?x' = (x - min) / (max - min))
+![](http://latex.codecogs.com/gif.latex?x'=(x-min)/(max-min))
