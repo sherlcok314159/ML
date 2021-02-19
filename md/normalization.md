@@ -39,6 +39,7 @@ max_ = np.max(data, axis=1, keepdims=True)
 min_ = np.min(data, axis=1, keepdims=True)
 data = (data - min_) / (max_ - min_)
 sns.distplot(data, fit=stats.norm)
+# plt.xlabel("Unchanged data")
 plt.xlabel("Changed data")
 plt.show()
 ```
