@@ -13,7 +13,7 @@
 ****
 ## <div id='basic'>基础知识</div>
 ****
-***Regression***
+### Regression
 
 回归是机器学习中常见的任务之一，**适用于连续值的预测**，输出为一个标量，即为预测出的值
 - [Linear Regression](md/linear_regression.md)
