@@ -56,3 +56,26 @@ plt.show()
 
 ![](https://github.com/sherlcok314159/ML/blob/main/Images/mean_sigmoid.png)
 
+```python
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+from scipy import stats
+import warnings
+
+warnings.filterwarnings("ignore")
+
+data = np.array([[23, 140, 11, 340, 12], [12, 222, 353, 132, 23]], dtype=float)
+mean_ = np.mean(data, axis=1, keepdims=True)
+std_ = np.std(data, axis=1, keepdims=True)
+data = (data - mean_) / std_
+print(data)
+[[-0.64718872  0.27399231 -0.74166883  1.84866073 -0.73379549]
+ [-1.06590348  0.57515027  1.59885522 -0.12815848 -0.97994352]]
+```
+处理后的数据，如果大于平均值就是正的，如果小于平均值则为负的
+
+![](https://github.com/sherlcok314159/ML/blob/main/Images/min_max_unchanged.png)
+
+![](https://github.com/sherlcok314159/ML/blob/main/Images/mean_sigmoid_changed.png)
