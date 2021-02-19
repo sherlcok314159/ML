@@ -21,4 +21,4 @@ print(data)
 
 ### Min-Max
 
-![](http://latex.codecogs.com/gif.latex?x'=(x-min)/(max-min))
+![](https://github.com/sherlcok314159/ML/blob/main/Images/eeaead2149745b81f52ea0ba53f75f5.png)
