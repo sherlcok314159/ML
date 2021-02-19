@@ -44,3 +44,15 @@ plt.xlabel("Changed data")
 plt.show()
 ```
 
+这样处理之后会使整个数据分布在[0,1]，最大值会变为1，最小值会变为0，越大就会越接近1，越小就越接近0
+
+整个数据不会因此变得符合正态分布
+
+![](https://github.com/sherlcok314159/ML/blob/main/Images/min_max_unchanged.png)
+
+![](https://github.com/sherlcok314159/ML/blob/main/Images/min_max_changed.png)
+
+### Z-score
+
+![](https://github.com/sherlcok314159/ML/blob/main/Images/mean_sigmoid.png)
+
