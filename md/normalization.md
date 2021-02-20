@@ -1,6 +1,6 @@
 ## 数据归一化
 
-常见的数据归一化：**constant factor normalization,min-max,z-score**
+常见的数据归一化：**Constant Factor Normalization,Min-Max,Z-score,Softmax**
 
 
 ### Constant Factor Normalization
@@ -79,3 +79,28 @@ print(data)
 ![](https://github.com/sherlcok314159/ML/blob/main/Images/min_max_unchanged.png)
 
 ![](https://github.com/sherlcok314159/ML/blob/main/Images/mean_sigmoid_changed.png)
+
+
+### Softmax
+
+```python
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+from scipy import stats
+import warnings
+from math import exp
+
+warnings.filterwarnings("ignore")
+
+
+data = np.array([[23, 140, 11, 340, 12], [12, 222, 353, 132, 23]], dtype=float)
+d = data.shape[0]
+for i in range(d):
+    data[i] = list(map(exp, data[i]))
+    data[i] = data[i] / (sum(data[i]))
+
+print(data)
+```
+
