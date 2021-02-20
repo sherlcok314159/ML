@@ -83,6 +83,7 @@ print(data)
 
 ### Softmax
 
+![](https://github.com/sherlcok314159/ML/blob/main/Images/softmax.png)
 ```python
 import pandas as pd
 import numpy as np
@@ -100,7 +101,12 @@ d = data.shape[0]
 for i in range(d):
     data[i] = list(map(exp, data[i]))
     data[i] = data[i] / (sum(data[i]))
-
 print(data)
+
+[[2.13132283e-138 1.38389653e-087 1.30953001e-143 1.00000000e+000
+  3.55967162e-143]
+ [8.04603043e-149 1.28062764e-057 1.00000000e+000 1.04934790e-096
+  4.81749166e-144]]
 ```
 
+在深度学习最后输出时或者在Logistic Regression时候都会经过**softmax**，这样处理的目的是最后输出为一个**机率**，所有输出相加和为1，输出的值全部介于[0,1]之间
