@@ -1,5 +1,7 @@
 ## 数据归一化
 
+有时候data的数据分布十分不均匀，会导致训练得不到想要的结果。这也是需要对数据进行归一化的原因
+
 常见的数据归一化：**Constant Factor Normalization,Min-Max,Z-score,Softmax**
 
 
