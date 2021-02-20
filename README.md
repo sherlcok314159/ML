@@ -11,8 +11,18 @@
 - [李宏毅](https://www.youtube.com/watch?v=CXgbekl66jc&list=PLJV_el3uVTsPy9oCRY30oBPNLCo89yu49&index=1)（入门极荐，简单易懂，且为中文授课）
 
 ****
-### <div id='basic'>基础知识</div>
+### <div id='basic'>Process</div>
 <!-- **** -->
-* [Regression](md/linear_regression.md)
-* [Normalization](md/normalization.md)
+Data Process
+* [Normalization](data_process/normalization.md)
+
+Choose A Function Set
+* [Regression](models/linear_regression.md)
+
+Define A Loss Function
+* [Loss function](loss/loss_.md)
+
+Select The Best Function
+
+* [Gradient Descent](optimization/GD.md)
 
