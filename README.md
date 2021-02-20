@@ -18,10 +18,9 @@
 回归是机器学习中常见的任务之一，**适用于连续值的预测**，输出为一个标量，即为预测出的值
 - [Linear Regression](md/linear_regression.md)
 
-****
-### Normalization
+<!-- **** -->
+### [Normalization](md/normalization.md)
 
 有时候data的数据分布十分不均匀，会导致训练得不到想要的结果。这也是需要对数据进行归一化的原因
 
-- [Normalization](md/normalization.md)
 
