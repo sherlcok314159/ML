@@ -19,9 +19,9 @@
 
 
 ```python
-def BGD(T,lr,w_init):
+def BGD(T,lr):
     #initialize 
-    w = w_init
+    w = 0
     for i in range(T):
         w = w - lr * gradient(w)
     return w
@@ -61,7 +61,17 @@ def BGD(T,lr,w_init):
 这里就不画图了。不过是走的时间多一点，更新参数次数多一点。只要不是小碎步，你最终还是可以走到全局最优的。
 
 
-**注意，它走的方向只是在图像上往左还是往右**，本质上是横坐标的**加减变化**，而不是按照斜率去走的。梯度可以想象成你走之前往旁边看一眼，看看是不是更低一点。然后你再决定往左还是往右走。 
+**注意**
+
+**它走的方向只是在图像上往左还是往右**，本质上是横坐标的**加减变化**，而不是按照斜率去走的。梯度可以想象成你走之前往旁边看一眼，看看是不是更低一点。然后你再决定往左还是往右走。 
+
+**w**没有必要设成零向量，还得看看维度，直接设成0，第一次迭代结束就是一个向量了
+
+不同人的**Loss Function**的设定可能不一样，因为可以是预测值减去真实值，也可以是真实值减去预测值，因为是均方偏差。你看别人的代码需要注意这一点，**因为微分后不同的写法决定梯度是否差一个负号**
+
+所优化的函数一定要**可微！可微！可微！**，那遇到不可微的怎么办呢？
+
+比如说 [ReLu](activation_function.md)，既然在原点处不可微，那就直接不看好了，因为输入很小机率是0
 
 细心的读者会发现图中有一个 **Convex** ，意思是凸函数。类如**f(x) = (x - 2) ^ 2**
 
@@ -85,11 +95,11 @@ def BGD(T,lr,w_init):
 **Momentum**
 
 ```python
-def momentum(T,lr,w_init,k):
-    w = w_init
+def momentum(T,lr,k):
+    w = 0
     v = 0
     for i in range(T):
-        v = k * v - lr * gradient(k)
+        v = k * v - lr * gradient(w)
         w = w + v
     return w 
 ```
@@ -102,10 +112,15 @@ def momentum(T,lr,w_init,k):
 
 像我一直脸黑，当然不能靠这种。
 
-**2.不断改参**
+**2.Adagrad**
 
+可以将缩写理解为**Adaptive Gradient Descent**，意思就是**lr**会随着参数的更新一起对应更新
 
+与**BGD**相比，这个不一样罢了
 
+![](https://github.com/sherlcok314159/ML/blob/main/Images/adagrad.png)
+
+里面还加了一个极小的数，防止分母为0，一般取1.0e-7
 
 
 **<div id='solutions'>遇到的问题以及解决方案</div>**
