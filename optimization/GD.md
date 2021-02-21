@@ -1,10 +1,10 @@
 ### Gradient Descent
 
-章节
+**章节**
 - [基础模型](#basic)
 - [遇到的问题以及解决方案](#solutions)
 
-<div id='basic'>基础模型</div>
+**<div id='basic'>基础模型</div>**
 
 一开始挑好模型集合之后，接着定义出一个损失函数，那么机器学习就变成**优化问题**，找出一组参数，使得*loss*最小。
 
@@ -17,4 +17,4 @@
 ![](https://github.com/sherlcok314159/ML/blob/main/Images/root_mean_square_error.png)
 
 
-<div id='solutions'>遇到的问题以及解决方案</div>
+**<div id='solutions'>遇到的问题以及解决方案</div>**
