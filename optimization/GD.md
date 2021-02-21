@@ -35,7 +35,7 @@ def BGD(T,lr,w_init):
 ![](https://github.com/sherlcok314159/ML/blob/main/Images/gradient.png)
 
 ![](https://github.com/sherlcok314159/ML/blob/main/Images/gd_0.png)
->[图片来源](https://rasbt.github.io/mlxtend/user_guide/general_concepts/gradient-optimization/)
+
 微分从图形上来讲就是某点处的斜率，其实方向就是沿斜率方向向下
 
 迭代次数的设定其实没什么好说的。我们来讨论一下**Learning Rate**。
