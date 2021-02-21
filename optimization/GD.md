@@ -96,7 +96,7 @@ def momentum(T,lr,w_init,k):
 
 
 
-![](https://github.com/sherlcok314159/ML/blob/main/Images/monmentum.png)
+![](https://github.com/sherlcok314159/ML/blob/main/Images/momentum.png)
 
 当然，这个方法还是比较看人品的，参数**k**是需要你自己调的。是时候表演真正的技术（人品）了。
 
