@@ -28,10 +28,12 @@ def BGD(T,lr,w_init):
 ```
 BGD其实就是原始的梯度下降算法，learning rate(lr)决定了参数更新的速度。e.g.假如你在山顶上，现在你要跑到山谷处，learning rate就相对于你迈出多大步（i.e.step size）。你可以选择迭代的次数。
 
-关于梯度，继续上面的那个例子，其实就是下山的时候你往那个方向走。梯度是一个向量
+关于梯度，继续上面的那个例子，其实就是下山的时候你往哪个方向走。梯度是一个向量
 
 
 ![](https://github.com/sherlcok314159/ML/blob/main/Images/gradient.png)
+
+![](https://github.com/sherlcok314159/ML/blob/main/Images/gd.png)
 
 
 **<div id='solutions'>遇到的问题以及解决方案</div>**
