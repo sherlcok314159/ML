@@ -25,4 +25,9 @@ Define A Loss Function
 Select The Best Function
 
 * [Gradient Descent](optimization/GD.md)
+****
+其实神经网络属于机器学习，只是过程具体化有些不同罢了，所以分开处理
 
+**Neutral Network**
+
+- [CNN](NN/cnn.md)
