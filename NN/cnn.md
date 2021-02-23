@@ -38,10 +38,71 @@ CNN 一共分为输入，卷积，池化，拉直，softmax，输出
 
 **卷积池化这两个过程可以不断重复多次，来减小取样同时保留图片重要特征**
 
+>We don't minimize total loss to find the best function.
+
+我们采取将数据打乱并分组成一个一个的mini-batch，每个数据所含的数据个数也是可调的。关于epoch
+
+![](https://github.com/sherlcok314159/ML/blob/main/Images/batch.png)
+
+------------------------------------------------------------------------[图片来源](https://www.youtube.com/watch?v=FrKWiRv254g&list=PLJV_el3uVTsPy9oCRY30oBPNLCo89yu49&index=19)----------------------------------------------------------------------------
+
+将一个mini-batch中的loss全部加起来，就更新一次参数。一个epoch就等于将所有的mini-batch都遍历一遍，并且经过一个就更新一次参数。
+
+如果epoch设为20，就将上述过程重复20遍
+
 然后把卷积池化之后的输出全部拉成一个向量接到全连接层（fully-connected feedforward network），就是前面我们讲的[DNN](NN/dnn.md)，最后经过[softmax](data_process/normalization.md)输出概率
 
+优化的时候采用的是[Adam](optimization/GD.md)，损失函数是[交叉熵(cross-entroppy)](loss/loss_.md)，激活函数选的为[Relu](NN/activation.md)
 **代码实操**
 
 ```python
+from tensorflow.keras import layers
+from tensorflow import keras
+import numpy as np
 
-from tensorflow
+# load train and test
+(x_train, y_train), (x_test, y_test) = keras.datasets.mnist.load_data()
+
+# Scale images to the [0, 1] range
+x_train = x_train.astype("float32") / 255
+x_test = x_test.astype("float32") / 255
+
+# 1 Byte = 8 Bits，2^8 -1 = 255。[0,255]代表图上的像素，同时除以一个常数进行归一化。1 就代表全部涂黑。0 就代表没涂
+
+# Make sure images have shape (28, 28, 1)
+x_train = np.expand_dims(x_train, -1)
+x_test = np.expand_dims(x_test, -1)
+
+# CNN 的输入方式必须得带上channel，这里扩充一下维度
+
+# convert class vectors to binary class matrices
+y_train = keras.utils.to_categorical(y_train, 10)
+y_test = keras.utils.to_categorical(y_test, 10)
+
+# y 属于 [0,9]代表手写数字的标签，这里将它转换为0-1表示，可以类比one-hot，举个例子，如果是2
+
+# [[0,0,1,0,0,0,0,0,0,0]……]
+
+model = keras.Sequential(
+    [
+        keras.Input(shape=(28, 28, 1)),
+        layers.Conv2D(filters=32, kernel_size=(3, 3), activation="relu"),
+        layers.MaxPooling2D(pool_size=(2, 2)),
+        layers.Conv2D(filters=64, kernel_size=(3, 3), activation="relu"),
+        layers.MaxPooling2D(pool_size=(2, 2)),
+        layers.Flatten(),
+        layers.Dense(units=10, activation="softmax"),
+    ]
+)
+
+# 注意，Conv2D里面有激活函数不代表在卷积和池化的时候进行。而是在DNN里进行，最后拉直后直接接softmax就行
+
+# kernel_size 代表滤波器的大小，pool_size 代表池化的滤波器的大小
+
+model.compile(loss="categorical_crossentropy", optimizer="adam", metrics=["accuracy"])
+
+model.fit(x_train, y_train, batch_size=128, epochs=15, validation_split=0.1) #10层交叉检验
+score = model.evaluate(x_test, y_test)
+print("Test loss:", score[0])
+print("Test accuracy:", score[1])
+```
