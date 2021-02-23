@@ -28,7 +28,7 @@ CNN 一共分为输入，卷积，池化，拉直，softmax，输出
 
 ![](https://github.com/sherlcok314159/ML/blob/main/Images/rgb.png)
 
---------------------[图片来源](https://www.youtube.com/watch?v=FrKWiRv254g&list=PLJV_el3uVTsPy9oCRY30oBPNLCo89yu49&index=19)---------------------
+------------------------------------------------------------------------[图片来源](https://www.youtube.com/watch?v=FrKWiRv254g&list=PLJV_el3uVTsPy9oCRY30oBPNLCo89yu49&index=19)--------------------------------------------------------------------------------------------
 
 
 接下来要经过池化（max pooling），池化矩阵的规模同样是自己设置。可以试试 2 * 2。池化所做的跟滤波器一样在矩阵上平移，只不过作用是取最大。
