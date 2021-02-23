@@ -30,6 +30,6 @@ CNN 一共分为输入，卷积，池化，拉直，softmax，输出
 
 经过池化之后，生成25 * 25的矩阵。
 
-卷积池化这两个过程可以不断重复多次，来减小取样同时保留图片重要特征
+**卷积池化这两个过程可以不断重复多次，来减小取样同时保留图片重要特征**
 
-然后把卷积池化之后的输出全部拉成一个向量接到全连接层（fully-connected feedforward network），最后经过softmax输出概率
+然后把卷积池化之后的输出全部拉成一个向量接到全连接层（fully-connected feedforward network），就是前面我们讲的[DNN](NN/dnn.md)，最后经过[softmax](data_process/normalization.md)输出概率
