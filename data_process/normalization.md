@@ -21,7 +21,7 @@ print(data)
  [0.12 2.22 3.53 1.32 0.23]]
 ```
 
-### Min-Max
+### Min-Max 
 
 ![](https://github.com/sherlcok314159/ML/blob/main/Images/min_max.png)
 
