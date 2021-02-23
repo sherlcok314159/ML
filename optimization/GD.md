@@ -111,7 +111,19 @@ def momentum(T,lr,k):
 
 像我一直脸黑，当然不能靠这种。
 
-**2.Adagrad**
+**2.RMSProp**
+
+![](https://github.com/sherlcok314159/ML/blob/main/Images/momentum.png)
+其他跟**BGD**一样
+
+**3.Adam**
+
+**Adam = RMSProp + Momentum**
+
+![](https://github.com/sherlcok314159/ML/blob/main/Images/adam.jpg)
+
+
+**4.Adagrad**
 
 可以将缩写理解为**Adaptive Gradient Descent**，意思就是**lr**会随着参数的更新一起对应更新
 
@@ -121,5 +133,3 @@ def momentum(T,lr,k):
 
 里面还加了一个极小的数，防止分母为0，一般取1.0e-7
 
-
-**<div id='solutions'>遇到的问题以及解决方案</div>**
