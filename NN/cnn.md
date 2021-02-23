@@ -61,6 +61,7 @@ CNN 一共分为输入，卷积，池化，拉直，softmax，输出
 from tensorflow.keras import layers
 from tensorflow import keras
 import numpy as np
+import matplotlib.pyplot as plt
 
 # load train and test
 (x_train, y_train), (x_test, y_test) = keras.datasets.mnist.load_data()
@@ -104,11 +105,35 @@ model = keras.Sequential(
 
 model.compile(loss="categorical_crossentropy", optimizer="adam", metrics=["accuracy"])
 
-model.fit(x_train, y_train, batch_size=128, epochs=15, validation_split=0.1) #10层交叉检验
+history = model.fit(x_train, y_train, batch_size=128, epochs=15, validation_split=0.1) #10层交叉检验
 score = model.evaluate(x_test, y_test)
 print("Test loss:", score[0])
 print("Test accuracy:", score[1])
 
 # Test loss: 0.03664601594209671
 # Test accuracy: 0.989300012588501
+
+# summarize history for accuracy
+plt.plot(history.history["accuracy"])
+plt.plot(history.history["val_accuracy"])
+plt.title("model accuracy")
+plt.ylabel("accuracy")
+plt.xlabel("epoch")
+plt.legend(["train", "test"], loc="upper left")#在左上方呈现标记
+plt.show()
+
+# summarize history for loss
+plt.plot(history.history["loss"])
+plt.plot(history.history["val_loss"])
+plt.title("model loss")
+plt.ylabel("loss")
+plt.xlabel("epoch")
+plt.legend(["train", "test"], loc="upper left")
+plt.show()
 ```
+在机器学习中画精确度和loss的图很有必要，这样可以发现自己的代码中是否存在问题，并且将这个问题可视化
+
+![](https://github.com/sherlcok314159/ML/blob/main/Images/cnn_acc.png)
+
+![](https://github.com/sherlcok314159/ML/blob/main/Images/cnn_loss.png)
+
