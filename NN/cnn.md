@@ -24,7 +24,7 @@ CNN 一共分为输入，卷积，池化，拉直，softmax，输出
 
 做好卷积之后原始如果说是28 * 28 的矩阵，经过3 * 3 的滤波器，变成 26 * 26 的矩阵了。
 
-因为是黑白图片，所以一个矩阵就行。如果是彩色图片，有RGB，所以得有**三个矩阵叠在一起**形成一个**Feature Map**
+因为是黑白图片，所以一个矩阵就行。（channel = 1）**input_shape = (28,28,1)**，如果是彩色图片，有RGB，所以得有**三个矩阵叠在一起**形成一个**Feature Map**
 
 ![](https://github.com/sherlcok314159/ML/blob/main/Images/rgb.png)
 
