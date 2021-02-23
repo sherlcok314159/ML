@@ -113,14 +113,15 @@ def momentum(T,lr,k):
 
 **2.RMSProp**
 
-![](https://github.com/sherlcok314159/ML/blob/main/Images/momentum.png)
+![](https://github.com/sherlcok314159/ML/blob/main/Images/rmsprop.png)
+
 其他跟**BGD**一样
 
 **3.Adam**
 
 **Adam = RMSProp + Momentum**
 
-![](https://github.com/sherlcok314159/ML/blob/main/Images/adam.jpg)
+![](https://github.com/sherlcok314159/ML/blob/main/Images/adam.png)
 
 
 **4.Adagrad**
