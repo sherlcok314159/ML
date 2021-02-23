@@ -53,6 +53,8 @@ CNN 一共分为输入，卷积，池化，拉直，softmax，输出
 然后把卷积池化之后的输出全部拉成一个向量接到全连接层（fully-connected feedforward network），就是前面我们讲的[DNN](NN/dnn.md)，最后经过[softmax](data_process/normalization.md)输出概率
 
 优化的时候采用的是[Adam](optimization/GD.md)，损失函数是[交叉熵(cross-entroppy)](loss/loss_.md)，激活函数选的为[Relu](NN/activation.md)
+
+****
 **代码实操**
 
 ```python
@@ -105,4 +107,7 @@ model.fit(x_train, y_train, batch_size=128, epochs=15, validation_split=0.1) #10
 score = model.evaluate(x_test, y_test)
 print("Test loss:", score[0])
 print("Test accuracy:", score[1])
+
+# Test loss: 0.03664601594209671
+# Test accuracy: 0.989300012588501
 ```
