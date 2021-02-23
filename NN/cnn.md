@@ -16,6 +16,8 @@ CNN 一共分为输入，卷积，池化，拉直，softmax，输出
 
 实际卷积的时候是拿一个滤波器与代表图片像素的矩阵做乘积然后相加。
 
+![](https://github.com/sherlcok314159/ML/blob/main/Images/convalution.png)
+
 滤波器中的值其实是learn出来的，是一个矩阵，矩阵的规模可以自己设置。
 
 其实就是滤波器在原始矩阵上进行平移，至于一次平移多少（stride），同样是参数可以自己设置。
