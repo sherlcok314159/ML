@@ -99,6 +99,7 @@ model = keras.Sequential(
 
 # 注意，Conv2D里面有激活函数不代表在卷积和池化的时候进行。而是在DNN里进行，最后拉直后直接接softmax就行
 
+
 # kernel_size 代表滤波器的大小，pool_size 代表池化的滤波器的大小
 
 model.compile(loss="categorical_crossentropy", optimizer="adam", metrics=["accuracy"])
