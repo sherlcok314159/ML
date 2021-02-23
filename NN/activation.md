@@ -28,9 +28,9 @@
 
 因为**Sigmoid**将负无穷到正无穷的数据**硬压**到（0，1），当**input**很大的时候，其实**output**的结果**变化很小**。本来影响就很小，你又叠了很多层，影响被迫**衰减**，就造成了**input**几乎对loss产生不了什么影响。
 
-**2.Relu**
+**2.ReLu**
 
-为了解决上面的问题，应该换一个激活函数
+为了解决上面的问题，应该将激活函数换成**ReLu**
 
 
 ![](https://github.com/sherlcok314159/ML/blob/main/Images/relu.png)
@@ -39,3 +39,24 @@
 
 ![](https://github.com/sherlcok314159/ML/blob/main/Images/relu_2.png)
 
+当**input**小于等于0的时候，直接变成0。这就意味着有些神经元（neuron）会对整个神经网络没有任何的影响，所以这些神经元是可以被拿掉的
+
+![](https://github.com/sherlcok314159/ML/blob/main/Images/relu_3.png)
+
+------------------------------------------------------------------------[图片来源](https://www.youtube.com/watch?v=xki61j7z-30&list=PLJV_el3uVTsPy9oCRY30oBPNLCo89yu49&index=16)----------------------------------------------------------------------------
+
+那些没用的神经元直接去掉
+
+![](https://github.com/sherlcok314159/ML/blob/main/Images/relu_4.png)
+
+
+------------------------------------------------------------------------[图片来源](https://www.youtube.com/watch?v=xki61j7z-30&list=PLJV_el3uVTsPy9oCRY30oBPNLCo89yu49&index=16)----------------------------------------------------------------------------
+
+这些就**不会存在很小**的gradient，就有效地减免一开始**Sigmoid**中产生的问题
+
+其实ReLu还有其他的形式
+
+![](https://github.com/sherlcok314159/ML/blob/main/Images/relu_others.png)
+
+
+------------------------------------------------------------------------[图片来源](https://www.youtube.com/watch?v=xki61j7z-30&list=PLJV_el3uVTsPy9oCRY30oBPNLCo89yu49&index=16)----------------------------------------------------------------------------
