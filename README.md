@@ -30,5 +30,6 @@ Select The Best Function
 
 **Neutral Network**
 
+- [Activation](NN/activation.md)
 - [DNN](NN/dnn.md)
 - [CNN](NN/cnn.md)
