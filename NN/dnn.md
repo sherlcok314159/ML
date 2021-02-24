@@ -20,11 +20,13 @@
 
 神经网络分为三个层次，从左到右分别为**输入层（Input Layer）**，**隐含层（Hidden Layer）**，**输出层（Output Layer）** 。当然在输出之前还得经过**softmax**，这里只是广义的网络架构。输入层和输出层没必要赘言。一个隐含层有很多神经元（neuron），神经元的数目是你可以设置的参数。
 
-何为**全连接（fully-connected）**呢？
+何为 **全连接（fully-connected）** 呢？
 
 **每一个输入跟神经元必定两两相连**
 
 ![](https://github.com/sherlcok314159/ML/blob/main/Images/neuron_4.png)
+
+------------------------------------------------------------------------[图片来源](https://bnzn2426.tistory.com/category/%EB%A8%B8%EC%8B%A0%EB%9F%AC%EB%8B%9D%26%EB%94%A5%EB%9F%AC%EB%8B%9D%20%EA%B3%B5%EB%B6%80)----------------------------------------------------------------------------
 
 那么，肯定有人问了
 
@@ -32,7 +34,7 @@
 
 >Universality Theorem 
 
->Any Deep Neuron Network can be represented by one-hidden-layer neuron network.
+>Any Deep Neuron Network can be replaced by one-hidden-layer neuron network.
 
 于是有人说，我都可以用一层代替很多层了，那为什么还用Deep，根本没必要嘛
 
@@ -69,3 +71,5 @@
 这也可以解释其实当我们**数据不够**的时候，用**Deep Neuron Network**其实train出的结果比其他好一点
 
 而且神奇的是，**Modularization**在**DeepLearning**的过程中会自动从训练数据中学得，Deep的过程中会把一个复杂的问题分成若干个**Simple Function**，每一个各司其职，就像是写代码的时候会写一个函数，然后再需要用的时候，**call**一下函数名就行了
+
+> Deep is necessary.
