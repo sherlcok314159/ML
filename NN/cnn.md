@@ -147,11 +147,17 @@ plt.show()
 
 由图可知，当batch数目越多，分的越开，每一个epoch的速度理所应当就会**上升**的，当batch_size = 1的时候，1 epoch 就更新参数50000次 和 batch_size = 10的时候，1 epoch就更新5000次，那么如果更新次数相等的话，batch_size = 1会花**166s**;batch_size = 10每个epoch会花**17s**，总的时间就是**17 * 10 = 170s**。其实batch_size = 1不就是[SGD](../optimization/GD.md)。随机化很不稳定，相对而言，batch_size = 10，收敛的会更稳定，时间和等于1的差不多。那么何乐而不为呢？
 
-肯定有人要问了？随机速度快可以理解，为什么batch_size = 10速度和它差不多呢？
+肯定有人要问了？随机速度快可以理解，看一眼就更新一次参数
 
-这里就要讲一下为什么深度学习的时候GPU可以加速了。
+![](https://github.com/sherlcok314159/ML/blob/main/Images/gpu.png)
+
+为什么batch_size = 10速度和它差不多呢？按照上面来想，应该是一个mini-batch结束再来下一个，这样慢慢进行下去，其实没理由啊。
+
+接下来以batch_size = 2来介绍一下
+
+![](https://github.com/sherlcok314159/ML/blob/main/Images/gpu_2.png)
+
+学过线性代数应该明白，可以将同维度的向量拼成矩阵，来进行矩阵运算，这样每一个mini-batch都在同一时间计算出来，即为平行运算
 
 >所有平行运算GPU都能进行加速。
-
-什么是平行运算呢？
 
