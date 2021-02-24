@@ -30,4 +30,5 @@ Select The Best Function
 
 **Neutral Network**
 
+- [DNN](NN/dnn.md)
 - [CNN](NN/cnn.md)
