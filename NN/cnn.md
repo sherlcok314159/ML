@@ -56,7 +56,6 @@ CNN 一共分为输入，卷积，池化，拉直，softmax，输出
 
 ****
 >e.g. 实现手写数字集（Mnist）的识别
-**代码实操**
 
 ```python
 from tensorflow.keras import layers
