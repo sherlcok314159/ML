@@ -48,4 +48,24 @@
 
 ![](https://github.com/sherlcok314159/ML/blob/main/Images/shallow.png)
 
-那我们联系一下现实，现实中**长发男**不大好找诶，这就意味着这类数据量很少，train出的结果很糟
+那我们联系一下现实，现实中**长发男**不大好找诶，这就意味着这类数据量很少，train出的结果很糟。
+
+我们都知道如果问题比较复杂的时候，可以**将问题分为几个小问题**，算法中有个思维是**分而治之（Divide and Conquer）**。这里要介绍一下**模组化（Modularization）**。
+
+继续上面的例子，我们可以先分辨是男是女和是长发还是短发
+
+![](https://github.com/sherlcok314159/ML/blob/main/Images/modularization.png)
+
+------------------------------------------------------------------------[图片来源](https://www.youtube.com/watch?v=XsC9byQkUH8&list=PLJV_el3uVTsPy9oCRY30oBPNLCo89yu49&index=20)----------------------------------------------------------------------------
+
+这样的话，数据量都是够的，train出的结果不会很糟
+
+![](https://github.com/sherlcok314159/ML/blob/main/Images/modularization_2.png)
+
+------------------------------------------------------------------------[图片来源](https://www.youtube.com/watch?v=XsC9byQkUH8&list=PLJV_el3uVTsPy9oCRY30oBPNLCo89yu49&index=20)----------------------------------------------------------------------------
+
+通过模组化用两层神经网络可以解决数据量不足的问题，这样train出的结果比一层比起来肯定是好的多的
+
+这也可以解释其实当我们**数据不够**的时候，用**Deep Neuron Network**其实train出的结果比其他好一点
+
+而且神奇的是，**Modularization**在**DeepLearning**的过程中会自动从训练数据中学得，Deep的过程中会把一个复杂的问题分成若干个**Simple Function**，每一个各司其职，就像是写代码的时候会写一个函数，然后再需要用的时候，**call**一下函数名就行了
