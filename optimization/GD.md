@@ -139,6 +139,8 @@ def momentum(T,lr,k):
 
 ![](https://github.com/sherlcok314159/ML/blob/main/Images/sgd.png)
 
+------------------------------------------------------------------------[图片来源](https://openlearninglibrary.mit.edu/courses/course-v1:MITx+6.036+1T2019/courseware/Week4/gradient_descent/?activate_block_id=block-v1%3AMITx%2B6.036%2B1T2019%2Btype%40sequential%2Bblock%40gradient_descent)----------------------------------------------------------------------------
+
 **注意**，虽然BGD和SGD看起来很像，但其实BGD是将整个数据看过一遍；而SGD只是从Dataset中Sample出某一个点。所以两者的梯度都不一样，前者梯度会带求和符号，而SGD就单个点的梯度。
 
 ![](https://github.com/sherlcok314159/ML/blob/main/Images/sgd_2.png)
