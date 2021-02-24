@@ -55,6 +55,7 @@ CNN 一共分为输入，卷积，池化，拉直，softmax，输出
 优化的时候采用的是[Adam](../optimization/GD.md)，损失函数是[交叉熵(cross-entroppy)](../loss/loss_.md)，激活函数选的为[Relu](activation.md)
 
 ****
+>e.g. 实现手写数字集（Mnist）的识别
 **代码实操**
 
 ```python
@@ -136,4 +137,21 @@ plt.show()
 ![](https://github.com/sherlcok314159/ML/blob/main/Images/cnn_acc.png)
 
 ![](https://github.com/sherlcok314159/ML/blob/main/Images/cnn_loss.png)
+
+
+这里再细谈一下batch 和 epoch
+
+![](https://github.com/sherlcok314159/ML/blob/main/Images/speed.png)
+
+------------------------------------------------------------------------[图片来源](https://www.youtube.com/watch?v=FrKWiRv254g&list=PLJV_el3uVTsPy9oCRY30oBPNLCo89yu49&index=19)----------------------------------------------------------------------------
+
+由图可知，当batch数目越多，分的越开，每一个epoch的速度理所应当就会**上升**的，当batch_size = 1的时候，1 epoch 就更新参数50000次 和 batch_size = 10的时候，1 epoch就更新5000次，那么如果更新次数相等的话，batch_size = 1会花**166s**;batch_size = 10每个epoch会花**17s**，总的时间就是**17 * 10 = 170s**。其实batch_size = 1不就是[SGD](../optimization/GD.md)。随机化很不稳定，相对而言，batch_size = 10，收敛的会更稳定，时间和等于1的差不多。那么何乐而不为呢？
+
+肯定有人要问了？随机速度快可以理解，为什么batch_size = 10速度和它差不多呢？
+
+这里就要讲一下为什么深度学习的时候GPU可以加速了。
+
+>所有平行运算GPU都能进行加速。
+
+什么是平行运算呢？
 

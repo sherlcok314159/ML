@@ -73,3 +73,79 @@
 而且神奇的是，**Modularization**在**DeepLearning**的过程中会自动从训练数据中学得，Deep的过程中会把一个复杂的问题分成若干个**Simple Function**，每一个各司其职，就像是写代码的时候会写一个函数，然后再需要用的时候，**call**一下函数名就行了
 
 > Deep is necessary.
+
+接下来，以手写数字识别（Mnist）为例代码实操一下
+
+```python
+import matplotlib.pyplot as plt
+import numpy as np
+from tensorflow import keras
+from tensorflow.keras import layers
+
+# Load train and test
+(x_train, y_train), (x_test, y_test) = keras.datasets.mnist.load_data()
+
+# print(x_train.shape)
+# print(x_test.shape)
+
+# Reshape to dense standard input
+x_train = x_train.reshape(60000, 784)
+x_test = x_test.reshape(10000, 784)
+
+# Scale images to the [0, 1] range
+x_train = x_train.astype("float32") / 255
+x_test = x_test.astype("float32") / 255
+
+# convert class vectors to binary class matrices
+y_train = keras.utils.to_categorical(y_train, 10)
+y_test = keras.utils.to_categorical(y_test, 10)
+
+model = keras.Sequential(
+    [
+        keras.Input(shape=(28 * 28)),
+        layers.Dense(128, activation="relu"),
+        layers.Dense(128, activation="relu"),
+        layers.Dense(128, activation="relu"),
+        layers.Dense(10, activation="softmax"),
+    ]
+)
+
+model.compile(loss="categorical_crossentropy", optimizer="adam", metrics=["accuracy"])
+history = model.fit(x_train, y_train, batch_size=128, epochs=15, validation_split=0.2)
+score = model.evaluate(x_test, y_test)
+
+print("Test Loss:", score[0])
+print("Test Accuracy", score[1])
+
+# Test Loss: 0.11334700882434845
+# Test Accuracy 0.9750999808311462
+
+# summarize history for accuracy
+plt.plot(history.history["accuracy"])
+plt.plot(history.history["val_accuracy"])
+plt.title("model accuracy")
+plt.ylabel("accuracy")
+plt.xlabel("epoch")
+plt.legend(["train", "test"], loc="upper left")
+plt.show()
+# summarize history for loss
+plt.plot(history.history["loss"])
+plt.plot(history.history["val_loss"])
+plt.title("model loss")
+plt.ylabel("loss")
+plt.xlabel("epoch")
+plt.legend(["train", "test"], loc="upper left")
+plt.show()
+```
+![](https://github.com/sherlcok314159/ML/blob/main/Images/dnn_accuracy_plot.png)
+
+![](https://github.com/sherlcok314159/ML/blob/main/Images/dnn_loss_plot.png)
+
+
+这里跟[CNN](cnn.md) 其实shape的处理是不一样的。在CNN中你必须再加一个维度来表示**channel**，而DNN这里是不需要的。读者也可以把print一下train_data.shape，会发现是(60000,28,28)。60000是数据的数目。输入shape应该是 28 * 28 = 784，为了与输入shape匹配，需要一开始**reshape成(60000,784)**
+
+**注意**：千万别把 28 * 28 写出 (28,28)！否则会报错
+
+```python
+ValueError: Input 0 of layer sequential is incompatible with the layer: expected axis -1 of input shape to have value 28 but received input with shape (128, 784)
+```

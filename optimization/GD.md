@@ -2,7 +2,7 @@
 
 **章节**
 - [BGD](#bgd)
-
+- [SGD](#sgd)
 
 一开始挑好模型集合之后，接着定义出一个损失函数，那么机器学习就变成**优化问题**，找出一组参数，使得**Loss**最小。
 
@@ -134,3 +134,5 @@ def momentum(T,lr,k):
 
 里面还加了一个极小的数，防止分母为0，一般取1.0e-7
 
+
+**<div id='sgd'>Stochastic-Gradient-Descent</div>**
