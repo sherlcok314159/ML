@@ -136,3 +136,23 @@ def momentum(T,lr,k):
 
 
 **<div id='sgd'>Stochastic-Gradient-Descent</div>**
+
+![](https://github.com/sherlcok314159/ML/blob/main/Images/sgd.png)
+
+**注意**，虽然BGD和SGD看起来很像，但其实BGD是将整个数据看过一遍；而SGD只是从Dataset中Sample出某一个点。所以两者的梯度都不一样，前者梯度会带求和符号，而SGD就单个点的梯度。
+
+![](https://github.com/sherlcok314159/ML/blob/main/Images/sgd_2.png)
+
+可以看出，SGD收敛的十分**剧烈**
+
+***BGD VS SGD？***
+
+SGD is better in 3 reasons:
+
+**1.Fast Computation**。虽然BGD很稳定，但是它必须看过整个数据才能进行更新参数，而数据量太大，会花很长时间。
+
+**2.Beat Local Minimum** BGD有时候会被卡在局部最优，而SGD可能有望跳出来
+
+**3.Avoid Overfitting** 有的时候我们选择SGD是不想要过拟合，BGD的拟合效果是好于SGD的
+
+
