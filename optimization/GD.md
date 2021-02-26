@@ -1,5 +1,5 @@
 ### Gradient Descent
-
+hey man
 **章节**
 - [BGD](#bgd)
 - [SGD](#sgd)
