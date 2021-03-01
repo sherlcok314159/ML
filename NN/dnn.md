@@ -1,5 +1,5 @@
 ### DNN(Deep-Learning Neural Network)
-DAMN!
+
 接下来介绍比较常见的**全连接层网络（fully-connected feedfoward nerural network）**
 
 **名词解释**
