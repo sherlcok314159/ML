@@ -58,6 +58,11 @@ CNN 一共分为输入，卷积，池化，拉直，softmax，输出
 >e.g. 实现手写数字集（Mnist）的识别
 
 ```python
+
+'''
+@Tool : Tensorflow 2.x
+'''
+
 from tensorflow.keras import layers
 from tensorflow import keras
 import numpy as np
@@ -160,3 +165,17 @@ plt.show()
 
 >所有平行运算GPU都能进行加速。
 
+那么，好奇的是到底计算机看到了什么？是一个一个的数字吗？
+
+![](https://github.com/sherlcok314159/ML/blob/main/Images/fake_digits.png)
+
+------------------------------------------------------------------------[图片来源](https://www.youtube.com/watch?v=FrKWiRv254g&list=PLJV_el3uVTsPy9oCRY30oBPNLCo89yu49&index=19)----------------------------------------------------------------------------
+
+其实这件事情很反直觉，原以为计算机是看一张一张的图片，可是这个很难看出是单个数字而是**数字集**，那么我们试试看最大化像素
+
+
+![](https://github.com/sherlcok314159/ML/blob/main/Images/cnn_learn_2.png)
+
+------------------------------------------------------------------------[图片来源](https://www.youtube.com/watch?v=FrKWiRv254g&list=PLJV_el3uVTsPy9oCRY30oBPNLCo89yu49&index=19)----------------------------------------------------------------------------
+
+其实左下角的6其实蛮像的耶。
