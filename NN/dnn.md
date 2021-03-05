@@ -134,8 +134,8 @@ print("Test Accuracy", score[1])
 # Test Accuracy 0.9750999808311462
 
 # summarize history for accuracy
-plt.plot(history.history["accuracy"])
-plt.plot(history.history["val_accuracy"])
+plt.plot(history.history["acc"])
+plt.plot(history.history["val_acc"])
 plt.title("model accuracy")
 plt.ylabel("accuracy")
 plt.xlabel("epoch")
@@ -151,8 +151,8 @@ plt.legend(["train", "test"], loc="upper left")
 plt.show()
 
 '''
-@Tool : Tensorflow 1.x
-transform accuracy,val_accuracy above into acc,val_acc
+@Tool : Tensorflow 2.x
+transform acc,val_acc above into accuracy,val_accuracy
 '''
  
 ```
