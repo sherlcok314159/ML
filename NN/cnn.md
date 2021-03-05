@@ -59,14 +59,31 @@ CNN 一共分为输入，卷积，池化，拉直，softmax，输出
 
 ```python
 
-'''
-@Tool : Tensorflow 2.x
-'''
-
-from tensorflow.keras import layers
 from tensorflow import keras
 import numpy as np
 import matplotlib.pyplot as plt
+import tensorflow as tf
+import matplotlib as mpl
+import sys 
+
+# solve could not create cudnn handle: CUDNN_STATUS_INTERNAL_ERROR
+config = tf.compat.v1.ConfigProto()
+config.gpu_options.allow_growth = True
+session = tf.compat.v1.InteractiveSession(config=config)
+
+# 不同库版本，使用此代码块查看
+print(sys.version_info)
+for module in mpl,np,tf,keras:
+  print(module.__name__,module.__version__)
+
+'''
+sys.version_info(major=3, minor=6, micro=9, releaselevel='final', serial=0)
+matplotlib 3.3.4
+numpy 1.16.0
+tensorflow 1.14.0
+tensorflow.python.keras.api._v1.keras 2.2.4-tf
+'''
+# If you get numpy futurewarning,then try numpy 1.16.0
 
 # load train and test
 (x_train, y_train), (x_test, y_test) = keras.datasets.mnist.load_data()
@@ -94,12 +111,12 @@ y_test = keras.utils.to_categorical(y_test, 10)
 model = keras.Sequential(
     [
         keras.Input(shape=(28, 28, 1)),
-        layers.Conv2D(filters=32, kernel_size=(3, 3), activation="relu"),
-        layers.MaxPooling2D(pool_size=(2, 2)),
-        layers.Conv2D(filters=64, kernel_size=(3, 3), activation="relu"),
-        layers.MaxPooling2D(pool_size=(2, 2)),
-        layers.Flatten(),
-        layers.Dense(units=10, activation="softmax"),
+        keras.layers.Conv2D(filters=32, kernel_size=(3, 3), activation="relu"),
+        keras.layers.MaxPooling2D(pool_size=(2, 2)),
+        keras.layers.Conv2D(filters=64, kernel_size=(3, 3), activation="relu"),
+        keras.layers.MaxPooling2D(pool_size=(2, 2)),
+        keras.layers.Flatten(),
+        keras.layers.Dense(units=10, activation="softmax"),
     ]
 )
 
@@ -119,8 +136,8 @@ print("Test accuracy:", score[1])
 # Test accuracy: 0.989300012588501
 
 # summarize history for accuracy
-plt.plot(history.history["accuracy"])
-plt.plot(history.history["val_accuracy"])
+plt.plot(history.history["acc"])
+plt.plot(history.history["val_acc"])
 plt.title("model accuracy")
 plt.ylabel("accuracy")
 plt.xlabel("epoch")

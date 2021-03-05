@@ -77,21 +77,29 @@
 接下来，以手写数字识别（Mnist）为例代码实操一下
 
 ```python
-
-'''
-@Tool : Tensorflow 2.x
-'''
-
 import matplotlib.pyplot as plt
 import numpy as np
 from tensorflow import keras
 from tensorflow.keras import layers
+import sys
+import matplotlib as mpl
+
+# 不同库版本，使用本代码需要查看
+print(sys.version_info)
+for module in mpl,np,tf,keras:
+  print(module.__name__,module.__version__)
+
+'''
+sys.version_info(major=3, minor=6, micro=9, releaselevel='final', serial=0)
+matplotlib 3.3.4
+numpy 1.16.0
+tensorflow 1.14.0
+tensorflow.python.keras.api._v1.keras 2.2.4-tf
+'''
+# If you get numpy futurewarning,then try numpy 1.16.0
 
 # Load train and test
 (x_train, y_train), (x_test, y_test) = keras.datasets.mnist.load_data()
-
-# print(x_train.shape)
-# print(x_test.shape)
 
 # Reshape to dense standard input
 x_train = x_train.reshape(60000, 784)
