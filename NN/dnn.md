@@ -77,6 +77,11 @@
 接下来，以手写数字识别（Mnist）为例代码实操一下
 
 ```python
+
+'''
+@Tool : Tensorflow 2.x
+'''
+
 import matplotlib.pyplot as plt
 import numpy as np
 from tensorflow import keras
@@ -136,6 +141,12 @@ plt.ylabel("loss")
 plt.xlabel("epoch")
 plt.legend(["train", "test"], loc="upper left")
 plt.show()
+
+'''
+@Tool : Tensorflow 1.x
+transform accuracy,val_accuracy above into acc,val_acc
+'''
+ 
 ```
 ![](https://github.com/sherlcok314159/ML/blob/main/Images/dnn_accuracy_plot.png)
 
