@@ -133,6 +133,7 @@ print("Test Accuracy", score[1])
 
 # Test Loss: 0.11334700882434845
 # Test Accuracy 0.9750999808311462
+# 注意天下几乎没有两个相同的准确率，因为你是random出来的，在epoch之前会randomly initialize parameters
 
 # visualize accuracy and loss
 def plot_(history,label):
