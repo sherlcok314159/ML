@@ -218,12 +218,15 @@ def plot_(history,label):
 plot_(history,"accuracy")
 plot_(history,"loss")
 
+```
+
 ![](https://github.com/sherlcok314159/ML/blob/main/Images/imdb_1.png)
 
 ![](https://github.com/sherlcok314159/ML/blob/main/Images/imdb_2.png)
 
 其实可以发现已经烂掉了，发生了过拟合
 
+```python
 score = model.evaluate(
     test_data,test_labels,
     batch_size=batch_size,
@@ -237,5 +240,4 @@ print("Test accuracy:", score[1])
 Test loss: 0.7127751180744171
 Test accuracy: 0.85788
 '''
-
 ```
