@@ -34,7 +34,7 @@ train的结果好，测试的结果烂掉了，那就是过拟合了。同样取
 
 **<div id='drop'>Dropout</div>**
 
-![](https://github.com/sherlcok314159/ML/blob/main/Images/dropout.jpg)
+![](https://github.com/sherlcok314159/ML/blob/main/Images/dropout.png)
 
 ------------------------------------------------------------------------[图片来源](https://www.youtube.com/watch?v=xki61j7z-30&list=PLJV_el3uVTsPy9oCRY30oBPNLCo89yu49&index=17&ab_channel=Hung-yiLee)----------------------------------------------------------------------------
 
@@ -57,7 +57,7 @@ If a weight = 1 by training,set w = 0.5 for testing.(Dropout rate is 50%.)
 其实，Dropout是一种Ensemble
 
 
-![](https://github.com/sherlcok314159/ML/blob/main/Images/dropout_ensemble.jpg)
+![](https://github.com/sherlcok314159/ML/blob/main/Images/dropout_ensemble.png)
 
 ------------------------------------------------------------------------[图片来源](https://www.youtube.com/watch?v=xki61j7z-30&list=PLJV_el3uVTsPy9oCRY30oBPNLCo89yu49&index=17&ab_channel=Hung-yiLee)----------------------------------------------------------------------------
 
@@ -94,7 +94,7 @@ model.fit(x, y, validation_split=0.2, callbacks=[early_stopping])
 
 ------------------------------------------------------------------------[图片来源](https://www.youtube.com/watch?v=xki61j7z-30&list=PLJV_el3uVTsPy9oCRY30oBPNLCo89yu49&index=17&ab_channel=Hung-yiLee)----------------------------------------------------------------------------
 
-![](https://github.com/sherlcok314159/ML/blob/main/Images/l2.jpg)
+![](https://github.com/sherlcok314159/ML/blob/main/Images/l2.png)
 
 ------------------------------------------------------------------------[图片来源](https://www.youtube.com/watch?v=xki61j7z-30&list=PLJV_el3uVTsPy9oCRY30oBPNLCo89yu49&index=17&ab_channel=Hung-yiLee)----------------------------------------------------------------------------
 
