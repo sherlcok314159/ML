@@ -3,6 +3,11 @@
 **章节**
 - [BGD](#bgd)
 - [SGD](#sgd)
+- [Better](#problem)
+    - [Momentum](#mom)
+    - [RMSProp](#rms)
+    - [Adam](#adam)
+    - [Adagrad](#adag)
 
 一开始挑好模型集合之后，接着定义出一个损失函数，那么机器学习就变成**优化问题**，找出一组参数，使得**Loss**最小。
 
@@ -72,68 +77,7 @@ def BGD(T,lr):
 
 比如说 [ReLu](../NN/activation.md)，既然在原点处不可微，那就直接不看好了，因为输入很小机率是0
 
-细心的读者会发现图中有一个 **Convex** ，意思是凸函数。类如**f(x) = (x - 2) ^ 2**
-
-理想总是很丰满，那是因为你没有经历过社会（数据）的毒打，如果不是 **Convex** ，会是如何呢？
-
-****
-
-**问题探讨**
-
-
-![](https://github.com/sherlcok314159/ML/blob/main/Images/gd.png)
-
-从上图中不难发现我们卡在**Local Minimum**了，我们想要到达**Global Minimum**，有人可能会想，卡住了没关系，我迭代次数多一点，让他慢慢走出来不就行了？细心观察就会明白，小步伐的时候，严格按照**Gradient** 指引的方向走，左右两边是相反方向。i.e. 你会一直往返直到结束
-
-那么，如何解决这个问题呢？
-
-**1.依靠惯性**
-
-假如他卡在那个**Local**的地方了，他如果具有惯性，能够自己滚出来，会不会有机会到达**Global**？
-
-**Momentum**
-
-```python
-def momentum(T,lr,k):
-    w = 0
-    v = 0
-    for i in range(T):
-        v = k * v - lr * gradient(w)
-        w = w + v
-    return w 
-```
-
-
-
-![](https://github.com/sherlcok314159/ML/blob/main/Images/momentum.png)
-
-当然，这个方法还是比较看人品的，参数**k**是需要你自己调的。是时候表演真正的技术（人品）了，一般在 **[0.5,0.9]** 的范围调，来决定惯性对整个式子的影响程度。
-
-像我一直脸黑，当然不能靠这种。
-
-**2.RMSProp**
-
-![](https://github.com/sherlcok314159/ML/blob/main/Images/rmsprop.png)
-
-其他跟**BGD**一样
-
-**3.Adam**
-
-**Adam = RMSProp + Momentum**
-
-![](https://github.com/sherlcok314159/ML/blob/main/Images/adam.png)
-
-
-**4.Adagrad**
-
-可以将缩写理解为**Adaptive Gradient Descent**，意思就是**lr**会随着参数的更新一起对应更新
-
-与**BGD**相比，这个不一样罢了
-
-![](https://github.com/sherlcok314159/ML/blob/main/Images/adagrad.png)
-
-里面还加了一个极小的数，防止分母为0，一般取1.0e-7
-
+接下来讨论一下跟它很像的SGD
 
 **<div id='sgd'>Stochastic-Gradient-Descent</div>**
 
@@ -156,5 +100,71 @@ SGD is better in 3 reasons:
 **2.Beat Local Minimum** BGD有时候会被卡在局部最优，而SGD可能有望跳出来
 
 **3.Avoid Overfitting** 有的时候我们选择SGD是不想要过拟合，BGD的拟合效果是好于SGD的
+
+****
+
+细心的读者会发现图中有一个 **Convex** ，意思是凸函数。类如**f(x) = (x - 2) ^ 2**
+
+理想总是很丰满，那是因为你没有经历过社会（数据）的毒打，如果不是 **Convex** ，会是如何呢？
+
+****
+
+**<div id='better'>问题探讨</div>**
+
+![](https://github.com/sherlcok314159/ML/blob/main/Images/gd.png)
+
+从上图中不难发现我们卡在**Local Minimum**了，我们想要到达**Global Minimum**，有人可能会想，卡住了没关系，我迭代次数多一点，让他慢慢走出来不就行了？细心观察就会明白，小步伐的时候，严格按照**Gradient** 指引的方向走，左右两边是相反方向。i.e. 你会一直往返直到结束
+
+那么，如何解决这个问题呢？
+
+**1.依靠惯性**
+
+假如他卡在那个**Local**的地方了，他如果具有惯性，能够自己滚出来，会不会有机会到达**Global**？
+
+**<div id='mom'>Momentum</div>**
+
+```python
+def momentum(T,lr,k):
+    w = 0
+    v = 0
+    for i in range(T):
+        v = k * v - lr * gradient(w)
+        w = w + v
+    return w 
+```
+
+
+
+![](https://github.com/sherlcok314159/ML/blob/main/Images/momentum.png)
+
+当然，这个方法还是比较看人品的，参数**k**是需要你自己调的。是时候表演真正的技术（人品）了，一般在 **[0.5,0.9]** 的范围调，来决定惯性对整个式子的影响程度。
+
+像我一直脸黑，当然不能靠这种。
+
+**<div id='rms'>2.RMSProp</div>**
+
+![](https://github.com/sherlcok314159/ML/blob/main/Images/rmsprop.png)
+
+其他跟**BGD**一样
+
+**<div id='adam'>3.Adam</div>**
+
+
+**Adam = RMSProp + Momentum**
+
+![](https://github.com/sherlcok314159/ML/blob/main/Images/adam.png)
+
+
+**4.Adagrad**
+
+可以将缩写理解为**Adaptive Gradient Descent**，意思就是**lr**会随着参数的更新一起对应更新
+
+与**BGD**相比，这个不一样罢了
+
+![](https://github.com/sherlcok314159/ML/blob/main/Images/adagrad.png)
+
+里面还加了一个极小的数，防止分母为0，一般取1.0e-7
+
+
 
 
