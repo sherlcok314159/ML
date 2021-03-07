@@ -106,6 +106,8 @@ tanh的特点：
 
 **6.Swish**
 
+![](https://github.com/sherlcok314159/ML/blob/main/Images/swish_2.png)
+
 ![](https://github.com/sherlcok314159/ML/blob/main/Images/swish.png)
 
 主要优点
