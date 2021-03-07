@@ -95,3 +95,24 @@ tanh的特点：
 
 **2.不变号** 正就被映射成正的，负的被映射成负的，零就被映射成零。另外，它过原点。
 
+**5.Softplus**
+
+![](https://github.com/sherlcok314159/ML/blob/main/Images/softplus_2.png)
+
+![](https://github.com/sherlcok314159/ML/blob/main/Images/softplus.png)
+
+它相对于ReLu相对来说更加平滑，不过同样是单侧抑制
+
+
+**6.Swish**
+
+![](https://github.com/sherlcok314159/ML/blob/main/Images/swish.png)
+
+主要优点
+
+**1.** 无界性有助于慢速训练期间，梯度逐渐接近0并导致饱和；
+
+**2.** 导数恒大于0
+
+**3.** 平滑度在优化和泛化有很大作用
+

@@ -34,3 +34,4 @@ Select The Best Function
 - [DNN](NN/DNN/dnn.md)
     - [Sentiment Classification in IMDB](NN/DNN/IMDB.md)
 - [CNN](NN/CNN/cnn.md)
+- [Problems](NN/problems.md)

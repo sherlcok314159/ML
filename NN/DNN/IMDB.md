@@ -233,11 +233,71 @@ score = model.evaluate(
     verbose=1
 )
 
-print("Test loss:", score[0])
-print("Test accuracy:", score[1])
+print("Test loss: ", score[0])
+print("Test accuracy: ", score[1])
 
 '''
 Test loss: 0.7127751180744171
 Test accuracy: 0.85788
 '''
 ```
+
+接下来进行一些讨论
+
+**More parameters?**
+
+```python
+# 改成128个神经元
+keras.layers.Dense(128,activation='relu'),
+'''
+Test loss: 0.7896
+Test accuracy: 0.8556
+'''
+
+# 改成256个神经元
+keras.layers.Dense(256,activation='relu'),
+'''
+Test loss: 0.9015
+Test accuracy: 0.8531
+'''
+
+# 改成512个神经元
+keras.layers.Dense(512,activation='relu'),
+'''
+Test loss: 1.0439
+Test accuracy: 0.8510
+'''
+# 其实结果都反倒不好了
+```
+
+**Other activation functions?**
+```python
+# 试试看sigmoid
+keras.layers.Dense(64,activation='sigmoid'),
+'''
+Test loss: 0.3955
+Test accuracy: 0.8771
+'''
+# 哇，这个结果很棒！
+
+# 试试看tanh
+keras.layers.Dense(64,activation='tanh'),
+'''
+Test loss: 1.0261
+Test accuracy: 0.8558
+'''
+# 没什么区别吧
+
+# 试试看softmax
+keras.layers.Dense(1,activation='softmax'),                               
+'''
+Test loss: 0.2950
+Test accuracy: 0.8838
+'''
+
+# 试试看softplus
+keras.layers.Dense(1,activation='softplus'),                               
+'''
+Test loss: 0.4718
+Test accuracy: 0.8709
+'''
