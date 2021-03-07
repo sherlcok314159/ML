@@ -295,9 +295,14 @@ Test loss: 0.2950
 Test accuracy: 0.8838
 '''
 
+# Cool!
+
 # 试试看softplus
 keras.layers.Dense(1,activation='softplus'),                               
 '''
 Test loss: 0.4718
 Test accuracy: 0.8709
 '''
+# 还不错
+
+
