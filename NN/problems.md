@@ -108,4 +108,6 @@ model.fit(x, y, validation_split=0.2, callbacks=[early_stopping])
 
 通常来讲，**L1**无论如何都会减去一个**固定**的值，而**L2**会根据不同情况来减小。所以当W很大的时候，L1减去的值还是固定的，会下降的很慢，而L2发现weight很大，也会下降的比较快，这个时候选择L2。而当W很小的时候，L1依旧减去固定值，L2发现很小，就几乎卡住了，这个时候选择L1
 
+其实在DeepLearning里面，regularization跟EarlyStopping其实功能差不多，没有在SVM中来的那么重要
+
 when and how
