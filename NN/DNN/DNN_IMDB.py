@@ -124,6 +124,7 @@ print("Test loss:", score[0])
 print("Test accuracy:", score[1])
 
 '''
-Test loss: 0.7127751180744171
-Test accuracy: 0.85788
+Test loss: 0.6628
+Test accuracy: 0.8588
 '''
+‵
