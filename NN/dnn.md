@@ -83,6 +83,7 @@ from tensorflow import keras
 from tensorflow.keras import layers
 import sys
 import matplotlib as mpl
+import tensorflow as tf
 
 # 不同库版本，使用本代码需要查看
 print(sys.version_info)
@@ -133,26 +134,22 @@ print("Test Accuracy", score[1])
 # Test Loss: 0.11334700882434845
 # Test Accuracy 0.9750999808311462
 
-# summarize history for accuracy
-plt.plot(history.history["acc"])
-plt.plot(history.history["val_acc"])
-plt.title("model accuracy")
-plt.ylabel("accuracy")
-plt.xlabel("epoch")
-plt.legend(["train", "test"], loc="upper left")
-plt.show()
-# summarize history for loss
-plt.plot(history.history["loss"])
-plt.plot(history.history["val_loss"])
-plt.title("model loss")
-plt.ylabel("loss")
-plt.xlabel("epoch")
-plt.legend(["train", "test"], loc="upper left")
-plt.show()
+# visualize accuracy and loss
+def plot_(history,label):
+    plt.plot(history.history[label])
+    plt.plot(history.history["val_ " + label])
+    plt.title("model " + label)
+    plt.ylabel(label)
+    plt.xlabel("epoch")
+    plt.legend(["train","test"],loc = "upper left")
+    plt.show()
+
+plot_(history,"acc")
+plot_(history,"loss")
 
 '''
 @Tool : Tensorflow 2.x
-transform acc,val_acc above into accuracy,val_accuracy
+Transform acc,val_acc above into accuracy,val_accuracy
 '''
  
 ```
