@@ -36,7 +36,27 @@ CNN 一共分为输入，卷积，池化，拉直，softmax，输出
 
 经过池化之后，生成25 * 25的矩阵。
 
-**卷积池化这两个过程可以不断重复多次，来减小取样同时保留图片重要特征**
+**卷积池化这两个过程可以不断重复多次，来减小取样（downsample）同时保留图片重要特征**
+
+除了Maxpooling,还有其他几种，这里一并介绍
+
+**GlobalMaxPooling**
+
+![](https://github.com/sherlcok314159/ML/blob/main/Images/GlobalMaxPooling.png)
+
+顾名思义，Global意味着全局，整个取一个最大值
+
+**AveragePooling**
+
+![](https://github.com/sherlcok314159/ML/blob/main/Images/AveragePooling.png)
+
+跟上面MaxPooling的操作类似，唯一区别是一个求最大值，一个求平均值
+
+**AveragePooling**
+
+![](https://github.com/sherlcok314159/ML/blob/main/Images/GlobalAveragePooling.png)
+
+全局求平均值
 
 >We don't minimize total loss to find the best function.
 

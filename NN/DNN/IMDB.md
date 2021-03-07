@@ -6,7 +6,6 @@
 
 - [包的准备](#prepare)
 - [数据下载](#download)
-- [文本表示](#txt_)
 - [数据预处理](#preprocess)
 - [设计DNN](#design)
 - [其他方案](#w)
@@ -49,32 +48,148 @@ imdb = keras.datasets.imdb
 
 (train_data,train_labels),(test_data,test_labels) = imdb.load_data(num_words = vocab_size，index_from = index_from)
 
+'''
+Downloading data from https://storage.googleapis.com/tensorflow/tf-keras-datasets/imdb.npz
+17465344/17464789 [==============================] - 28s 2us/step
+'''
+
 # 若要进一步了解各种参数，API示例文档 https://keras.io/api/datasets/imdb/
 
 # 训练集的大小
 print(train_data.shape)
 print(train_labels.shape)
 
+# (25000,)
+# (25000,)
+
 # 训练集的第一个样本（是向量）
 print(train_data[0],train_labels[0])
+
+'''
+[1, 14, 22, 16, 43, 530, 973, 1622, 1385, 65, 458, 4468, 66, 3941, 4, 173, 36, 256, 5, 25, 100, 43, 838, 112, 50, 670, 2, 9, 35, 480, 284, 5, 150, 4,……] 
+
+1
+'''
 
 # 多维的数组 numpy.ndarray
 print(type(train_data))
 print(type(train_labels))
 
+'''
+<class 'numpy.ndarray'>
+<class 'numpy.ndarray'>
+'''
+
 # train_labels的值0(negative),1(positive)-二分类
 print(np.unique(train_labels))
 
-'''
-Downloading data from https://storage.googleapis.com/tensorflow/tf-keras-datasets/imdb.npz
-17465344/17464789 [==============================] - 28s 2us/step
-(25000,)
-(25000,)
-[1, 14, 22, 16, 43, 530, 973, 1622, 1385, 65, 458, 4468, 66, 3941, 4, 173, 36, 256, 5, 25, 100, 43, 838, 112, 50, 670, 2, 9, 35, 480, 284, 5, 150, 4, 172, 112, 167, 2, 336, 385, 39, 4, 172, 4536, 1111, 17, 546, 38, 13, 447, 4, 192, 50, 16, 6, 147, 2025, 19, 14, 22, 4, 1920, 4613, 469, 4, 22, 71, 87, 12, 16, 43, 530, 38, 76, 15, 13, 1247, 4, 22, 17, 515, 17, 12, 16, 626, 18, 2, 5, 62, 386, 12, 8, 316, 8, 106, 5, 4, 2223, 5244, 16, 480, 66, 3785, 33, 4, 130, 12, 16, 38, 619, 5, 25, 124, 51, 36, 135, 48, 25, 1415, 33, 6, 22, 12, 215, 28, 77, 52, 5, 14, 407, 16, 82, 2, 8, 4, 107, 117, 5952, 15, 256, 4, 2, 7, 3766, 5, 723, 36, 71, 43, 530, 476, 26, 400, 317, 46, 7, 4, 2, 1029, 13, 104, 88, 4, 381, 15, 297, 98, 32, 2071, 56, 26, 141, 6, 194, 7486, 18, 4, 226, 22, 21, 134, 476, 26, 480, 5, 144, 30, 5535, 18, 51, 36, 28, 224, 92, 25, 104, 4, 226, 65, 16, 38, 1334, 88, 12, 16, 283, 5, 16, 4472, 113, 103, 32, 15, 16, 5345, 19, 178, 32] 1
-<class 'numpy.ndarray'>
-<class 'numpy.ndarray'>
-[0 1]
-'''
+# [0 1]
+
+#测试集大小
+print(test_data.shape)
+print(test_labels.shape)
+
+#(25000, 500)
+#(25000,)
 
 ```
 
+**<div id='preprocess'>数据预处理</div>**
+
+```python
+# 下载词表，就是imdb_word_index.json
+# key是单词，value是索引
+word_index=imdb.get_word_index()
+
+print(len(word_index))
+print(type(word_index))
+
+# 88584
+# <class 'dict'>
+
+print(word_index.get("footwork"))
+
+# 34698
+
+# 取出的词表索引从1开始，id都偏移3
+word_index = {k:(v+3) for k,v in word_index.items()}
+# 自定义索引0-3
+word_index["<PAD>"] = 0 # 填充字符
+word_index["<START>"] = 1 # 起始字符
+word_index["<UNK>"] = 2 # 找不到就返回UNK
+word_index["<END>"] = 3 # 结束字符
+
+# 转成习惯的方式，索引为key,单词为value
+reverse_word_index = {v:k for k,v in word_index.items()}
+
+# 查看解码效果
+print(reverse_word_index)
+
+# {34710: 'fawn', 52015: 'tsukino', 52016: 'nunnery', 16825: 'sonja', 63960: 'vani', 1417: 'woods', ……}
+
+# debug
+
+print(reverse_word_index[34707])
+
+# footwork
+
+print(word_index.get("footwork"))
+
+# 34707
+
+# 随机看一下样本长度，可见长度不一
+print(len(train_data[0]),len(train_data[1]),len(train_data[100]))
+
+# 218 189 158
+
+# 设置输入词汇表的长度，长度<500会被补全，>500会被截断
+
+max_length = 500
+
+# 填充padding
+# value 用什么值填充
+# padding 选择填充的顺序，2中pre,post
+train_data = keras.prepocessing.sequence.pad_sequences(train_data,value = word_index["<PAD>"],padding="pre",maxlen = max_length)
+
+# 使测试集要和训练集结构相同
+test_data = keras.preprocessing.sequence.pad_sequences(test_data,value = word_index["<PAD>"],padding = "pre",maxlen = max_length)
+
+```
+
+
+这里简要介绍一下两种**padding**方式，与前面代码无关，一个是在**开头**填充，一个是在**末尾**填充，在本题中好像pre train出的结果好一点
+
+```python
+
+train_data = [[1,2,3,34],[2,3,1,4,2]]
+train_data = keras.preprocessing.sequence.pad_sequences(train_data,value = 0,padding = "pre",maxlen = 10)
+print(train_data)
+
+'''
+[[ 0  0  0  0  0  0  1  2  3 34]
+ [ 0  0  0  0  0  2  3  1  4  2]]
+'''
+
+train_data = [[1,2,3,34],[2,3,1,4,2]]
+train_data = keras.preprocessing.sequence.pad_sequences(train_data,value = 0,padding = "post",maxlen = 10)
+
+print(train_data)
+
+'''
+[[ 1  2  3 34  0  0  0  0  0  0]
+ [ 2  3  1  4  2  0  0  0  0  0]]
+'''
+```
+
+**<div id='design'>定义模型</div>**
+
+```python
+# 一个单词的维度是16维
+embedding_dim = 16
+batch_size = 128
+
+# 定义模型
+# 定义矩阵 [vocab_size,embedding_dim]
+# GlobalAveragePooling1D 全局平均值池化-在max_length这个维度上做平均，就是1x16了
+# 二分类问题，最后的激活函数用sigmoid
+```
