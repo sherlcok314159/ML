@@ -1,19 +1,3 @@
-### Sentiment Classification in IMDB
-
-***通过DNN实现影评情感分类***
-
-章节
-
-- [包的准备](#prepare)
-- [数据下载](#download)
-- [数据预处理](#preprocess)
-- [设计DNN](#design)
-- [其他方案](#w)
-
-
-**<div id='prepare'>包的准备</div>**
-
-```python
 import matplotlib.pyplot as plt
 import matplotlib as mpl
 import numpy as np
@@ -24,21 +8,6 @@ from tensorflow import keras
 for module in mpl,np,pd,tf,keras:
     print(module.__name__,module.__version__)
 
-'''
-matplotlib 3.3.4
-numpy 1.16.0
-pandas 1.1.5
-tensorflow 1.14.0
-tensorflow.python.keras.api._v1.keras 2.2.4-tf
-'''
-
-若没有按照版本安装，如
-pip3 install numpy==1.16.0
-```
-
-**<div id='download'>数据下载</div>**
-
-```python
 #取出词频为前10000
 vocab_size = 10000
 # <3的id都是特殊字符
@@ -48,68 +17,25 @@ imdb = keras.datasets.imdb
 
 (train_data,train_labels),(test_data,test_labels) = imdb.load_data(num_words = vocab_size,index_from = index_from)
 
-'''
-Downloading data from https://storage.googleapis.com/tensorflow/tf-keras-datasets/imdb.npz
-17465344/17464789 [==============================] - 28s 2us/step
-'''
-
-# 若要进一步了解各种参数，API示例文档 https://keras.io/api/datasets/imdb/
-
-# 训练集的大小
 print(train_data.shape)
 print(train_labels.shape)
 
-# (25000,)
-# (25000,)
-
-# 训练集的第一个样本（是向量）
 print(train_data[0],train_labels[0])
 
-'''
-[1, 14, 22, 16, 43, 530, 973, 1622, 1385, 65, 458, 4468, 66, 3941, 4, 173, 36, 256, 5, 25, 100, 43, 838, 112, 50, 670, 2, 9, 35, 480, 284, 5, 150, 4,……] 
-
-1
-'''
-
-# 多维的数组 numpy.ndarray
 print(type(train_data))
 print(type(train_labels))
 
-'''
-<class 'numpy.ndarray'>
-<class 'numpy.ndarray'>
-'''
-
-# train_labels的值0(negative),1(positive)-二分类
 print(np.unique(train_labels))
 
-# [0 1]
-
-#测试集大小
 print(test_data.shape)
 print(test_labels.shape)
 
-#(25000, 500)
-#(25000,)
-
-```
-
-**<div id='preprocess'>数据预处理</div>**
-
-```python
-# 下载词表，就是imdb_word_index.json
-# key是单词，value是索引
 word_index=imdb.get_word_index()
 
 print(len(word_index))
 print(type(word_index))
 
-# 88584
-# <class 'dict'>
-
 print(word_index.get("footwork"))
-
-# 34698
 
 # 取出的词表索引从1开始，id都偏移3
 word_index = {k:(v+3) for k,v in word_index.items()}
@@ -149,41 +75,11 @@ max_length = 500
 # 填充padding
 # value 用什么值填充
 # padding 选择填充的顺序，2中pre,post
-train_data = keras.prepocessing.sequence.pad_sequences(train_data,value = word_index["<PAD>"],padding="pre",maxlen = max_length)
+train_data = keras.preprocessing.sequence.pad_sequences(train_data,value = word_index["<PAD>"],padding="pre",maxlen = max_length)
 
 # 使测试集要和训练集结构相同
 test_data = keras.preprocessing.sequence.pad_sequences(test_data,value = word_index["<PAD>"],padding = "pre",maxlen = max_length)
 
-```
-
-
-这里简要介绍一下两种**padding**方式，与前面代码无关，一个是在**开头**填充，一个是在**末尾**填充，在本题中好像pre train出的结果好一点
-
-```python
-
-train_data = [[1,2,3,34],[2,3,1,4,2]]
-train_data = keras.preprocessing.sequence.pad_sequences(train_data,value = 0,padding = "pre",maxlen = 10)
-print(train_data)
-
-'''
-[[ 0  0  0  0  0  0  1  2  3 34]
- [ 0  0  0  0  0  2  3  1  4  2]]
-'''
-
-train_data = [[1,2,3,34],[2,3,1,4,2]]
-train_data = keras.preprocessing.sequence.pad_sequences(train_data,value = 0,padding = "post",maxlen = 10)
-
-print(train_data)
-
-'''
-[[ 1  2  3 34  0  0  0  0  0  0]
- [ 2  3  1  4  2  0  0  0  0  0]]
-'''
-```
-
-**<div id='design'>定义模型</div>**
-
-```python
 # 一个单词的维度是16维
 embedding_dim = 16
 batch_size = 128
@@ -215,14 +111,8 @@ def plot_(history,label):
     plt.legend(["train","validation"],loc = "upper left")
     plt.show()
 
-plot_(history,"accuracy")
+plot_(history,"acc")
 plot_(history,"loss")
-
-![](https://github.com/sherlcok314159/ML/blob/main/Images/imdb_1.png)
-
-![](https://github.com/sherlcok314159/ML/blob/main/Images/imdb_2.png)
-
-其实可以发现已经烂掉了，发生了过拟合
 
 score = model.evaluate(
     test_data,test_labels,
@@ -237,5 +127,3 @@ print("Test accuracy:", score[1])
 Test loss: 0.7127751180744171
 Test accuracy: 0.85788
 '''
-
-```
