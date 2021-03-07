@@ -52,7 +52,7 @@ CNN 一共分为输入，卷积，池化，拉直，softmax，输出
 
 跟上面MaxPooling的操作类似，唯一区别是一个求最大值，一个求平均值
 
-**AveragePooling**
+**GlobalAveragePooling**
 
 ![](https://github.com/sherlcok314159/ML/blob/main/Images/GlobalAveragePooling.png)
 
