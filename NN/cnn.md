@@ -135,23 +135,19 @@ print("Test accuracy:", score[1])
 # Test loss: 0.03664601594209671
 # Test accuracy: 0.989300012588501
 
-# summarize history for accuracy
-plt.plot(history.history["acc"])
-plt.plot(history.history["val_acc"])
-plt.title("model accuracy")
-plt.ylabel("accuracy")
-plt.xlabel("epoch")
-plt.legend(["train", "test"], loc="upper left")#在左上方呈现标记
-plt.show()
+# visualize accuracy and loss
+def plot_(history,label):
+    plt.plot(history.history[label])
+    plt.plot(history.history["val_" + label])
+    plt.title("model " + label)
+    plt.ylabel(label)
+    plt.xlabel("epoch")
+    plt.legend(["train","test"],loc = "upper left")
+    plt.show()
 
-# summarize history for loss
-plt.plot(history.history["loss"])
-plt.plot(history.history["val_loss"])
-plt.title("model loss")
-plt.ylabel("loss")
-plt.xlabel("epoch")
-plt.legend(["train", "test"], loc="upper left")
-plt.show()
+plot_(history,"acc")
+plot_(history,"loss")
+
 ```
 在机器学习中画精确度和loss的图很有必要，这样可以发现自己的代码中是否存在问题，并且将这个问题可视化
 

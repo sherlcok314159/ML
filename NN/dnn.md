@@ -138,7 +138,7 @@ print("Test Accuracy", score[1])
 # visualize accuracy and loss
 def plot_(history,label):
     plt.plot(history.history[label])
-    plt.plot(history.history["val_ " + label])
+    plt.plot(history.history["val_" + label])
     plt.title("model " + label)
     plt.ylabel(label)
     plt.xlabel("epoch")
