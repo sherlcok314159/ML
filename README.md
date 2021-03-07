@@ -31,5 +31,6 @@ Select The Best Function
 **Neutral Network**
 
 - [Activation](NN/activation.md)
-- [DNN](NN/dnn.md)
-- [CNN](NN/cnn.md)
+- [DNN](NN/DNN/dnn.md)
+    - [Sentiment Classification in IMDB](NN/DNN/IMDB.md)
+- [CNN](NN/CNN/cnn.md)
