@@ -8,7 +8,7 @@
 - [数据下载](#download)
 - [数据预处理](#preprocess)
 - [设计DNN](#design)
-- [其他方案](#w)
+- [调参](#update)
 
 
 **<div id='prepare'>包的准备</div>**
@@ -244,7 +244,9 @@ Test accuracy: 0.85788
 
 接下来进行一些讨论
 
-**More parameters?**
+**<div id='update'>调参</div>**
+
+**More neurons?**
 
 ```python
 # 改成128个神经元
@@ -289,7 +291,7 @@ Test accuracy: 0.8558
 # 没什么区别吧
 
 # 试试看softmax
-keras.layers.Dense(1,activation='softmax'),                               
+keras.layers.Dense(64,activation='softmax'),                               
 '''
 Test loss: 0.2950
 Test accuracy: 0.8838
@@ -298,11 +300,45 @@ Test accuracy: 0.8838
 # Cool!
 
 # 试试看softplus
-keras.layers.Dense(1,activation='softplus'),                               
+keras.layers.Dense(64,activation='softplus'),                               
 '''
 Test loss: 0.4718
 Test accuracy: 0.8709
 '''
 # 还不错
 
+# 试试看Elu
+keras.layers.Dense(64,activation='elu'),                               
+'''
+Test loss: 0.9268
+Test accuracy: 0.8544
+'''
+
+# 试试看Softsign
+keras.layers.Dense(64,activation='softsign'),                               
+'''
+Test loss: 0.9815
+Test accuracy: 0.8555
+'''
+
+# 试试看Exponential
+keras.layers.Dense(64,activation='exponential'),                               
+'''
+Test loss: 0.9815
+Test accuracy: 0.8555
+'''
+
+
+# 试试看Leaky Relu
+keras.layers.Dense(64),
+keras.layers.LeakyRelu(),                               
+'''
+Test loss: 0.8014
+Test accuracy: 0.8560
+'''
+```
+
+**Deep?**
+
+尝试了各种各样的组合，最终大部分都落在[86，87]区间，还没有不DEEP来的好
 

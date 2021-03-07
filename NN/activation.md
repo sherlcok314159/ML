@@ -118,3 +118,35 @@ tanh的特点：
 
 **3.** 平滑度在优化和泛化有很大作用
 
+**7.Elu**
+
+![](https://github.com/sherlcok314159/ML/blob/main/Images/elu_2.jpeg)
+
+![](https://github.com/sherlcok314159/ML/blob/main/Images/elu.png)
+
+
+Elu具有Relu的全部优点，**没有Dead Relu问题**，输出值的**平均值接近于0，以0为中心**
+
+Elu通过减少偏置偏移的影响，使正常梯度更接近于单位自然梯度，从而使均值向零**加速学习**
+
+Elu在较小的输入时会饱和至**负值**，从而减少前向传播的变异和信息
+
+但它相对来说计算会麻烦一点，而且理论上ELU应该比RELU，实操上不一定都比RELU好
+
+**8.Softsign**
+
+![](https://github.com/sherlcok314159/ML/blob/main/Images/softsign.png)
+
+![](https://github.com/sherlcok314159/ML/blob/main/Images/softsign_2.jpg)
+
+
+**9.Selu**
+
+![](https://github.com/sherlcok314159/ML/blob/main/Images/selu.png)
+
+![](https://github.com/sherlcok314159/ML/blob/main/Images/selu_2.png)
+
+
+**10.Exponential**
+
+![](https://github.com/sherlcok314159/ML/blob/main/Images/exponential.png)
