@@ -17,7 +17,7 @@ Data Process
 * [Normalization](data_process/normalization.md)
 
 Choose A Function Set
-* [Regression](models/linear_regression.md)
+* [Regression](models/Regression/regression.md)
 
 Define A Loss Function
 * [Loss function](loss/loss_.md)
