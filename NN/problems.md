@@ -86,6 +86,9 @@ early_stopping = EarlyStopping(monitor='val_loss', patience=2)
 
 model.fit(x, y, validation_split=0.2, callbacks=[early_stopping])
 ```
+>**Patience**: **number** of **epochs** with **no improvement** after which training will be stopped.
+
+简单来说就是没有进步的epoch个数
 
 **<div id='regular'>Regularization</div>**
 

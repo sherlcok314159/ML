@@ -369,9 +369,31 @@ patience = 1，accuracy: 0.8746
 ![](https://github.com/sherlcok314159/ML/blob/main/Images/val_loss_1.png)
 
 ```python
-patience = 0，accuracy: 0.8772
+patience = 2，accuracy: 0.8772
 ```
 
 ![](https://github.com/sherlcok314159/ML/blob/main/Images/val_loss_2.png)
 
+
+```python
+patience = 3，accuracy: 0.8183
+```
+
+![](https://github.com/sherlcok314159/ML/blob/main/Images/val_loss_3.png)
+
+```python
+patience = 4，accuracy: 0.8724
+```
+
+![](https://github.com/sherlcok314159/ML/blob/main/Images/val_loss_4.png)
+
+```python
+patience = 4，accuracy: 0.8650
+```
+
+![](https://github.com/sherlcok314159/ML/blob/main/Images/val_loss_5.png)
+
+其实大概可以看出，很多时候我们很难找出一个patience充当万金油，不知道该跳哪一个，所以真正实操的时候，很多时候选择不跳过
+
+一般的取值在10到100之间，取决于你的data和模型。举个例子来讲，如果你的模型下降的比较慢一开始，就把patience适当调大一点
 
