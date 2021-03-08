@@ -33,7 +33,7 @@
 
 **<div id='cost0'>Cost function</div>**
 
-在机器学习中，我们通过定义一个模型的[损失函数](../loss/loss_.md)，通过[梯度下降](../optimization/GD.md)找到最优的参数。
+在机器学习中，我们通过定义一个模型的[损失函数](https://github.com/sherlcok314159/ML/blob/main/loss/loss_.md)，通过[梯度下降](https://github.com/sherlcok314159/ML/blob/main/optimization/GD.md)找到最优的参数。
 
 ![](https://github.com/sherlcok314159/ML/blob/main/Images/cost_0.png)
 
@@ -53,7 +53,7 @@ linear regression 只能做连续值预测，其实从另一种角度来看，�
 
 ![](https://github.com/sherlcok314159/ML/blob/main/Images/logistic.png)
 
-当然，你如果熟悉[sigmoid](../NN/activation.md)，就会发现在函数上logistic regression就是把linear regression的函数放到了z上，仅此而已。关于sigmoid 相关性质，可以点击上面了解
+当然，你如果熟悉[sigmoid](https://github.com/sherlcok314159/ML/blob/main/NN/activation.md)，就会发现在函数上logistic regression就是把linear regression的函数放到了z上，仅此而已。关于sigmoid 相关性质，可以点击上面了解
 
 你会发现当输入值大于0的时候，就会映射到[0.5,1]区间，同样的，当小于0的时候，会被映射到[0,0.5]，当作二元分类的时候，只有两种标签（0，1），比如你今天要做个垃圾邮件识别器，label只有两个，是 or 不是。
 
@@ -66,7 +66,7 @@ linear regression 只能做连续值预测，其实从另一种角度来看，�
 
 ![](https://github.com/sherlcok314159/ML/blob/main/Images/cost_1.png)
 
-这里选择[Cross entropy](../loss/loss_.md) 作为loss function ，因为是二元分类问题，符合伯努力分布
+这里选择[Cross entropy](https://github.com/sherlcok314159/ML/blob/main/loss/loss_.md) 作为loss function ，因为是二元分类问题，符合伯努力分布
 
 可见在y = 1的时候，x 靠近 0 ，即 y = 0 loss 会越来越大。当y = 0的时候，其实图像就像是y = 1 关于（1，0）的对称。同理
 
