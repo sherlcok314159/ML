@@ -20,7 +20,9 @@
 
 其实，最简单的线性模型可以是
 
+
 ![](https://github.com/sherlcok314159/ML/blob/main/Images/linear.png)
+
 
 就是一条直线
 
