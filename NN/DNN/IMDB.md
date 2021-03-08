@@ -127,6 +127,14 @@ print(reverse_word_index)
 
 # {34710: 'fawn', 52015: 'tsukino', 52016: 'nunnery', 16825: 'sonja', 63960: 'vani', 1417: 'woods', ……}
 
+# 解码函数，如果找不到的话就是<UNK>，按照索引找词
+def decode_review(text_ids):
+  return " ".join([reverse_word_index.get(word_id,"<UNK>") for word_id in text_ids])
+
+
+# 逐个对单词解码，得到一篇文本
+decode_review(train_data[0])
+
 # debug
 
 print(reverse_word_index[34707])
