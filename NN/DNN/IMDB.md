@@ -350,3 +350,28 @@ Test accuracy: 0.8560
 
 尝试了各种各样的组合，最终大部分都落在[86，87]区间，还没有不DEEP来的好
 
+
+**EarlyStopping?**
+
+其实很多时候train的时候再往下其实val_loss是不会下降的，不如直接停掉，防止过拟合
+
+代码在[Problems](../problems.md)中说过了，这里只讨论一下patience参数的影响
+
+
+```python
+patience = 0，accuracy: 0.8788
+```
+![](https://github.com/sherlcok314159/ML/blob/main/Images/val_loss_0.png)
+
+```python
+patience = 1，accuracy: 0.8746
+```
+![](https://github.com/sherlcok314159/ML/blob/main/Images/val_loss_1.png)
+
+```python
+patience = 0，accuracy: 0.8772
+```
+
+![](https://github.com/sherlcok314159/ML/blob/main/Images/val_loss_2.png)
+
+

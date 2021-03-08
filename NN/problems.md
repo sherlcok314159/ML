@@ -81,7 +81,9 @@ If a weight = 1 by training,set w = 0.5 for testing.(Dropout rate is 50%.)
 ```python
 from tensorflow.keras.callbacks import EarlyStopping
 
+# patience越大对不下降越不敏感，就越有耐心
 early_stopping = EarlyStopping(monitor='val_loss', patience=2)
+
 model.fit(x, y, validation_split=0.2, callbacks=[early_stopping])
 ```
 
@@ -111,4 +113,38 @@ model.fit(x, y, validation_split=0.2, callbacks=[early_stopping])
 
 其实在DeepLearning里面，regularization跟EarlyStopping其实功能差不多，没有在SVM中来的那么重要
 
+那么，如何用代码实操呢？
 
+```python
+from tensorflow.keras import layers
+from tensorflow.keras import regularizers
+
+layer = layers.Dense(
+    units=64,
+    kernel_regularizer=regularizers.l1_l2(l1=1e-5, l2=1e-4),
+    bias_regularizer=regularizers.l2(1e-4),
+    activity_regularizer=regularizers.l2(1e-5)
+)
+```
+
+或者
+
+```python
+layer = tf.keras.layers.Dense(5, kernel_initializer='ones', # 这只是示例
+                              kernel_regularizer=tf.keras.regularizers.l1(0.01),
+                              activity_regularizer=tf.keras.regularizers.l2(0.01))
+tensor = tf.ones(shape=(5, 5)) * 2.0
+out = layer(tensor)
+# The kernel regularization term is 0.25
+# The activity regularization term (after dividing by the batch size) is 5
+print(tf.math.reduce_sum(layer.losses))  # 5.25 (= 5 + 0.25)
+```
+
+或者自定义一个
+```python
+def my_regularizer(x):
+    return 1e-3 * tf.reduce_sum(tf.square(x))
+
+```
+
+若要了解更多，可以去keras官网看一下[具体接口](https://keras.io/api/layers/regularizers/)
