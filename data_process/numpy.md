@@ -301,23 +301,44 @@ print(np.shape(y))
 #(1, 100)
 #(100,)
 ```
-*17.随机浮点数生成*
+*17.随机数字生成*
 ```python
+
+# 随机生成数字
+print(np.linspace(2,6,num = 4))
+# [2.         3.33333333 4.66666667 6.        ] # 始末点是你输入的
+
+a = np.linspace(2,8,num = 4,endpoint = False)
+print(a)
+# [2.  3.5 5.  6.5]
+
+print(type(a))
+# numpy.ndarray
+
+# 类似的，还有一个指数空间，10的指数次
+
+print(np.logspace(3,7,num = 4))
+# [1.00000000e+03 2.15443469e+04 4.64158883e+05 1.00000000e+07]
+
+# 随机生成一个小数
+print(np.random.uniform(0.,1.))
+# 0.01437751259085529
+
 print(np.random.rand(3,2))
 #[[0.5488135  0.71518937]
 # [0.60276338 0.54488318]
 # [0.4236548  0.64589411]]
 
-#rand的用法与zeros是一样的，生成几叉几的，但不同的是zeros需要套括号，而rand不用
+# rand的用法与zeros是一样的，生成几叉几的，但不同的是zeros需要套括号，而rand不用
 
 print(np.random.rand(4, 1))
 print(np.zeros((4, 1)))
 
-#如果一个数，就是一维的列表
+# 如果一个数，就是一维的列表
 print(np.random.rand(3))
 #[0.12277558 0.57764143 0.59843161]
 
-#如果要求生成的随机数可以被预测，可以用np.random.seed(k)当然k可以任取
+# 如果要求生成的随机数可以被预测，可以用np.random.seed(k)当然k可以任取
 np.random.seed(0)
 print(np.random.rand(3,1))
 #[[0.52372051]
@@ -330,7 +351,7 @@ print(np.random.rand(3,1))
 # [0.6603495 ]
 # [0.64741481]]
 
-#你会发现生成的随机数是一样的
+# 你会发现生成的随机数是一样的
 ```
 
 *18.洗牌*
@@ -340,7 +361,7 @@ np.random.shuffle(lis)
 print(lis)
 #[4, 5, 3, 1, 2]
 
-#需要注意的是shuffle是作用于列表，所以，列表是动态修改的，如果直接打印更改的，会是"None"，需要直接打印列表本身
+# 需要注意的是shuffle是作用于列表，所以，列表是动态修改的，如果直接打印更改的，会是"None"，需要直接打印列表本身
 ```
 
 *19.求平均值*
@@ -357,7 +378,7 @@ print(np.mean(a, axis=0, keepdims=True))
 print(np.mean(a, axis=0, keepdims=True,dtype = int))
 #[[2 3 4]]
 
-#所有参数用法均与np.sum一样,不多赘述
+# 所有参数用法均与np.sum一样,不多赘述
 
 ```
 *20.拓展维度*
@@ -378,7 +399,43 @@ print(d.shape)
 (1,1,3)
 (1,3,1)
 ------
-#axis = 0 最左边加一个维度
-#axis = 1 中间加一个维度
-#axis = -1 最右边加一个维度
+# axis = 0 最左边加一个维度
+# axis = 1 中间加一个维度
+# axis = -1 最右边加一个维度
 ```
+
+*21.生成序列数据*
+
+```python
+# grammar
+a = np.arange(start = ,end = ,step = ,dtype = )
+# case 
+a = np.arange(1,9,1,dtype = "int")
+print(a)
+# [1 2 3 4 5 6 7 8]
+# 结果是以列表形式呈现
+
+```
+
+*22.将单个数据变成向量*
+
+```python
+a,b = 0,1
+a,b = np.meshgrid(a,b)
+print(a,b)
+# [[0]][[1]]
+print(a.shape)
+# (1,1)
+z = np.meshgrid(a,b)
+print(z)
+# [array([[0]]), array([[1]])]
+
+import matplotlib.pyplot as plt
+y = np.arange(1,3,1)
+# [1,2]
+plt.scatter(z,y)
+plt.show()
+
+# 在matplotlib里面，当数据以列表或者array出现时，都可以接受
+```
+
