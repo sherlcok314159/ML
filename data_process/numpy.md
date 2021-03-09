@@ -216,7 +216,7 @@ print(np.array_split(a,5,axis = 1))
 #axis不再赘言，split之后会产生列表，跟Python语法一样的
 ```
 
-*13.合成*
+*13.拼接*
 
 ```python
 a = np.array([[1]])
@@ -229,6 +229,33 @@ b_div = np.array_split(b,5,axis = 1)
 print(np.concatenate(b_div[0:3]+b_div[4:],axis = 1))
 #[[1 2 3 5]
 # [6 7 8 0]]
+
+c = np.array([[1,2,3],[4,5,6]])
+d = np.array([[0,9,8],[7,6,5]])
+# 按行拼接，行数需相等，左右
+print(np.c_[c,d]) # 注意必须是方括号，不要误做()
+#[[1 2 3 0 9 8]
+# [4 5 6 7 6 5]]
+
+# 按列拼接，列数需相等，上下
+print(np.r_[c,d]) 
+# [[1 2 3]
+# [4 5 6]
+# [0 9 8]
+# [7 6 5]]
+
+# 注意，当dim >= 2时满足如上，当dim = 1时，相反
+p = np.zeros((4,))
+q = np.zeros((4,))
+np.c_[p,q]
+
+#array([[0., 0.],
+#       [0., 0.],
+#       [0., 0.],
+#       [0., 0.]])
+
+np.r_[p,q]
+# array([0., 0., 0., 0., 0., 0., 0., 0.])
 ```
 
 *14.生成特定向量*
@@ -412,7 +439,7 @@ a = np.arange(start = ,end = ,step = ,dtype = )
 # case 
 a = np.arange(1,9,1,dtype = "int")
 print(a)
-# [1 2 3 4 5 6 7 8]
+# [1 2 3 4 5 6 7 8] 不包括最后一个
 # 结果是以列表形式呈现
 
 ```
@@ -437,5 +464,15 @@ plt.scatter(z,y)
 plt.show()
 
 # 在matplotlib里面，当数据以列表或者array出现时，都可以接受
+```
+
+*23.降维拉平*
+
+```python
+a = np.zeros((3,4))
+# 将数据变为一维
+b = a.ravel()
+print(b)
+# [0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0.]
 ```
 
