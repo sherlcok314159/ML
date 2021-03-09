@@ -3,7 +3,7 @@
 **章节**
 - [BGD](#bgd)
 - [SGD](#sgd)
-- [Better](#problem)
+- [Better](#better)
     - [Momentum](#mom)
     - [RMSProp](#rms)
     - [Adam](#adam)
