@@ -351,6 +351,12 @@ print(np.logspace(3,7,num = 4))
 print(np.random.uniform(0.,1.))
 # 0.01437751259085529
 
+# 随机生成0，1小数
+x = np.random.uniform(size = 1000)
+print(x)
+print(type(x))
+# class 'numpy.ndarray'>
+
 print(np.random.rand(3,2))
 #[[0.5488135  0.71518937]
 # [0.60276338 0.54488318]
@@ -440,8 +446,9 @@ a = np.arange(start = ,end = ,step = ,dtype = )
 a = np.arange(1,9,1,dtype = "int")
 print(a)
 # [1 2 3 4 5 6 7 8] 不包括最后一个
-# 结果是以列表形式呈现
-
+print(type(a))
+# <class 'numpy.ndarray'>
+# 结果是以array形式呈现
 ```
 
 *22.将单个数据变成向量*
