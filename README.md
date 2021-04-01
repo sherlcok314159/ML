@@ -4,6 +4,8 @@
 ### 章节
 - [线上课程](#courses)
 - [基础知识](#basic)
+- [深度学习](#deep)
+- [手撕源码](#source_code)
 
 ****
 ### <div id='courses'>线上课程</div>
@@ -28,10 +30,11 @@ Select The Best Function
 ****
 其实神经网络属于机器学习，只是过程具体化有些不同罢了，所以分开处理
 
-**Neutral Network**
-
+### <div id='deep'>Neutral Network</div>
 - [Activation](NN/activation.md)
 - [DNN](NN/DNN/dnn.md)
     - [Sentiment Classification in IMDB](NN/DNN/IMDB.md)
 - [CNN](NN/CNN/cnn.md)
 - [Problems](NN/problems.md)
+
+### <div id='source_code'></div手撕源码>
