@@ -19,7 +19,7 @@
 * [Normalization](data_process/normalization.md)
 
 模型汇总
-* [Regression](models/Regression/regression.md)
+* [Regression](models/Regression/04_training_linear_models.ipynb)
 
 损失函数
 * [Loss function](loss/loss_.md)
@@ -37,3 +37,7 @@
 - [Problems](NN/problems.md)
 
 ### <div id='source_code'>手撕源码</div>
+- Bert文本系列
+     - [Bert之文本分类](bert/text.md)
+     - [Bert之文本翻译](bert/translate.md)
+     - [Bert之阅读理解](bert/understand.md)
