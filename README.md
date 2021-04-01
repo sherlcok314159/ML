@@ -13,7 +13,7 @@
 - [李宏毅](https://www.youtube.com/watch?v=CXgbekl66jc&list=PLJV_el3uVTsPy9oCRY30oBPNLCo89yu49&index=1)（入门极荐，简单易懂，且为中文授课）
 
 ****
-### <div id='basic'>Process</div>
+### <div id='basic'>基础知识</div>
 <!-- **** -->
 数据处理
 * [Normalization](data_process/normalization.md)
