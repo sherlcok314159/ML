@@ -15,17 +15,16 @@
 ****
 ### <div id='basic'>Process</div>
 <!-- **** -->
-Data Process
+数据处理
 * [Normalization](data_process/normalization.md)
 
-Choose A Function Set
+模型汇总
 * [Regression](models/Regression/regression.md)
 
-Define A Loss Function
+损失函数
 * [Loss function](loss/loss_.md)
 
-Select The Best Function
-
+优化方法
 * [Gradient Descent](optimization/GD.md)
 ****
 其实神经网络属于机器学习，只是过程具体化有些不同罢了，所以分开处理
