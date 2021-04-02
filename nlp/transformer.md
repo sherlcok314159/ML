@@ -30,3 +30,14 @@
 
 传统的[word2vec](https://en.wikipedia.org/wiki/Word2vec)通过将词语转换为坐标形式，并且根据**距离之远近决定两个词意思的相近程度。** 但是在NLP任务中，尽管是同一个词语，但在不同语境下代表的意思很有可能不同。例如，你今天方便的时候，来我家吃饭吧和我肚子不舒服，去厕所方便一下这两句中方便的意思肯定不一样。可是，word2vec处理之后坐标形式就固定了。
 
+**3、突出对待**
+
+在一个句子中，当我们需要强调某一个部分的时候，word2vec无法为我们做到这些。比如，
+
+The cat doesn't eat the cake because it is not hungry.
+
+The cat doesn't eat the cake because it smells bad.
+
+第一个句子中it强调的是the cat，在第二个句子中it强调的是the cake。
+
+
