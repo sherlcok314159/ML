@@ -40,4 +40,13 @@ The cat doesn't eat the cake because it smells bad.
 
 第一个句子中it强调的是the cat，在第二个句子中it强调的是the cake。
 
+***
+**<div id='self_attention'>Self-Attention</div>**
 
+attention的意思是我们给有意义的内容配以较高的权重，那么自己与自己做attention是什么意思？
+
+![](https://github.com/sherlcok314159/ML/blob/main/nlp/Images/self_attention.png)
+
+比如这个句中的"green"，self的意思就是说拿这个词与整个句子其他的词语分别算相似程度。如此便考虑了词与上下文和句子整体之间的关系。当然，自己与自己肯定是联系最紧密。
+
+那么，如何计算self-attenion呢？我们的目的是让机器能够判定出某个词语与整个句子之间的关系。
