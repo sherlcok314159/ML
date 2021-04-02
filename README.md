@@ -5,7 +5,7 @@
 - [线上课程](#courses)
 - [基础知识](#basic)
 - [深度学习](#deep)
-- [手撕源码](#source_code)
+- [NLP](#nlp)
 
 ****
 ### <div id='courses'>线上课程</div>
@@ -36,8 +36,12 @@
 - [CNN](NN/CNN/cnn.md)
 - [Problems](NN/problems.md)
 
-### <div id='source_code'>手撕源码</div>
+### <div id='nlp'>NLP任务</div>
+
+- NLP基础模型讲解
+    - [Transformer](nlp/transformer.md)
+    - [Bert](nlp/bert.md)
 - Bert文本系列
-     - [Bert之文本分类](bert/text.md)
-     - [Bert之文本翻译](bert/translate.md)
-     - [Bert之阅读理解](bert/understand.md)
+     - [Bert之文本分类](nlp/text.md)
+     - [Bert之文本翻译](nlp/translate.md)
+     - [Bert之阅读理解](nlp/understand.md)
