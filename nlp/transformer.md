@@ -19,7 +19,7 @@
 
 **1、无法并行运算**
 
-在transformer之前，大部分应该都是RNN，下面简单介绍一下RNN
+在transformer之前，大部分应该都是[RNN](https://en.wikipedia.org/wiki/Recurrent_neural_network)，下面简单介绍一下RNN
 
 ![](https://github.com/sherlcok314159/ML/blob/main/nlp/Images/RNN.png)
 
@@ -28,5 +28,5 @@
 
 **2、语义表述不清**
 
-传统的[word2vec]()
+传统的[word2vec](https://en.wikipedia.org/wiki/Word2vec)通过将词语转换为坐标形式，并且根据**距离之远近决定两个词意思的相近程度。** 但是在NLP任务中，尽管是同一个词语，但在不同语境下代表的意思很有可能不同。例如，你今天方便的时候，来我家吃饭吧和我肚子不舒服，去厕所方便一下这两句中方便的意思肯定不一样。可是，word2vec处理之后坐标形式就固定了。
 
