@@ -32,3 +32,6 @@
 
 ![](https://github.com/sherlcok314159/ML/blob/main/nlp/Images/connect.png)
 
+
+[CLS]代表分类的结果，对于一个二分类任务就是可以或不可以连在一起（0，1）
+
