@@ -9,6 +9,8 @@
     - [Multi-Headed](#multi)
 - [Positional Encoding](#positional)
 - [Add & Norm](#add)
+- [Feed Forward](#feed)
+- [Encoder To Decoder](#etd)
 - [Source Code Explanation](#code)
 
 ![](https://github.com/sherlcok314159/ML/blob/main/nlp/Images/transformer.png)
@@ -119,12 +121,22 @@ self-attention除了可以捕获到句子语法特征外，还可以在长序列
 
 **<div id='add'>Add & Norm</div>**
 
-Add 的意思是残差相连，思路来源于论文[Deep residual learning for image recognition](https://openaccess.thecvf.com/content_cvpr_2016/html/He_Deep_Residual_Learning_CVPR_2016_paper.html)，和Norm指的是Layer Normalization，来源于论文[Layer normalization](https://arxiv.org/abs/1607.06450)。
+Add 的意思是残差相连，思路来源于论文[Deep residual learning for image recognition](https://openaccess.thecvf.com/content_cvpr_2016/html/He_Deep_Residual_Learning_CVPR_2016_paper.html)，Norm指的是Layer Normalization，来源于论文[Layer normalization](https://arxiv.org/abs/1607.06450)。
 
-![](https://github.com/sherlcok314159/ML/blob/main/nlp/Images/paper_2.png)
+论文中指出
+> That is, the output of each sub-layer is
+LayerNorm(x + Sublayer(x)), where Sublayer(x) is the function implemented by the sub-layer
+itself
 
-意思是每一层的输入和输出结果相拼接，然后进行归一化，这样可以更加稳定。
+意思是每一层的输入和输出结果相拼接，然后进行归一化，这样可以更加稳定。肯定会有读者好奇为什么不直接将输出结果归一化，偏要把输入结果拼接到输出结果然后再归一化。其实，很多时候深度学习还是不可解释性，属于黑盒理论，我们其实很难弄明白数据经过每一个网络究竟干了什么，所以以防万一，我们把原来没经过网络的数据也放进去。
 
 归一化的公式如下：
 
 ![](https://github.com/sherlcok314159/ML/blob/main/Images/mean_sigmoid.png)
+
+***
+
+**<div id='feed'>Feed Forward</div>**
+
+最后一个结构就是全连接层网络了
+
