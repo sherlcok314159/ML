@@ -6,7 +6,7 @@
 **章节**
 - [Reasons](#reasons)
 - [Self-Attention](#self_attention)
-    - [Multi-Headed](#multi)
+    - [Multi-Head Attention](#multi)
 - [Positional Encoding](#positional)
 - [Add & Norm](#add)
 - [Feed Forward](#feed)
@@ -91,7 +91,7 @@ attention的意思是我们给有意义的内容配以较高的权重，那么�
 self-attention除了可以捕获到句子语法特征外，还可以在长序列中捕获各个部分的**依赖关系**，而同样的处理用RNN和LSTM需要进行按照次序运算，迭代几次之后才有可能得到信息，而且距离越远，可能捕获到的可能性就越小。而self-attention极大程度上缩小了距离，更有利于利用特征。
 
 ***
-**<div id='multi'>Multi-headed Attention</div>**
+**<div id='multi'>Multi-head Attention</div>**
 
 理解了自注意力，那么什么是多头注意力呢？
 
