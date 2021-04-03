@@ -23,6 +23,9 @@
 
 **<div id='mask'>MASK</div>**
 
+![](https://github.com/sherlcok314159/ML/blob/main/nlp/Images/MASK.png)
+
+
 我们可以定义一个概率决定多少的数据被遮盖掉，比如说设置为15%，然后我们让bert去猜遮掉的究竟是什么。bert会根据前后句子关系，然后去自己的语料库里找匹配的词语，然后返回最佳匹配的。英文一般均为一个英文单词，但是中文大多为一个字，**因为中文的词语简直太多，没有办法全部涵盖**
 
 **<div id='connect'>Connect Or Not</div>**
