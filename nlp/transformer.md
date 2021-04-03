@@ -8,7 +8,7 @@
 - [Self-Attention](#self_attention)
     - [Multi-Headed](#multi)
 - [Positional Encoding](#positional)
-- [Add & Normalize](#add)
+- [Add & Norm](#add)
 - [Source Code Explanation](#code)
 
 ![](https://github.com/sherlcok314159/ML/blob/main/nlp/Images/transformer.png)
@@ -68,20 +68,26 @@ attention的意思是我们给有意义的内容配以较高的权重，那么�
 
 外面用softmax起着归一化的作用将具体的数值转化为，概率，更加直观。
 
-当然，两者做点积之后还需要除以矩阵K的维度开根号，Q，K，V矩阵维度是q x d_k，p x d_k，p x d_v，softmax是沿着p维进行的，但是很多时候大方差会导致数值分布不均匀，经过softmax之后就会大的愈大，小的愈小，这里除以一个矩阵K的维度其实类似于一个归一化，让它的**方差趋向于1，分布均匀一点**，所以在原paper里面又叫做**Scaled Dot-Product Attention**。
+在论文中提到
+
+![](https://github.com/sherlcok314159/ML/blob/main/nlp/Images/paper_1.png)
+
+两者做点积之后还需要除以矩阵K的维度开根号，Q，K，V矩阵维度是q x d_k，p x d_k，p x d_v，softmax是沿着p维进行的，但是很多时候大方差会导致数值分布不均匀，经过softmax之后就会大的愈大，小的愈小，这里除以一个矩阵K的维度其实类似于一个归一化，让它的**方差趋向于1，分布均匀一点**，所以在原paper里面又叫做**Scaled Dot-Product Attention**。
 
 那为什么除以一个矩阵K的维度开根号能使方差变为1呢？首先对于随机分布的q，k，方差均为1，期望均为0。我们把特定的一个q_i,k_i看成X，Y。
 
 ![](https://github.com/sherlcok314159/ML/blob/main/nlp/Images/scaled.png)
 
 
-那么q与k做点积之后的结果均值为0，方差为d_k。方差太大不稳定，所以除以矩阵K的维度开根号。
-
+那么q与k做点积之后的结果均值为0，方差为d_k。方差太大不稳定，所以除以矩阵K的维度开根号，参照链接(https://www.zhihu.com/question/339723385)。
 
 
 例如 v = 0.36v1 + 0.64v2，v1,v2是矩阵V里的。
 
 既然都是矩阵运算，那么都是可以**并行加速**的。
+
+self-attention除了可以捕获到句子语法特征外，还可以在长序列中捕获各个部分的**依赖关系**，而同样的处理用RNN和LSTM需要进行按照次序运算，迭代几次之后才有可能得到信息，而且距离越远，可能捕获到的可能性就越小。而self-attention极大程度上缩小了距离，更有利于利用特征。
+
 ***
 **<div id='multi'>Multi-headed Attention</div>**
 
@@ -111,5 +117,14 @@ attention的意思是我们给有意义的内容配以较高的权重，那么�
 
 ***
 
-**<div id='add'>Add & Normalize</div>**
+**<div id='add'>Add & Norm</div>**
 
+Add 的意思是残差相连，思路来源于论文[Deep residual learning for image recognition](https://openaccess.thecvf.com/content_cvpr_2016/html/He_Deep_Residual_Learning_CVPR_2016_paper.html)，和Norm指的是Layer Normalization，来源于论文[Layer normalization](https://arxiv.org/abs/1607.06450)。
+
+![](https://github.com/sherlcok314159/ML/blob/main/nlp/Images/paper_2.png)
+
+意思是每一层的输入和输出结果相拼接，然后进行归一化，这样可以更加稳定。
+
+归一化的公式如下：
+
+![](https://github.com/sherlcok314159/ML/blob/main/Images/mean_sigmoid.png)
