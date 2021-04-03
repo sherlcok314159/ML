@@ -150,3 +150,13 @@ Elu在较小的输入时会饱和至**负值**，从而减少前向传播的变�
 **10.Exponential**
 
 ![](https://github.com/sherlcok314159/ML/blob/main/Images/exponential.png)
+
+
+**11.Softmax**
+
+![](https://github.com/sherlcok314159/ML/blob/main/Images/softmax.png)
+
+![](https://github.com/sherlcok314159/ML/blob/main/Images/softmax_2.png)
+
+
+softmax将输入映射成[-1,1]输出，可以视作为概率，但是当输入值很大的时候，softmax几乎是无动于衷的，即为梯度下降或者消失了。
