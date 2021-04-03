@@ -138,5 +138,10 @@ itself
 
 **<div id='feed'>Feed Forward</div>**
 
-最后一个结构就是全连接层网络了
+![](https://github.com/sherlcok314159/ML/blob/main/Images/FFN.png)
 
+Feed-Forward Network究竟做了啥呢？
+
+![](https://github.com/sherlcok314159/ML/blob/main/Images/FFN_2.png)
+
+首先它会引入[RELU](../NN/activation)进行非线性变化，也就是公式前半部分所为，而且经过这一层之后会被升维，之后把这一层的结果连接到下一层进行线性变化，同时进行降维，保证输入输出维度一致。
