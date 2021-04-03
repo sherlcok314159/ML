@@ -6,9 +6,10 @@
 **章节**
 - [Reasons](#reasons)
 - [Self-Attention](#self_attention)
-    - [Multi-Headed](#multi_headed)
-- [Add & Normalize](#add)
+    - [Multi-Headed](#multi)
 - [Positional Encoding](#positional)
+- [Add & Normalize](#add)
+- [Source Code Explanation](#code)
 
 ![](https://github.com/sherlcok314159/ML/blob/main/nlp/Images/transformer.png)
 
@@ -65,9 +66,40 @@ attention的意思是我们给有意义的内容配以较高的权重，那么�
 
 ![](https://github.com/sherlcok314159/ML/blob/main/nlp/Images/values.png)
 
-当然，两者做点积之后还需要除以矩阵K的维度开根号，除以维度的原因是**不能因为维度越大导致比例越大**，这样不够精确，除以根号的原因是维度通常很大，为了稳定性和方便计算考虑。
+外面用softmax起着归一化的作用将具体的数值转化为，概率，更加直观。
 
-外面用softmax将具体的数值转化为概率，更加直观。
+当然，两者做点积之后还需要除以矩阵K的维度开根号，Q，K，V矩阵维度是q x d_k，p x d_k，p x d_v，softmax是沿着p维进行的，但是很多时候大方差会导致数值分布不均匀，经过softmax之后就会大的愈大，小的愈小，这里除以一个矩阵K的维度其实类似于一个归一化，让它的**方差趋向于1，分布均匀一点**，所以在原paper里面又叫做**Scaled Dot-Product Attention**。
 
 例如 v = 0.36v1 + 0.64v2，v1,v2是矩阵V里的。
+
+既然都是矩阵运算，那么都是可以**并行加速**的。
+
+**<div id='multi'>Multi-headed Attention</div>**
+
+理解了自注意力，那么什么是多头注意力呢？
+
+![](https://github.com/sherlcok314159/ML/blob/main/nlp/Images/cnn.png)
+------------------------------------------------------------------------[图片来源](https://www.researchgate.net/publication/325924260_A_Simple_Fusion_Of_Deep_And_Shallow_Learning_For_Acoustic_Scene_Classification/figures?lo=1)----------------------------------------------------------------------------
+
+类比一下[CNN](../NN/CNN/cnn.md)，当我们不断提取特征的时候会用到一个叫卷积核的东西（filter），我们为了最大化提取有效特征，通常选择**一组卷积核**来提取，因为不同的卷积核对图片的不同区域的注意力不同。
+比如，我们要识别一张鸟的图片，可能第一个卷积核更关注鸟嘴，第二个卷积核更关注鸟翅膀等等。
+
+![](https://github.com/sherlcok314159/ML/blob/main/nlp/Images/qkv_2.png)
+
+在Transformer中也是如此，不同的Q，K，V矩阵得出的特征关系也不相同，同样，不一定一组Q，K，V提取到的关系能解决问题，所以保险起见，我们用多组。这里可以把一组Q，K，V矩阵类比为一个卷积核，最后再通过全连接层进行拼接降维。
+
+![](https://github.com/sherlcok314159/ML/blob/main/nlp/Images/qkv_3.png)
+
+****
+**<div id='positional'>Positional Encoding</div>**
+
+为什么要进行位置编码呢？
+
+我上面阐述的注意力机制是不是只说了某个词与它所处的句子之间的关系，但是在实际自然语言处理中，只知道这个词与句子的关系而不知道它在哪个位置是不行的。
+
+具体做什么我们在源码节细讲。
+
+***
+
+**<div id='add'>Add & Normalize</div>**
 
