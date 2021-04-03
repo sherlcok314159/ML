@@ -145,3 +145,8 @@ Feed-Forward Network究竟做了啥呢？
 首先它会引入[RELU](../NN/activation.md)进行非线性变化，也就是公式前半部分所为，而且经过这一层之后会被升维，之后把这一层的结果连接到下一层进行线性变化，同时进行降维，保证输入输出维度一致。
 
 ![](https://github.com/sherlcok314159/ML/blob/main/nlp/Images/FFN.png)
+
+***
+**<div id='etd'>Encoder To Decoder</div>**
+
+接下来要把左侧的编码器和右侧的解码器进行相连，细心观察图会发现只有两个箭头到了右边，这两个箭头代表的是K，V矩阵，Q矩阵由右侧解码器提供。其他结构与编码器一致，最后再连一个全连接层进行线性变化，最终用softmax映射成概率。
