@@ -91,7 +91,7 @@ attention的意思是我们给有意义的内容配以较高的权重，那么�
 ![](https://github.com/sherlcok314159/ML/blob/main/nlp/Images/scaled.png)
 
 
-那么q与k做点积之后的结果均值为0，方差为d_k。方差太大不稳定，所以除以矩阵K的维度开根号，参照链接(https://www.zhihu.com/question/339723385)。
+那么q与k做点积之后的结果均值为0，方差为d_k。方差太大不稳定，所以除以矩阵K的维度开根号，参照链接(https://www.zhihu.com/question/339723385) 。
 
 
 例如 v = 0.36v1 + 0.64v2，v1,v2是矩阵V里的。
