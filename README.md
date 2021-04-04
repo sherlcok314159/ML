@@ -6,7 +6,7 @@
 - [基础知识](#basic)
 - [深度学习](#deep)
 - [NLP](#nlp)
-
+- [必备技能](#skills)
 ****
 ### <div id='courses'>线上课程</div>
 
@@ -38,11 +38,15 @@
 
 ### <div id='nlp'>NLP任务</div>
 
-- NLP基础模型讲解
-    - [Transformer](nlp/transformer.md)
-    - [Bert](nlp/bert.md)
-    - [Bert & Transformer源码](nlp/source_code.md)
-- Bert文本系列
-     - [Bert之文本分类](nlp/text.md)
-     - [Bert之文本翻译](nlp/translate.md)
-     - [Bert之阅读理解](nlp/understand.md)
+- NLP模型原理讲解
+    - [Transformer](nlp/models/transformer.md)
+    - [Bert](nlp/models/bert.md)
+
+- Bert文本源码解读系列
+     - [Bert之文本分类](nlp/tasks/text.md)
+     - [Bert之文本翻译](nlp/tasks/translate.md)
+     - [Bert之阅读理解](nlp/tasks/understand.md)
+
+### <div id='skills'>必备技能</div>
+
+- [阅读源码](nlp/source_code.md)
