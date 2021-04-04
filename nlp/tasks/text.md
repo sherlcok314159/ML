@@ -120,5 +120,21 @@ do_lower_case --> 是否小写处理（针对英文）
 首先会将每一列的内容读取到一个列表里面，然后将每一行的内容作为一个小列表作为元素加到大列表里面。
 
 ***
+**<div id='handle'>数据处理</div>**
 
 
+因为我们的数据集为MRPC，我们直接跳到MrpcProcessor类就好，它是继承自DataProcessor。
+
+这里简要介绍一下os.path.join。
+
+![](https://github.com/sherlcok314159/ML/blob/main/nlp/Images/os_path.png)
+
+我们不是一共有三个数据集，train,dev以及test嘛，data_dir我们给的是它们的父目录，我们如何能读取到它们呢？以train为例，是不是得"path/train.tsv"，这个时候，os.path.join就可以把两者拼接起来。
+
+![](https://github.com/sherlcok314159/ML/blob/main/nlp/Images/labels.png)
+
+这个意思是任务的标签，我们的任务是二分类，自然为0&1。
+
+![](https://github.com/sherlcok314159/ML/blob/main/nlp/Images/read_.png)
+
+examples最终是列表，第一个元素图中已有。
