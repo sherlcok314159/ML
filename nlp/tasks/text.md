@@ -137,4 +137,4 @@ do_lower_case --> 是否小写处理（针对英文）
 
 ![](https://github.com/sherlcok314159/ML/blob/main/nlp/Images/read_.png)
 
-examples最终是列表，第一个元素图中已有。
+examples最终是列表，第一个元素为列表，内容图中已有。
