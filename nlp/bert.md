@@ -9,7 +9,6 @@
     - [MASK](#mask)
     - [Connect Or Not](#connect)
 - [Reading Comprehension](#comprehension)
-- [Source Code Explanation](#code)
 
 
 **<div id='encoder'>Encoder</div>**
@@ -52,8 +51,3 @@
 这里需要额外训练两个辅助向量，因为答案我们需要始末位置，一个是开始，一个是结束。然后拿辅助向量与文章内容做内积，经过softmax得到最终概率，然后输出最相近的作为起始点，同样的得到结束点，然后答案就是始末位置卡住的地方。
 
 
-***
-
-**<div id='code'>Source Code Explanation</div>**
-
-接下来我会通过对bert源码的解释来更加细致地了解bert的架构。
