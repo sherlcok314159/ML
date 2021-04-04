@@ -50,3 +50,4 @@
 ### <div id='skills'>必备技能</div>
 
 - [阅读源码](nlp/source_code.md)
+- [迅速上手项目](nlp/fast.md)
