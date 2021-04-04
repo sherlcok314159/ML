@@ -11,6 +11,7 @@ https://arxiv.org/abs/1810.04805
 
 **章节**
 - [Demo传参](#flags)
+    - [跑不动?](#bugs)
 - [数据篇](#data)
     - [数据读入](#read)
     - [数据处理](#handle)
@@ -62,11 +63,38 @@ python run_classifier.py \
 task_name --> 这次任务的名称
 do_train --> 是否做fine-tune
 do_eval --> 是否交叉验证
+do_predict --> 是否做预测
 data_dir --> 数据集的位置
 vocab_dir --> 词表的位置（一般bert模型下好就能找到） 
 bert_config --> bert模型参数设置
 init_checkpoint --> 预训练好的模型
 max_seq_length --> 一个序列的最大长度
 output_dir --> 结果输出文件（包括日志文件）
+do_lower_case --> 是否小写处理（针对英文）
+
 其他的字面意思
 ```
+***
+**<div id='bugs'>跑不动？</div>**
+
+有些时候发现跑demo的时候会出现各种问题，这里简单汇总一下
+
+**1.No such file or directory!**
+
+这个意思是没找到，你需要确保你上面模型和数据文件的路径填正确就可解决
+
+**2.Memory Limit**
+
+
+![](https://github.com/sherlcok314159/ML/blob/main/nlp/Images/bug.png)
+
+因为bert参数量巨大，模型复杂，如果GPU显存不够是带不动的，就会出现如上图般情况。
+
+解决方法
+
+- 把batch_size,max_seq_length,num_epochs改小一点
+- 把do_train直接false掉
+- 使用优化bert模型，如Albert,FastTransformer
+
+经过本人实证，把参数适当改小参数，如果还是不行直接不做fine-tune就好，这对迅速跑通demo的人来说最有效。
+
