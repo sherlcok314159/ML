@@ -14,7 +14,6 @@
 - [Encoder To Decoder](#etd)
 - [Shared Weights](#share)
 - [Effect](#effect)
-- [Source Code Explanation](#code)
 
 ![](https://github.com/sherlcok314159/ML/blob/main/nlp/Images/transformer.png)
 
