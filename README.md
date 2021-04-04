@@ -41,6 +41,7 @@
 - NLP基础模型讲解
     - [Transformer](nlp/transformer.md)
     - [Bert](nlp/bert.md)
+    - [Bert & Transformer源码](nlp/source_code.md)
 - Bert文本系列
      - [Bert之文本分类](nlp/text.md)
      - [Bert之文本翻译](nlp/translate.md)
