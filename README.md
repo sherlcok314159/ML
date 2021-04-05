@@ -11,6 +11,7 @@
 ### <div id='courses'>线上课程</div>
 
 - [李宏毅](https://www.youtube.com/watch?v=CXgbekl66jc&list=PLJV_el3uVTsPy9oCRY30oBPNLCo89yu49&index=1)（入门极荐，简单易懂，且为中文授课）
+- [吴恩达](https://www.coursera.org/learn/machine-learning/home/welcome)（斯坦福华人教授，业界公认厉害）
 
 ****
 ### <div id='basic'>基础知识</div>
@@ -46,6 +47,8 @@
      - [Bert之文本分类](nlp/tasks/text.md)
      - [Bert之文本翻译](nlp/tasks/translate.md)
      - [Bert之阅读理解](nlp/tasks/understand.md)
+
+- Bert实战项目
 
 ### <div id='skills'>必备技能</div>
 
