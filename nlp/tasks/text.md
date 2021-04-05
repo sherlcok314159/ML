@@ -369,3 +369,12 @@ initializer_range -->
 
 
 ![](https://github.com/sherlcok314159/ML/blob/main/nlp/Images/slice.png)
+
+前面要把token_type_embeddings加到input_ids的编码中，进行了同维度处理，这里对于位置编码也一样，不然最后相加不了。
+
+![](https://github.com/sherlcok314159/ML/blob/main/nlp/Images/position_reshape.png)
+
+至此，Embedding层就结束了。
+
+***
+
