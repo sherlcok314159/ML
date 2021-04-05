@@ -230,3 +230,13 @@ _run_strip_accents会将变音字符替换掉，如résumé中的é会被替换�
 
 此处tokenizer.tokenize是FullTokenizer的方法。
 
+![](https://github.com/sherlcok314159/ML/blob/main/nlp/Images/b_none.png)
+
+不同的任务可能含有的句子不一样，上面代码的意思就是若b不为空，那么max_length = 总长度 - 3，原因注释已有；若b为空，则就需要减去2即可。
+
+![](https://github.com/sherlcok314159/ML/blob/main/nlp/Images/truncate.png)
+
+_truncate_seq_pair进行一个截断操作，里面用了pop()，这个是列表方法，把列表最后一个取出来，英文注释也说了为什么没有按照比例截断，若一个序列很短，那按比例截断会流失信息较多，因为比例是长短序列通用的。同时，_truncate_seq_pair还保证了a,b长度一致。若b为空，a则不需要调用这个方法，直接列表方法取就好。
+
+
+
