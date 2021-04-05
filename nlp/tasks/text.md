@@ -307,3 +307,18 @@ initializer_range -->
 
 ![](https://github.com/sherlcok314159/ML/blob/main/nlp/Images/mask_type.png)
 
+***
+
+**<div id='connect'>词向量拼接</div>**
+
+接下来正式进入Embedding层的操作，最终传到注意力层的其实是原始token_ids，token_type_ids以及positional embedding拼接起来的。
+
+首先是token_ids的操作，先来看一下embedding_lookup方法。
+
+![](https://github.com/sherlcok314159/ML/blob/main/nlp/Images/embedding_lookup.png)
+
+这是它的参数，大部分英文注释已有，需要注意的一点是input_ids的shape必须为[batch_size,max_seq_length]。
+
+接下来进行扩维。
+
+![](https://github.com/sherlcok314159/ML/blob/main/nlp/Images/input_shape.png)
