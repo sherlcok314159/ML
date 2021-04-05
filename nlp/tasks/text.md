@@ -176,7 +176,7 @@ label_list前面对数据进行处理的类里有get_labels参数，返回的是
 ![](https://github.com/sherlcok314159/ML/blob/main/nlp/Images/or.png)
 
 
-在tokenization.py文件中提供了三种分类，分别是BasicTokenizer，WordpieceTokenizer和FullTokenizer，下面具体介绍一下这三者。
+在tokenization.py文件中提供了三种切分，分别是BasicTokenizer，WordpieceTokenizer和FullTokenizer，下面具体介绍一下这三者。
 
 在tokenization.py文件中遍布convert_to_unicode，这是用来转换为unicode编码，一般来说，输入输出不会有变化。
 
@@ -202,5 +202,13 @@ _run_strip_accents会将变音字符替换掉，如résumé中的é会被替换�
 
 ![](https://github.com/sherlcok314159/ML/blob/main/nlp/Images/punc.png)
 
+以上便是BasicTokenizer的内容了。
+
+接下来是WordpieceTokenizer了，其实这个词切分是针对英文单词的，因为汉字每个字已经是最小的结构，不能进行切分了。而英文还可以进行切分，英文有不同语态，如loved,loves,loving等等，这个时候WordpieceTokenizer就能发挥作用了。
+
+- 遍历一个英文单词里面的小结构，如果发现在词表里找到，就把这个切掉
+- 对未被切分的部分继续进行步骤一，直至所有都被切分干净
+
+下面有个gif可以直观显示，[来源](https://alanlee.fun/2019/10/16/bert-tokenizer/)
 
 ![](https://github.com/sherlcok314159/ML/blob/main/nlp/Images/v2-4771d1cfbda7282b74e5713e628290f0_b.gif)
