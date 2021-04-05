@@ -190,6 +190,17 @@ label_list前面对数据进行处理的类里有get_labels参数，返回的是
 
 如果是中文字符，_tokenize_chinese_chars会将中文字符旁边都加上空格，图中我也有引例注释。
 
+![](https://github.com/sherlcok314159/ML/blob/main/nlp/Images/whitespace.png)
+
+whitespace_tokenize会进行按空格切分。
+
+![](https://github.com/sherlcok314159/ML/blob/main/nlp/Images/accents.png)
+
+_run_strip_accents会将变音字符替换掉，如résumé中的é会被替换为e。
+
+接下来进行标点字符切分，前提是判断是否是标点吧，_is_punctuation履行了这个职责，这里不再多说。
+
+![](https://github.com/sherlcok314159/ML/blob/main/nlp/Images/punc.png)
 
 
 ![](https://github.com/sherlcok314159/ML/blob/main/nlp/Images/v2-4771d1cfbda7282b74e5713e628290f0_b.gif)
