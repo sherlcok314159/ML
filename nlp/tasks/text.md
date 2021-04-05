@@ -239,4 +239,23 @@ _run_strip_accents会将变音字符替换掉，如résumé中的é会被替换�
 _truncate_seq_pair进行一个截断操作，里面用了pop()，这个是列表方法，把列表最后一个取出来，英文注释也说了为什么没有按照比例截断，若一个序列很短，那按比例截断会流失信息较多，因为比例是长短序列通用的。同时，_truncate_seq_pair还保证了a,b长度一致。若b为空，a则不需要调用这个方法，直接列表方法取就好。
 
 
+我们不是说需要在开头添加[CLS]，句子分割处和结尾添加[SEP]嘛（本次任务a,b均不为空），刚刚只是进行了一个切分和截断操作。
+
+![](https://github.com/sherlcok314159/ML/blob/main/nlp/Images/cls.png)
+
+tokens是我们用来放序列转换为编码的新列表，segment_ids用来区别是第一句还是第二句。这段代码大意就是在开头和结尾处加入[CLS]，[SEP]，因为是a所以都是第一句，segment_ids就都为0，同时[CLS]和[SEP]也都被当做是a的部分，编码为0。下面关于b的同理。
+
+接下来再把具体内容转换为索引。
+
+![](https://github.com/sherlcok314159/ML/blob/main/nlp/Images/ids.png)
+
+我们一开始的参数不是有max_seq_length嘛，这个代表一整个序列的最大长度（a,b拼接的），但是很多时候我们的总序列长度不会达到最大长度，但是我们又要保证所有输入序列长度一致，即为最大序列长度。所以我们需要对剩下的部分，即没有内容的部分进行填充（Padding），但填充的时候有个问题，一般我们都会添0，但做self-attention的时候（如果还不了解自注意力，可以去主页看看我写的Transformer的论文解读），每一个词要跟句子里面所有的词做内积，但是0是我们人为填充进去的，它不代表任何意义，然而，做自注意力的时候还是要跟它做内积，是不是不太合理呀？
+
+于是就有了MASK机制，什么意思呢？我们把机器需要看，需要做自注意力的保留，不要看的MASK掉，这样做自注意力的时候就不会出岔子。
+
+![](https://github.com/sherlcok314159/ML/blob/main/nlp/Images/mask.png)
+
+同时，只要没达到最大长度，就全部补零。
+
+这个的剩余部分tf.logging是日志，不用管，这个convert_single_example最终返回的是feature，feature包含什么已经具体阐述过了。
 
