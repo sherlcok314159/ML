@@ -27,6 +27,8 @@ https://arxiv.org/abs/1810.04805
     - [多头注意力](#head)
         - [MASK机制](#mask)
         - [Q,K,V矩阵构建](#qkv)
+    - [损失优化](#loss)
+    - [其他注意点](#others)
 
 
 **<div id='flags'>Demo传参</div>**
@@ -434,4 +436,36 @@ attention_mask即为上节我们说的MASK，这里进行拓展一个维度。
 
 
 ![](https://github.com/sherlcok314159/ML/blob/main/nlp/Images/adder.png)
+
+
+接下来进行transformer模型构建，不难发现这里from_tensor和to_tensor一致，所以是做自注意力。
+
+***
+**<div id='loss'>损失优化</div>**
+
+在bert里面说过，最后拿出开头的[CLS]就可以了。这既是get_pooled_output方法的作用。
+
+![](https://github.com/sherlcok314159/ML/blob/main/nlp/Images/output_cls.png)
+
+最后再连接一个全连接层，最后就是二分类的任务w * x + b
+
+![](https://github.com/sherlcok314159/ML/blob/main/nlp/Images/loss.png)
+
+
+***
+**<div id='others'>其他注意点</div>**
+
+这是残差相连的部分
+
+![](https://github.com/sherlcok314159/ML/blob/main/nlp/Images/residuals.png)
+
+还有一点就是记得在transformer中讲过我们会连两层全连接层，一层升维，另一层降维。
+
+![](https://github.com/sherlcok314159/ML/blob/main/nlp/Images/dim_up.png)
+
+接下来进行降维
+
+![](https://github.com/sherlcok314159/ML/blob/main/nlp/Images/dim_down.png)
+
+
 
