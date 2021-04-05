@@ -287,7 +287,7 @@ tokens是我们用来放序列转换为编码的新列表，segment_ids用来区
 
 ```python
 vocab_size --> 词表的大小，用别人的词表，这个参数已经固定
-hidden_size -->
+hidden_size --> 
 num_hidden_layers --> 全连接层隐含层的层数
 num_attention_heads -->注意力头的个数
 intermediate_size --> 全连接层中隐含层层数
@@ -326,4 +326,10 @@ initializer_range -->
 等会我们需要在embedding_table里面查找，这里先构建一个[vocab_size,embedding_size]的table。需要注意的是vocab_size 和 embedding_size 都是固定好的，训练的时候不能乱改。
 
 ![](https://github.com/sherlcok314159/ML/blob/main/nlp/Images/embedding_table.png)
+
+之后我们对input_ids进行降维，貌似这样可以加速。one_hot_embedding一般为false，这是对TPU加速用的。接下来在embedding_table里面进行查找。
+
+![](https://github.com/sherlcok314159/ML/blob/main/nlp/Images/gather.png)
+
+
 
