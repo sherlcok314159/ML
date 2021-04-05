@@ -7,7 +7,7 @@ https://arxiv.org/abs/1706.03762
 https://arxiv.org/abs/1810.04805
 
 
-在本文中，我将以run_classifier.py以及MRPC数据集为例介绍关于bert以及transformer的源码，另外，本文在最后一个部分详细讲解了如何从0到1来跑自己的第一个bert模型。
+在本文中，我将以run_classifier.py以及MRPC数据集为例介绍关于bert以及transformer的源码。
 
 **章节**
 - [Demo传参](#flags)
