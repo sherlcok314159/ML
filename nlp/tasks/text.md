@@ -22,8 +22,8 @@ https://arxiv.org/abs/1810.04805
 - [模型构建](#model)
     - [词向量拼接](#connect)
         - [词向量编码](#token)
-        - [句子类型编码](#type)
         - [位置编码](#position)
+        - [句子类型编码](#type)
     - [多头注意力](#head)
         - [MASK机制](#mask)
         - [Q,K,V矩阵构建](#qkv)
@@ -342,5 +342,9 @@ initializer_range -->
 
 ***
 
+**<div id='position'>位置编码</div>**
 
+接下来进行位置编码，首先创建token_type_table。
+
+![](https://github.com/sherlcok314159/ML/blob/main/nlp/Images/token_type_table.png)
 
