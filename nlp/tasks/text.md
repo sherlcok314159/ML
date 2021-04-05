@@ -21,6 +21,7 @@ https://arxiv.org/abs/1810.04805
 - [TFRecord文件构建](#tf)
 - [模型构建](#model)
     - [词向量拼接](#connect)
+        - [词向量编码](#token)
         - [句子类型编码](#type)
         - [位置编码](#position)
     - [多头注意力](#head)
@@ -313,6 +314,8 @@ initializer_range -->
 
 接下来正式进入Embedding层的操作，最终传到注意力层的其实是原始token_ids，token_type_ids以及positional embedding拼接起来的。
 
+**<div id='token'>token_ids编码</div>**
+
 首先是token_ids的操作，先来看一下embedding_lookup方法。
 
 ![](https://github.com/sherlcok314159/ML/blob/main/nlp/Images/embedding_lookup.png)
@@ -330,6 +333,14 @@ initializer_range -->
 之后我们对input_ids进行降维，貌似这样可以加速。one_hot_embedding一般为false，这是对TPU加速用的。接下来在embedding_table里面进行查找。
 
 ![](https://github.com/sherlcok314159/ML/blob/main/nlp/Images/gather.png)
+
+然后我们把output reshape一下。
+
+![](https://github.com/sherlcok314159/ML/blob/main/nlp/Images/output_reshape.png)
+
+这就是token的编码了。
+
+***
 
 
 
