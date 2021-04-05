@@ -207,8 +207,17 @@ _run_strip_accents会将变音字符替换掉，如résumé中的é会被替换�
 接下来是WordpieceTokenizer了，其实这个词切分是针对英文单词的，因为汉字每个字已经是最小的结构，不能进行切分了。而英文还可以进行切分，英文有不同语态，如loved,loves,loving等等，这个时候WordpieceTokenizer就能发挥作用了。
 
 - 遍历一个英文单词里面的小结构，如果发现在词表里找到，就把这个切掉
-- 对未被切分的部分继续进行步骤一，直至所有都被切分干净
+- 对未被切分的部分继续进行步骤一，直至所有都被切分干净，注意除了第一个，其他的前面都要加上"##"
 
 下面有个gif可以直观显示，[来源](https://alanlee.fun/2019/10/16/bert-tokenizer/)
 
 ![](https://github.com/sherlcok314159/ML/blob/main/nlp/Images/v2-4771d1cfbda7282b74e5713e628290f0_b.gif)
+
+
+最后是FullTokenizer，这个是两者的集成版，先进行BasicTokenizer，后进行WordpieceTokenizer。当然了，对于中文，就没必要跑WordpieceTokenizer。
+
+![](https://github.com/sherlcok314159/ML/blob/main/nlp/Images/full.png)
+
+下面简单提一下convert_by_vocab，这里是将具体的内容转换为索引。
+
+![](https://github.com/sherlcok314159/ML/blob/main/nlp/Images/id.png)
