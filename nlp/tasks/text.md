@@ -142,6 +142,12 @@ do_lower_case --> 是否小写处理（针对英文）
 examples最终是列表，第一个元素为列表，内容图中已有。
 
 ***
+**<div id='deal'>词处理</div>**
+读取数据之后，接下来我们需要对词进行切分以及简单的编码处理
+
+***
+
+
 **<div id='split'>切分</div>**
 
 刚刚对数据进行了简单的处理，接下来我们调到函数convert_single_example，进一步进行词向量编码。
@@ -164,11 +170,11 @@ label_list前面对数据进行处理的类里有get_labels参数，返回的是
 
 需要注意，OrderedDict的大小为一般字典的两倍，尤其当储存的东西大了起来的时候，需要慎重权衡。
 
-但是到了python 3.6，字典已经就变成有序的了，为什么还用OrderedDict，我就有些疑惑了。
+但是到了python 3.6，字典已经就变成有序的了，为什么还用OrderedDict，我就有些疑惑了。如果说OrderedDict排序用得到，可是普通dict也能胜任，为什么非要用OrderedDict呢？
+
 
 ![](https://github.com/sherlcok314159/ML/blob/main/nlp/Images/or.png)
 
-如果说OrderedDict排序用得到，可是普通dict也能胜任，为什么非要用OrderedDict呢？
 
 
 
