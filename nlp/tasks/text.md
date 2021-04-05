@@ -322,3 +322,8 @@ initializer_range -->
 接下来进行扩维。
 
 ![](https://github.com/sherlcok314159/ML/blob/main/nlp/Images/input_shape.png)
+
+等会我们需要在embedding_table里面查找，这里先构建一个[vocab_size,embedding_size]的table。需要注意的是vocab_size 和 embedding_size 都是固定好的，训练的时候不能乱改。
+
+![](https://github.com/sherlcok314159/ML/blob/main/nlp/Images/embedding_table.png)
+
