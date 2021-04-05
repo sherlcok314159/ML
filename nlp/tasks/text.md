@@ -423,3 +423,15 @@ Transformer论文不是说了嘛，在加入位置编码之前会进行一个Dro
 
 ![](https://github.com/sherlcok314159/ML/blob/main/nlp/Images/regularization.png)
 
+
+attention_mask即为上节我们说的MASK，这里进行拓展一个维度。
+
+![](https://github.com/sherlcok314159/ML/blob/main/nlp/Images/attention_expand.png)
+
+这里再简要介绍一下adder。tf.cast方法只是转换数据类型，这里用x代表attention_mask，（1-x）* (-1000)的目的是当attention为1时，即要关注这个，那么(1-x)就越趋近于0，那么做softmax，值就越接近于0，类似地，如果attention为0，那么进过softmax后的值就更接近-1。最后把这个adder加到刚刚我们得到注意力的值，估计这里会有人搞不懂为什么怎么做。
+
+如果关联度很高，那么attention_scores就越接近1，越低，越接近0，但是，很可能是我们补零的部分，所以我们需要对这个进行处理，这里有两种思路，既然是补零的，我们直接去掉就好；或者这里谷歌的做法是如果不需要，直接-1，是不是注意力值就趋近于0了，如果需要，加了0本身值不会发生变化。经过谷歌验证，后者效率更高。
+
+
+![](https://github.com/sherlcok314159/ML/blob/main/nlp/Images/adder.png)
+
