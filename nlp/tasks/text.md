@@ -397,3 +397,29 @@ Transformer论文不是说了嘛，在加入位置编码之前会进行一个Dro
 ***
 **<div id='qkv'>Q,K,V矩阵构建</div>**
 
+首先来到attention_layer方法，q,k,v矩阵的激活函数均为None。
+
+![](https://github.com/sherlcok314159/ML/blob/main/nlp/Images/attention_layer.png)
+
+在进入构建之前，最好先熟悉这5个字母的含义。
+
+![](https://github.com/sherlcok314159/ML/blob/main/nlp/Images/convention.png)
+
+开始构建q矩阵，注意q是由from_tensor，即第一个句子构建的。
+
+![](https://github.com/sherlcok314159/ML/blob/main/nlp/Images/q_layer.png)
+
+接着构建k和v矩阵，都是从to_tensor构建的。
+
+![](https://github.com/sherlcok314159/ML/blob/main/nlp/Images/k_layer.png)
+
+![](https://github.com/sherlcok314159/ML/blob/main/nlp/Images/v_layer.png)
+
+接下来会对q,k矩阵进行加速内积处理，不做深入探讨。
+
+![](https://github.com/sherlcok314159/ML/blob/main/nlp/Images/speed.png)
+
+记得我们在transformer里面需要除以d的维度开根号。
+
+![](https://github.com/sherlcok314159/ML/blob/main/nlp/Images/regularization.png)
+
