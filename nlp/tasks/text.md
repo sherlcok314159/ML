@@ -150,14 +150,6 @@ examples最终是列表，第一个元素为列表，内容图中已有。
 
 **<div id='split'>切分</div>**
 
-刚刚对数据进行了简单的处理，接下来我们调到函数convert_single_example，进一步进行词向量编码。
-
-
-![](https://github.com/sherlcok314159/ML/blob/main/nlp/Images/single_features.png)
-
-这里是初始化一个例子。input_ids 是等会把一个一个词转换为词表的索引；segment_ids代表是前一句话（0）还是后一句话（1），因为这还未实例化，所以is_real_example为false。
-
-
 ![](https://github.com/sherlcok314159/ML/blob/main/nlp/Images/label_map.png)
 
 label_list前面对数据进行处理的类里有get_labels参数，返回的是一个列表，如["0","1"]。
@@ -221,3 +213,20 @@ _run_strip_accents会将变音字符替换掉，如résumé中的é会被替换�
 下面简单提一下convert_by_vocab，这里是将具体的内容转换为索引。
 
 ![](https://github.com/sherlcok314159/ML/blob/main/nlp/Images/id.png)
+
+以上就是切分了。
+***
+
+**<div id='embedding'>词向量编码</div>**
+
+刚刚对数据进行了切分，接下来我们跳到函数convert_single_example，进一步进行词向量编码。
+
+
+![](https://github.com/sherlcok314159/ML/blob/main/nlp/Images/single_features.png)
+
+这里是初始化一个例子。input_ids 是等会把一个一个词转换为词表的索引；segment_ids代表是前一句话（0）还是后一句话（1），因为这还未实例化，所以is_real_example为false。
+
+![](https://github.com/sherlcok314159/ML/blob/main/nlp/Images/tok.png)
+
+此处tokenizer.tokenize是FullTokenizer的方法。
+
