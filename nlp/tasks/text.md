@@ -259,3 +259,13 @@ tokens是我们用来放序列转换为编码的新列表，segment_ids用来区
 
 这个的剩余部分tf.logging是日志，不用管，这个convert_single_example最终返回的是feature，feature包含什么已经具体阐述过了。
 
+
+****
+
+**<div id='tf'>TFRecord文件构建</div>**
+
+
+
+
+
+需要注意的是这份run_classifier.py人家谷歌是用TPU跑的，所以会有TPU部分代码，一般我们只用GPU，所以TPU部分不需要关注，一般TPU都会出现TPUEstimator。
