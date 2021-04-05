@@ -15,8 +15,9 @@ https://arxiv.org/abs/1810.04805
 - [数据篇](#data)
     - [数据读入](#read)
     - [数据处理](#handle)
-- [切分](#split)
-- [词向量编码](#embedding)
+- [词处理](#deal)
+    - [切分](#split)
+    - [词向量编码](#embedding)
 - [TFRecord文件构建](#tf)
 - [模型构建](#model)
     - [词向量拼接](#connect)
@@ -164,5 +165,12 @@ label_list前面对数据进行处理的类里有get_labels参数，返回的是
 需要注意，OrderedDict的大小为一般字典的两倍，尤其当储存的东西大了起来的时候，需要慎重权衡。
 
 但是到了python 3.6，字典已经就变成有序的了，为什么还用OrderedDict，我就有些疑惑了。
+
+![](https://github.com/sherlcok314159/ML/blob/main/nlp/Images/or.png)
+
+如果说OrderedDict排序用得到，可是普通dict也能胜任，为什么非要用OrderedDict呢？
+
+
+
 
 ![](https://github.com/sherlcok314159/ML/blob/main/nlp/Images/v2-4771d1cfbda7282b74e5713e628290f0_b.gif)
