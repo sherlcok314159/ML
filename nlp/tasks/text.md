@@ -176,6 +176,19 @@ label_list前面对数据进行处理的类里有get_labels参数，返回的是
 ![](https://github.com/sherlcok314159/ML/blob/main/nlp/Images/or.png)
 
 
+在tokenization.py文件中提供了三种分类，分别是BasicTokenizer，WordpieceTokenizer和FullTokenizer，下面具体介绍一下这三者。
+
+在tokenization.py文件中遍布convert_to_unicode，这是用来转换为unicode编码，一般来说，输入输出不会有变化。
+
+![](https://github.com/sherlcok314159/ML/blob/main/nlp/Images/clean.png)
+
+这个方法是用来替换不合法字符以及多余的空格，比如\t,\n会被替换为两个标准空格。
+
+接下来会有一个_tokenize_chinese_chars方法，这个是对中文进行编码，我们首先要判断一下是否是中文字符吧，_is_chinese_char方法会进行一个判断。
+
+![](https://github.com/sherlcok314159/ML/blob/main/nlp/Images/chinese.png)
+
+如果是中文字符，_tokenize_chinese_chars会将中文字符旁边都加上空格，图中我也有引例注释。
 
 
 
