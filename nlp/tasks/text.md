@@ -138,3 +138,28 @@ do_lower_case --> 是否小写处理（针对英文）
 ![](https://github.com/sherlcok314159/ML/blob/main/nlp/Images/read_.png)
 
 examples最终是列表，第一个元素为列表，内容图中已有。
+
+***
+**<div id='embedding'>词向量编码</div>**
+
+刚刚对数据进行了简单的处理，接下来我们调到函数convert_single_example，进一步进行词向量编码。
+
+
+![](https://github.com/sherlcok314159/ML/blob/main/nlp/Images/single_features.png)
+
+这里是初始化一个例子。input_ids 是等会把一个一个词转换为词表的索引；segment_ids代表是前一句话（0）还是后一句话（1），因为这还未实例化，所以is_real_example为false。
+
+
+![](https://github.com/sherlcok314159/ML/blob/main/nlp/Images/label_map.png)
+
+label_list前面对数据进行处理的类里有get_labels参数，返回的是一个列表，如["0","1"]。
+
+![](https://github.com/sherlcok314159/ML/blob/main/nlp/Images/vocab_load.png)
+
+想要切分数据，首先得读取词表吧，代码里面一开始创造一个OrderedDict，这个是为什么呢？
+
+在python 3.5的时候，当你想要遍历键值对的时候它是任意返回的，换句话说它并不关心键值对的储存顺序，而只是跟踪键和值的关联程度，会出现**无序**情况。而OrderedDict可以解决无序情况，它内部维护着一个根据插入顺序排序的双向链表，另外，对一个已经存在的键的重复复制不会改变键的顺序。
+
+需要注意，OrderedDict的大小为一般字典的两倍，尤其当储存的东西大了起来的时候，需要慎重权衡。
+
+但是到了python 3.6，字典已经就变成有序的了，为什么还用OrderedDict，我就有些疑惑了。
