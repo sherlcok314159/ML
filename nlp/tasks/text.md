@@ -22,8 +22,8 @@ https://arxiv.org/abs/1810.04805
 - [模型构建](#model)
     - [词向量拼接](#connect)
         - [词向量编码](#token)
-        - [位置编码](#position)
         - [句子类型编码](#type)
+        - [位置编码](#position)
     - [多头注意力](#head)
         - [MASK机制](#mask)
         - [Q,K,V矩阵构建](#qkv)
@@ -342,9 +342,30 @@ initializer_range -->
 
 ***
 
-**<div id='position'>位置编码</div>**
+**<div id='type'>句子类型编码</div>**
 
-接下来进行位置编码，首先创建token_type_table。
+进行位置编码之前，我们首先进行对token_type_ids的编码（判断是哪一句）。
+
+首先创建token_type_table。
 
 ![](https://github.com/sherlcok314159/ML/blob/main/nlp/Images/token_type_table.png)
 
+然后进行一个token_type_embedding，matul是矩阵相乘
+
+![](https://github.com/sherlcok314159/ML/blob/main/nlp/Images/type_embedding.png)
+
+做好相乘之后，我们需要把token_type_embedding的shape还原，因为等会要将token_type_ids与词编码相加。
+
+![](https://github.com/sherlcok314159/ML/blob/main/nlp/Images/type_reshape.png)
+
+***
+**<div id='position'>位置编码</div>**
+
+首先我们先创造大量的位置，max_position_embeddings是官方给定的参数，不能修改。
+
+![](https://github.com/sherlcok314159/ML/blob/main/nlp/Images/full_position.png)
+
+我们创造了这么多的位置，最终不一定用的完，为了更快速的训练，我们一般做切片处理，只要到我的max_seq_length还有位置就好，后面都可以不要。
+
+
+![](https://github.com/sherlcok314159/ML/blob/main/nlp/Images/slice.png)
