@@ -279,3 +279,31 @@ tokens是我们用来放序列转换为编码的新列表，segment_ids用来区
 
 接下来，是构建模型篇，是整个代码中最重要的一部分。接下来我将用代码介绍一下transformer模型的架构。
 
+找到modeling.py文件，这是模型文件。
+
+![](https://github.com/sherlcok314159/ML/blob/main/nlp/Images/bertconfig.png)
+
+首先是BertConfig的类，这里自定义了一些参数及数值。
+
+```python
+vocab_size --> 词表的大小，用别人的词表，这个参数已经固定
+hidden_size -->
+num_hidden_layers --> 全连接层隐含层的层数
+num_attention_heads -->注意力头的个数
+intermediate_size --> 全连接层中隐含层层数
+hidden_act --> 全连接层中的激活函数
+hidden_dropout_prob --> 在全连接层中实施Dropout，被去掉的概率
+attention_probs_dropout_prob --> 
+max_position_embeddings --> 最大位置数目
+type_vocab_size -->
+initializer_range -->
+```
+
+![](https://github.com/sherlcok314159/ML/blob/main/nlp/Images/shape.png)
+
+后面 batch_size x seq_length 会经常出现，这里是原始定义
+
+这里还有个初始化，如果MASK和token_type_ids我们前面没有，这里就默认全为1和0。这是为了后面词嵌入（embedding）做准备。
+
+![](https://github.com/sherlcok314159/ML/blob/main/nlp/Images/mask_type.png)
+
