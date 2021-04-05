@@ -154,7 +154,7 @@ examples最终是列表，第一个元素为列表，内容图中已有。
 
 label_list前面对数据进行处理的类里有get_labels参数，返回的是一个列表，如["0","1"]。
 
-![](https://github.com/sherlcok314159/ML/blob/main/nlp/Images/vocab_load.png)
+![](https://github.com/sherlcok314159/ML/blob/main/nlp/Images/load_vocab.png)
 
 想要切分数据，首先得读取词表吧，代码里面一开始创造一个OrderedDict，这个是为什么呢？
 
@@ -163,3 +163,5 @@ label_list前面对数据进行处理的类里有get_labels参数，返回的是
 需要注意，OrderedDict的大小为一般字典的两倍，尤其当储存的东西大了起来的时候，需要慎重权衡。
 
 但是到了python 3.6，字典已经就变成有序的了，为什么还用OrderedDict，我就有些疑惑了。
+
+![](https://github.com/sherlcok314159/ML/blob/main/nlp/Images/v2-4771d1cfbda7282b74e5713e628290f0_b.gif)
