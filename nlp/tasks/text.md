@@ -265,7 +265,17 @@ tokens是我们用来放序列转换为编码的新列表，segment_ids用来区
 **<div id='tf'>TFRecord文件构建</div>**
 
 
+因为用TFRecord读取文件比较方便快捷，需要转换一下文件格式。
 
+![](https://github.com/sherlcok314159/ML/blob/main/nlp/Images/example.png)
 
+前半部分是examples写入，examples是来自上图方法。features是来自上面刚讲过的convert_single_example方法。
 
 需要注意的是这份run_classifier.py人家谷歌是用TPU跑的，所以会有TPU部分代码，一般我们只用GPU，所以TPU部分不需要关注，一般TPU都会出现TPUEstimator。
+
+***
+
+**<div id='model'>模型构建</div>**
+
+接下来，是构建模型篇，是整个代码中最重要的一部分。接下来我将用代码介绍一下transformer模型的架构。
+
