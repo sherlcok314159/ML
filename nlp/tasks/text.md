@@ -15,6 +15,7 @@ https://arxiv.org/abs/1810.04805
 - [数据篇](#data)
     - [数据读入](#read)
     - [数据处理](#handle)
+- [切分](#split)
 - [词向量编码](#embedding)
 - [TFRecord文件构建](#tf)
 - [模型构建](#model)
@@ -140,7 +141,7 @@ do_lower_case --> 是否小写处理（针对英文）
 examples最终是列表，第一个元素为列表，内容图中已有。
 
 ***
-**<div id='embedding'>词向量编码</div>**
+**<div id='split'>切分</div>**
 
 刚刚对数据进行了简单的处理，接下来我们调到函数convert_single_example，进一步进行词向量编码。
 
