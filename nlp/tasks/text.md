@@ -376,5 +376,22 @@ initializer_range -->
 
 至此，Embedding层就结束了。
 
+Transformer论文不是说了嘛，在加入位置编码之前会进行一个Dropout操作
+
+![](https://github.com/sherlcok314159/ML/blob/main/nlp/Images/embedding_dropout.png)
+
 ***
+
+**<div id='head'>多头机制</div>**
+
+接下来来到整个transformer模型的精华部分，即为多头注意力机制。
+
+***
+
+**<div id='mask'>MASK机制</div>**
+
+首先来到create_attention_mask_from_input_mask方法，from_seq_length和to_seq_length分别指的是a和b，前面讲关于切分的时候已经说了，切分处理会让a,b长度一致为max_seq_length。所以这里两者长度相等。最后创建了一个shape为(batch_size,from_seq_length,to_seq_length)的MASK
+
+![](https://github.com/sherlcok314159/ML/blob/main/nlp/Images/attention_mask_.png)
+
 
