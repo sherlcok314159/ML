@@ -290,16 +290,15 @@ tokens是我们用来放序列转换为编码的新列表，segment_ids用来区
 
 ```python
 vocab_size --> 词表的大小，用别人的词表，这个参数已经固定
-hidden_size --> 
-num_hidden_layers --> 全连接层隐含层的层数
+hidden_size --> 隐层神经元个数
+num_hidden_layers --> encoder的层数
 num_attention_heads -->注意力头的个数
-intermediate_size --> 全连接层中隐含层层数
-hidden_act --> 全连接层中的激活函数
+intermediate_size --> 中间层神经元个数
+hidden_act --> 隐层激活函数
 hidden_dropout_prob --> 在全连接层中实施Dropout，被去掉的概率
-attention_probs_dropout_prob --> 
+attention_probs_dropout_prob --> 注意力层dropout比例
 max_position_embeddings --> 最大位置数目
-type_vocab_size -->
-initializer_range -->
+initializer_range --> truncated_normal_initializer的stdev，用来初始化权重参数，从普通正态分布中标准差为0.02的分布中取样出一部分参数，作为初始化权重
 ```
 
 ![](https://github.com/sherlcok314159/ML/blob/main/nlp/Images/shape.png)
@@ -328,7 +327,7 @@ initializer_range -->
 
 ![](https://github.com/sherlcok314159/ML/blob/main/nlp/Images/input_shape.png)
 
-等会我们需要在embedding_table里面查找，这里先构建一个[vocab_size,embedding_size]的table。需要注意的是vocab_size 和 embedding_size 都是固定好的，训练的时候不能乱改。这里有一个initializer_range，这里默认是0.02。这应该是权重参数初始化的一种方法，这里的0.02代表的是标准差，权重参数将从正态分布标准差为0.02的数据中随机取一组权重参数做为初始参数。
+等会我们需要在embedding_table里面查找，这里先构建一个[vocab_size,embedding_size]的table。需要注意的是vocab_size 和 embedding_size 都是固定好的，训练的时候不能乱改。
 
 ![](https://github.com/sherlcok314159/ML/blob/main/nlp/Images/embedding_table.png)
 
