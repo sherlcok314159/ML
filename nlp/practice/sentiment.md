@@ -35,7 +35,9 @@ bert模型是可以通用的，但是不同数据需要通过预处理来达到�
 
 ![](https://github.com/sherlcok314159/ML/blob/main/nlp/Images/tsv.png)
 
-至于dev和test数据集处理方式大同小异，只需要将名字换一下，这里不多赘述。
+至于dev和test数据集处理方式大同小异，只需要将名字换一下，这里不多赘述，这里放了处理训练集的完整函数。
+
+![](https://github.com/sherlcok314159/ML/blob/main/nlp/Images/train.png)
 
 然后get_labels方法，里面写具体的labels，这里是0，1，2，那么就是0，1，2，注意不要忘了带上英文引号就行。
 
