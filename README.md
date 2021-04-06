@@ -7,6 +7,7 @@
 - [深度学习](#deep)
 - [NLP](#nlp)
 - [必备技能](#skills)
+- [问题库](#problems)
 ****
 ### <div id='courses'>线上课程</div>
 
@@ -55,3 +56,9 @@
 - [阅读源码](nlp/source_code.md)
 - [迅速上手项目](nlp/fast.md)
 - [Numpy](data_process/numpy.md)
+
+### <div id='problems'>问题库</div>
+
+- [问题库](problems.md)
+此部分用来记载各种各样小bug的解决方案
+
