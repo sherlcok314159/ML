@@ -45,7 +45,6 @@
 
 - Bert文本任务源码解读系列
      - [Bert之文本分类](nlp/tasks/text.md)
-     - [Bert之文本翻译](nlp/tasks/translate.md)
      - [Bert之阅读理解](nlp/tasks/understand.md)
 
 - Bert实战项目
