@@ -36,7 +36,11 @@
 - [DNN](NN/DNN/dnn.md)
     - [Sentiment Classification in IMDB](NN/DNN/IMDB.md)
 - [CNN](NN/CNN/cnn.md)
-- [Problems](NN/problems.md)
+- [RNN](NN/RNN/单向rnn、双向rnn_embedding.py)
+    - [LSTM之词嵌入](NN/RNN/LSTM/lstm_embedding.py)
+    - [LSTM之文本分类](NN/RNN/LSTM/文本分类_lstm_subword.py)
+    - [LSTM之文本生成](NN/RNN/LSTM/文本生成.py)
+- [优化](NN/problems.md)
 
 ### <div id='nlp'>NLP任务</div>
 
