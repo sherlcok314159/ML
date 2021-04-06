@@ -49,6 +49,7 @@
      - [Bert之阅读理解](nlp/tasks/understand.md)
 
 - Bert实战项目
+     - [中文情感分类](nlp/practice/sentiment.md)
 
 ### <div id='skills'>必备技能</div>
 
