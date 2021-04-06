@@ -9,6 +9,8 @@ https://arxiv.org/abs/1810.04805
 
 在本文中，我将以run_classifier.py以及MRPC数据集为例介绍关于bert以及transformer的源码。
 
+当然，注释好的源代码在[这里]()
+
 **章节**
 - [Demo传参](#flags)
     - [跑不动?](#bugs)
