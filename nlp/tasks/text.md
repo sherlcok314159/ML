@@ -328,7 +328,7 @@ initializer_range -->
 
 ![](https://github.com/sherlcok314159/ML/blob/main/nlp/Images/input_shape.png)
 
-等会我们需要在embedding_table里面查找，这里先构建一个[vocab_size,embedding_size]的table。需要注意的是vocab_size 和 embedding_size 都是固定好的，训练的时候不能乱改。
+等会我们需要在embedding_table里面查找，这里先构建一个[vocab_size,embedding_size]的table。需要注意的是vocab_size 和 embedding_size 都是固定好的，训练的时候不能乱改。这里有一个initializer_range，这里默认是0.02。这应该是权重参数初始化的一种方法，这里的0.02代表的是标准差，权重参数将从正态分布标准差为0.02的数据中随机取一组权重参数做为初始参数。
 
 ![](https://github.com/sherlcok314159/ML/blob/main/nlp/Images/embedding_table.png)
 
