@@ -3,6 +3,7 @@
 集锦
 
 - [Colab](#colab)
+- [处理文件](#file)
 
 
 
@@ -49,3 +50,8 @@ print(tensorflow.__version__) #验证版本
 ```
 ![](https://github.com/sherlcok314159/ML/blob/main/Images/debug.png)
 
+***
+
+**<div id='file'>文件处理</div>**
+
+- json文件结构不清楚，可以在vscode中格式化文档，用json美化拓展
