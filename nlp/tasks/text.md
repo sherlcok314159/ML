@@ -1,4 +1,4 @@
-### Bert & Transformer源码详解
+### Bert & Transformer文本分类源码详解
 
 参考论文
 
@@ -7,7 +7,7 @@ https://arxiv.org/abs/1706.03762
 https://arxiv.org/abs/1810.04805
 
 
-在本文中，我将以run_classifier.py以及MRPC数据集为例介绍关于bert以及transformer的源码，本代码基于tensorflow-gpu 1.14.0，若为tensorflow 2.x版本，会有各种错误，建议切换版本至1.14。
+在本文中，我将以run_classifier.py以及MRPC数据集为例介绍关于bert以及transformer的源码，官方代码基于tensorflow-gpu 1.x，若为tensorflow 2.x版本，会有各种错误，建议切换版本至1.14。
 
 当然，注释好的源代码在[这里](https://github.com/sherlcok314159/ML/tree/main/nlp/code)
 
