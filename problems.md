@@ -37,5 +37,9 @@ print(tensorflow.__version__) #验证版本
 
 - 切换GPU：> 代码执行程序 > 更改运行类型
 
+- 计时
 
+```bash
+%%time
+```
 
