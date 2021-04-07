@@ -2,12 +2,12 @@
 
 集锦
 
-- Colab
-  - [深度学习环境](#deep)
+- [Colab](#colab)
 
 
 
-**<div id='deep'>Colab——深度学习</div>**
+
+**<div id='colab'>Colab——深度学习</div>**
 
 - 切换tensorflow版本：
 ```python
@@ -42,4 +42,10 @@ print(tensorflow.__version__) #验证版本
 ```bash
 %%time
 ```
+
+- debug
+```bash
+%debug print(i)
+```
+![](https://github.com/sherlcok314159/ML/blob/main/Images/debug.png)
 
