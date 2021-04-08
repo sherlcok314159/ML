@@ -43,5 +43,9 @@ bert模型是可以通用的，但是不同数据需要通过预处理来达到�
 
 模型去bert官方下载中文的预训练模型，其他的对着改改就好，相信看过我的[文本分类](../tasks/text.md)的剩下的都不需要多说。
 
+跑出来的结果如下，我用的是Tesla K80，白嫖Google Colab的，用时1h17min47s。
+
+![](https://github.com/sherlcok314159/ML/blob/main/nlp/Images/result.png)
+
 
 
