@@ -65,7 +65,7 @@ _repr_方法只是在有start_position的时候进行字符串的拼接。
 
 用于训练的数据集是json文件，需要用json库读入。
 
-训练集的样式如下
+训练集的样式如下，可见data是最外层的
 
 ```python
 {
@@ -113,3 +113,12 @@ _repr_方法只是在有start_position的时候进行字符串的拼接。
     ]
 }
 ```
+
+![](https://github.com/sherlcok314159/ML/blob/main/nlp/Images/json.png)
+
+input_data是一个大列表，然后每一个元素样式如下
+
+```python
+{'paragraphs': [{...}, {...}, {...}, {...}, {...}, {...}, {...}, {...}, {...}, ...], 'title': 'University_of_Notre_Dame'}
+```
+
