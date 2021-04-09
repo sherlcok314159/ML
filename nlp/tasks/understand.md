@@ -122,7 +122,12 @@ input_data是一个大列表，然后每一个元素样式如下
 {'paragraphs': [{...}, {...}, {...}, {...}, {...}, {...}, {...}, {...}, {...}, ...], 'title': 'University_of_Notre_Dame'}
 ```
 
-这是用来判断是否是一个空格，马上就会用到。
+is_whitespace方法是用来判断是否是一个空格，马上就会用到。
 
 ![](https://github.com/sherlcok314159/ML/blob/main/nlp/Images/white.png)
+
+
+然后我们层层剥开，然后遍历context的内容，它是一个字符串，所以遍历的时候会遍历每一个字母，字符会被进行判断，如果是空格，则加入doc_tokens，char_to_word_offset表示切分后的索引列表，每一个元素表示一个词有几个字符组成。
+
+![](https://github.com/sherlcok314159/ML/blob/main/nlp/Images/context.png)
 
