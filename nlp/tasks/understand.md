@@ -238,3 +238,11 @@ score_C = min(1,3) + 0.05 = 1.05
 回到上面，token_to_orig_map是用来记录文章部分在all_doc_tokens的索引，而token_is_max_context是记录文章每一个词在当前span里面是否具有最完整的上下文关系，因为一开始只有一个span，那么一开始每个词肯定都是True。split_token_index用于切分成每一个token，这样可以进行上下文关系判断，至于后面添[SEP]和segment_ids添1这种操作文本分类也有。
 
 ![](https://github.com/sherlcok314159/ML/blob/main/nlp/Images/token_max_span.png)
+
+接下来将tokens（精细化切分后的）按照词表转化为id，另外若不足，则把0填充进去这种操作也是很常见的。
+
+![](https://github.com/sherlcok314159/ML/blob/main/nlp/Images/pad.png)
+
+前面是进行判断，如果切了之后答案并不在span里面就直接舍弃，若在里面，因为一开始all_doc_tokens里面没有问题和[CLS],[SEP]时正文的索引是tok_start_position，然后转换为input_ids又有问题以及[CLS],[SEP]，所以要得到正文索引需要跳过它们。
+
+![](https://github.com/sherlcok314159/ML/blob/main/nlp/Images/doc_offset.png)
