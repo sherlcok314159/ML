@@ -911,7 +911,7 @@ def convert_examples_to_features(examples, label_list, max_seq_length,
     features.append(feature)
   return features
 
-
+# 主函数
 def main(_):
   tf.logging.set_verbosity(tf.logging.INFO)
 
@@ -920,6 +920,7 @@ def main(_):
       "mnli": MnliProcessor,
       "mrpc": MrpcProcessor,
       "xnli": XnliProcessor,
+      # 这里添加进我们自己定义的处理类
       "my"  : MyDataProcessor,
   }
 
@@ -929,7 +930,8 @@ def main(_):
   if not FLAGS.do_train and not FLAGS.do_eval and not FLAGS.do_predict:
     raise ValueError(
         "At least one of `do_train`, `do_eval` or `do_predict' must be True.")
-
+  
+  # 加载预训练好的参数
   bert_config = modeling.BertConfig.from_json_file(FLAGS.bert_config_file)
 
   if FLAGS.max_seq_length > bert_config.max_position_embeddings:
@@ -938,8 +940,11 @@ def main(_):
         "was only trained up to sequence length %d" %
         (FLAGS.max_seq_length, bert_config.max_position_embeddings))
 
+  # 创造目录
   tf.gfile.MakeDirs(FLAGS.output_dir)
 
+  # 将task_name转换为小写
+  # 换句话说，一开始输参数的时候无论大小写都行
   task_name = FLAGS.task_name.lower()
 
   if task_name not in processors:
@@ -980,7 +985,7 @@ def main(_):
     # warm-up 的意思是一开始训练先让学习率低一些，等到了warm-up步数之后再把学习率还原
 
     num_warmup_steps = int(num_train_steps * FLAGS.warmup_proportion)
-
+  
   model_fn = model_fn_builder(
       bert_config=bert_config,
       num_labels=len(label_list),
@@ -1009,7 +1014,8 @@ def main(_):
     file_based_convert_examples_to_features(
         train_examples, label_list, FLAGS.max_seq_length, tokenizer, train_file)
     # 日志记载
-
+    # 终端或者输出栏所见
+    # 训练
     tf.logging.info("***** Running training *****")
     tf.logging.info("  Num examples = %d", len(train_examples))
     tf.logging.info("  Batch size = %d", FLAGS.train_batch_size)
@@ -1037,6 +1043,7 @@ def main(_):
     file_based_convert_examples_to_features(
         eval_examples, label_list, FLAGS.max_seq_length, tokenizer, eval_file)
 
+    # 进行验证
     tf.logging.info("***** Running evaluation *****")
     tf.logging.info("  Num examples = %d (%d actual, %d padding)",
                     len(eval_examples), num_actual_eval_examples,
