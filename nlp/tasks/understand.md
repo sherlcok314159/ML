@@ -176,7 +176,7 @@ qa里面还有一个is_impossible，用于判断是否有答案
 
 ![](https://github.com/sherlcok314159/ML/blob/main/nlp/Images/question_slice.png)
 
-接下来对doc_tokens进行空格切分以及词切分，变成all_doc_tokens，需要注意的是orig_to_tok_index是all_doc_tokens的索引
+接下来对doc_tokens进行空格切分以及词切分，变成all_doc_tokens，需要注意的是orig_to_tok_index代表的是doc_tokens在all_doc_tokens的索引，取最近的一个，而tok_to_orig_index代表的是all_doc_tokens在doc_tokens索引
 
 ![](https://github.com/sherlcok314159/ML/blob/main/nlp/Images/subtoken.png)
 
@@ -213,7 +213,7 @@ doc_spans储存很多个doc_span。这里对窗口的长度有所限制，规定
 
 ![](https://github.com/sherlcok314159/ML/blob/main/nlp/Images/cls_0.png)
 
-下面讲_check_is_max_context方法，这个方法是用来判断是否具有完备的上下文关系，源代码给了一个例子：
+下面讲_check_is_max_context方法，这个方法是用来判断某个词是否具有完备的上下文关系，源代码给了一个例子：
 
 Span A: the man went to the
 
@@ -231,4 +231,10 @@ score_B = min(4, 0) + 0.05 = 0.05
 
 score_C = min(1,3) + 0.05 = 1.05
 
-所以，在Span C中，bought的上下文语义最全，最终该方法会返回最棒的span的索引，意思是答案在这个span里面语义最全。
+所以，在Span C中，bought的上下文语义最全，最终该方法会返回True or False，在滑动窗口这个方法中，一个词很可能出现在多个span里面，所以用这个方法判断当前这个词在当前span里面是否具有最完整的上下文
+
+![](https://github.com/sherlcok314159/ML/blob/main/nlp/Images/is_max.png)
+
+回到上面，token_to_orig_map是用来记录文章部分在all_doc_tokens的索引，而token_is_max_context是记录文章每一个词在当前span里面是否具有最完整的上下文关系，因为一开始只有一个span，那么一开始每个词肯定都是True。split_token_index用于切分成每一个token，这样可以进行上下文关系判断，至于后面添[SEP]和segment_ids添1这种操作文本分类也有。
+
+![](https://github.com/sherlcok314159/ML/blob/main/nlp/Images/token_max_span.png)
