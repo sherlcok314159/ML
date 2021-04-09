@@ -17,6 +17,8 @@ https://arxiv.org/abs/1810.04805
   - [番外句子分类](#outside)
   - [创造实例](#example)
   - [实例转换](#convert)
+- [模型构造](#model)
+- [写入预测](#predict)
 
 **<div id='flags'>Demo传参</div>**
 
@@ -251,3 +253,21 @@ score_C = min(1,3) + 0.05 = 1.05
 
 最终用这些参数实例化InputFeatures对象，然后不断重复，每一个feature对应着一个特殊的id，即为unique_id。
 ***
+
+**<div id='model'>模型构建</div>**
+
+这里大致与文本分类差不多，只是文本分类在模型里面直接进行了softmax处理，然后进行最小交叉熵损失，而这次我们没有直接这样做，得到了开头和结尾处的未归一化的概率logits，之后我们直接返回。
+
+然后这次我们是在model_fn_builder方法里面的子方法model_fn里定义compute_loss，其实这里也是经过softmax进行归一化，然后再计算交叉熵损失，最终返回均方误差。
+
+
+![](https://github.com/sherlcok314159/ML/blob/main/nlp/Images/compute.png)
+
+
+然后我们计算开头和结尾处的损失，总损失为二者和的平均。
+
+最终我们进行优化。
+
+![](https://github.com/sherlcok314159/ML/blob/main/nlp/Images/optimization.png)
+***
+
