@@ -246,3 +246,8 @@ score_C = min(1,3) + 0.05 = 1.05
 前面是进行判断，如果切了之后答案并不在span里面就直接舍弃，若在里面，因为一开始all_doc_tokens里面没有问题和[CLS],[SEP]时正文的索引是tok_start_position，然后转换为input_ids又有问题以及[CLS],[SEP]，所以要得到正文索引需要跳过它们。
 
 ![](https://github.com/sherlcok314159/ML/blob/main/nlp/Images/doc_offset.png)
+
+接下来大量的tf.logging只是写入日志信息，同时也是你终端或输出那里看到的。
+
+最终用这些参数实例化InputFeatures对象，然后不断重复，每一个feature对应着一个特殊的id，即为unique_id。
+***
