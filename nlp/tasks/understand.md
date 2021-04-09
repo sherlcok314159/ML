@@ -216,11 +216,13 @@ doc_spans储存很多个doc_span。这里对窗口的长度有所限制，规定
 下面讲_check_is_max_context方法，这个方法是用来判断是否具有完备的上下文关系，源代码给了一个例子：
 
 Span A: the man went to the
+
 Span B: to the store and bought
+
 Span C: and bought a gallon of ...
 
 那么对于bought来说，它在Span B和Span C中都有出现，那么，哪一个上下文关系最全呢？其实我们凭直觉应该可以猜到应该是Span C，因为Span B中bought出现在句末，没有下文。当然了，我们还是得用公式计算一下
 
-```latex
+```tex
 X = 1
 ```
