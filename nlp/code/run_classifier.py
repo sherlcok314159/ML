@@ -213,6 +213,73 @@ class DataProcessor(object):
       # lines最终结果是将每一个列表再作为一个元素，拼接成一个大列表
       # len --> 3669
 
+class MyDataProcessor(DataProcessor):
+  """Base class for data converters for sequence classification data sets."""
+
+  def get_train_examples(self, data_dir):
+    """Gets a collection of `InputExample`s for the train set."""
+    file_path = os.path.join(data_dir,"train_sentiment.txt")
+    f = open(file_path,"r",encoding="utf-8")
+    train_data = []
+    index = 0
+    for line in f.readlines():
+      guid = "train-%d" %(index)
+      line = line.replace("\n","").split("\t")
+      text_a = tokenization.convert_to_unicode(str(line[1]))
+      label = str(line[2])
+      train_data.append(
+          InputExample(guid=guid, text_a=text_a, text_b=None, label=label))
+      index += 1
+    return train_data
+
+  def get_dev_examples(self, data_dir):
+    file_path = os.path.join(data_dir, 'test_sentiment.txt')
+    f = open(file_path, 'r', encoding='utf-8')
+    dev_data = []
+    index = 0
+    for line in f.readlines():
+      guid = 'dev-%d' % index
+      line = line.replace("\n", "").split("\t")
+      text_a = tokenization.convert_to_unicode(str(line[1]))
+      label = str(line[2])
+      dev_data.append(InputExample(guid=guid, text_a=text_a, text_b=None, label=label))
+      index += 1
+    return dev_data
+
+  def get_test_examples(self, data_dir):
+    """Gets a collection of `InputExample`s for prediction."""
+    file_path = os.path.join(data_dir,"test_sentiment.txt")
+    f = open(file_path,"r",encoding="utf-8")
+    test_data = []
+    index = 0
+    for line in f.readlines():
+      guid = "test-%d" %(index)
+      line = line.replace("\n","").split("\t")
+      text_a = tokenization.convert_to_unicode(str(line[1]))
+      label = str(line[2])
+      test_data.append(
+          InputExample(guid=guid, text_a=text_a, text_b=None, label=label))
+      index += 1
+    return test_data
+
+  def get_labels(self):
+    """Gets the list of labels for this data set."""
+    return ["0", "1", "2"]
+
+  @classmethod
+  def _read_tsv(cls, input_file, quotechar=None):
+    """Reads a tab separated value file."""
+    with tf.gfile.Open(input_file, "r") as f:
+      reader = csv.reader(f, delimiter="\t", quotechar=quotechar)  
+      lines = []
+      
+      # line --> ['0', '453575', '453448', 'The 30-year bond US3...s close.", 'The 30-year bond US3...Wednesday.']
+      # 将每一行内容，变成一个列表
+      
+      for line in reader:
+        lines.append(line)
+      return lines
+
 
 class XnliProcessor(DataProcessor):
   """Processor for the XNLI data set."""
@@ -675,15 +742,17 @@ def create_model(bert_config, is_training, input_ids, input_mask, segment_ids,
 
     return (loss, per_example_loss, logits, probabilities)
 
-# TPU需要
+
 
 def model_fn_builder(bert_config, num_labels, init_checkpoint, learning_rate,
                      num_train_steps, num_warmup_steps, use_tpu,
                      use_one_hot_embeddings):
   """Returns `model_fn` closure for TPUEstimator."""
 
+  # 无论是TPU，GPU还是CPU，都会call这个函数
   def model_fn(features, labels, mode, params):  # pylint: disable=unused-argument
     """The `model_fn` for TPUEstimator."""
+    # 注意！！！这个和GPU是兼容的！！！
 
     tf.logging.info("*** Features ***")
     for name in sorted(features.keys()):
@@ -708,6 +777,7 @@ def model_fn_builder(bert_config, num_labels, init_checkpoint, learning_rate,
     tvars = tf.trainable_variables()
     initialized_variable_names = {}
     scaffold_fn = None
+    # 加载预训练模型
     if init_checkpoint:
       (assignment_map, initialized_variable_names
       ) = modeling.get_assignment_map_from_checkpoint(tvars, init_checkpoint)
@@ -850,6 +920,7 @@ def main(_):
       "mnli": MnliProcessor,
       "mrpc": MrpcProcessor,
       "xnli": XnliProcessor,
+      "my"  : MyDataProcessor,
   }
 
   tokenization.validate_case_matches_checkpoint(FLAGS.do_lower_case,
