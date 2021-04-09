@@ -223,6 +223,12 @@ Span C: and bought a gallon of ...
 
 那么对于bought来说，它在Span B和Span C中都有出现，那么，哪一个上下文关系最全呢？其实我们凭直觉应该可以猜到应该是Span C，因为Span B中bought出现在句末，没有下文。当然了，我们还是得用公式计算一下
 
-```tex
-X = 1
+```python
+score = min(num_left_context, num_right_context) + 0.01 * doc_span.length
 ```
+
+score_B = min(4, 0) + 0.05 = 0.05
+
+score_C = min(1,3) + 0.05 = 1.05
+
+所以，在Span C中，bought的上下文语义最全，最终该方法会返回最棒的span的索引，意思是答案在这个span里面语义最全。
