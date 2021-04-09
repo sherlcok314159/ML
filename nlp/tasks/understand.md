@@ -131,3 +131,11 @@ is_whitespace方法是用来判断是否是一个空格，马上就会用到。
 
 ![](https://github.com/sherlcok314159/ML/blob/main/nlp/Images/context.png)
 
+切分后的doc_tokens会去掉空白部分，同时会包括英文逗号。一个单词会有很多字符，每个字符对应的索引会存在char_to_word_offset，例如，前面都是0，代表这些字符都是第一个单词的，所以都是0。
+
+```python
+doc_tokens = ['Architecturally,', 'the', 'school', 'has', 'a', 'Catholic', 'character.', 'Atop', 'the',"..."]
+
+char_to_word_offset = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ...]
+```
+
