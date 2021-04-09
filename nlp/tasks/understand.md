@@ -122,3 +122,7 @@ input_data是一个大列表，然后每一个元素样式如下
 {'paragraphs': [{...}, {...}, {...}, {...}, {...}, {...}, {...}, {...}, {...}, ...], 'title': 'University_of_Notre_Dame'}
 ```
 
+这是用来判断是否是一个空格，马上就会用到。
+
+![](https://github.com/sherlcok314159/ML/blob/main/nlp/Images/white.png)
+
