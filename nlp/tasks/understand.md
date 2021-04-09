@@ -203,5 +203,5 @@ tokens = [CLS] query tokens [SEP] context [SEP]
 
 很多时候文章长度大于maximum_sequence_length的时候，这个时候我们要对文章进行切片处理，把它按照一定长度进行切分，每一个切片称为一个doc_span，start代表从哪开始，length代表一个的长度。
 
-![](https://github.com/sherlcok314159/ML/blob/main/nlp/Images/doc_span.png)
+
 
