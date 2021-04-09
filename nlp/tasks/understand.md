@@ -16,7 +16,7 @@ https://arxiv.org/abs/1810.04805
 - [数据篇](#data)
   - [番外句子分类](#outside)
   - [创造实例](#example)
-
+  - [实例转换](#convert)
 
 **<div id='flags'>Demo传参</div>**
 
@@ -158,6 +158,28 @@ qa里面还有一个is_impossible，用于判断是否有答案
 
 ![](https://github.com/sherlcok314159/ML/blob/main/nlp/Images/impossible.png)
 
-然后将example变成SquadExample的实例化对象，将example加入大列表——examples并返回。
+然后将example变成SquadExample的实例化对象，将example加入大列表——examples并返回，至此实例创建完成。
 
 ![](https://github.com/sherlcok314159/ML/blob/main/nlp/Images/example_.png)
+
+***
+
+**<div id='convert'>实例转换</div>**
+
+把json文件变成实例之后，我们还差一步便可以把数据塞进模型进行训练了，那就是将实例转化为变量。
+
+先对question_text进行简单的空格切分变为query_tokens
+
+![](https://github.com/sherlcok314159/ML/blob/main/nlp/Images/example_tokenize.png)
+
+如果问题过长，就进行截断操作
+
+![](https://github.com/sherlcok314159/ML/blob/main/nlp/Images/question_slice.png)
+
+接下来对doc_tokens进行空格切分以及词切分，变成all_doc_tokens，需要注意的是orig_to_tok_index是all_doc_tokens的索引
+
+![](https://github.com/sherlcok314159/ML/blob/main/nlp/Images/subtoken.png)
+
+对tok_start_position和tok_end_position进行初始化，记住，这两个是相对于all_doc_tokens来说的，一定要与start_position和end_position区分开来，它们是相对于doc_tokens来说的
+
+![](https://github.com/sherlcok314159/ML/blob/main/nlp/Images/tok_start.png)
