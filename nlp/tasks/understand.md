@@ -63,4 +63,53 @@ _repr_方法只是在有start_position的时候进行字符串的拼接。
 
 **<div id='example'>创造实例</div>**
 
-用于训练的数据集是json文件，
+用于训练的数据集是json文件，需要用json库读入。
+
+训练集的样式如下
+
+```python
+{
+    "data": [
+        {
+            "title": "University_of_Notre_Dame",
+            "paragraphs": [
+                {
+                    "context": "Architecturally, the school has a Catholic character.",
+                    "qas": [
+                        {
+                            "answers": [
+                                {
+                                    "answer_start": 515,
+                                    "text": "Saint Bernadette Soubirous"
+                                }
+                            ],
+                            "question": "To whom did the Virgin Mary allegedly appear in 1858 in Lourdes France?",
+                            "id": "5733be284776f41900661182"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "title":"...",
+            "paragraphs":[
+                {
+                    "context":"...",
+                    "qas":[
+                        {
+                            "answers":[
+                                {
+                                    "answer_start":..,
+                                    "text":"...",
+                                }
+                            ],
+                            "question":"...",
+                            "id":"..."
+                        },
+                    ]
+                }
+            ]
+        }
+    ]
+}
+```
