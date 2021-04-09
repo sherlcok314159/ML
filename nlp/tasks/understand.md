@@ -14,7 +14,8 @@ https://arxiv.org/abs/1810.04805
 **章节**
 - [Demo传参](#flags)
 - [数据篇](#data)
-  -[番外句子分类](#outside)
+  - [番外句子分类](#outside)
+  - [创造实例](#example)
 
 
 **<div id='flags'>Demo传参</div>**
@@ -52,12 +53,14 @@ python bert/run_squad.py \
 
 **<div id='outside'>番外句子分类</div>**
 
-想必很多人看到SquadExample类都很疑惑，这里处理好一个example，为什么后面还要进行处理？看英文注释会发现这个类其实跟阅读理解没关系，它只是处理之后对于句子分类任务的，自然在run_squad.py里面没被调用。
+想必很多人看到SquadExample类的_repr_方法都很疑惑，这里处理好一个example，为什么后面还要进行处理？看英文注释会发现这个类其实跟阅读理解没关系，它只是处理之后对于句子分类任务的，自然在run_squad.py里面没被调用。
 
-初始化没什么好说的，_repr_方法只是在有start_position的时候进行字符串的拼接。
+_repr_方法只是在有start_position的时候进行字符串的拼接。
 
 ![](https://github.com/sherlcok314159/ML/blob/main/nlp/Images/repr.png)
 
 ***
 
+**<div id='example'>创造实例</div>**
 
+用于训练的数据集是json文件，
