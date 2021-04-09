@@ -122,7 +122,7 @@ input_data是一个大列表，然后每一个元素样式如下
 {'paragraphs': [{...}, {...}, {...}, {...}, {...}, {...}, {...}, {...}, {...}, ...], 'title': 'University_of_Notre_Dame'}
 ```
 
-is_whitespace方法是用来判断是否是一个空格，马上就会用到。
+is_whitespace方法是用来判断是否是一个空格，在切分字符然后加入doc_tokens会用到。
 
 ![](https://github.com/sherlcok314159/ML/blob/main/nlp/Images/white.png)
 
@@ -131,11 +131,33 @@ is_whitespace方法是用来判断是否是一个空格，马上就会用到。
 
 ![](https://github.com/sherlcok314159/ML/blob/main/nlp/Images/context.png)
 
-切分后的doc_tokens会去掉空白部分，同时会包括英文逗号。一个单词会有很多字符，每个字符对应的索引会存在char_to_word_offset，例如，前面都是0，代表这些字符都是第一个单词的，所以都是0。
+切分后的doc_tokens会去掉空白部分，同时会包括英文逗号。一个单词会有很多字符，每个字符对应的索引会存在char_to_word_offset，例如，前面都是0，代表这些字符都是第一个单词的，所以都是0，换句话说就是第一个单词很长。
 
 ```python
 doc_tokens = ['Architecturally,', 'the', 'school', 'has', 'a', 'Catholic', 'character.', 'Atop', 'the',"..."]
 
 char_to_word_offset = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ...]
 ```
+接下来进行qas内容的遍历，每个元素称为qa，进行id和question内容的分配，后面都是初始化一些参数
 
+![](https://github.com/sherlcok314159/ML/blob/main/nlp/Images/qas.png)
+
+qa里面还有一个is_impossible，用于判断是否有答案
+
+![](https://github.com/sherlcok314159/ML/blob/main/nlp/Images/ispossible.png)
+
+确保有答案之后，刚刚读入了问题，现在读入与答案相关的部分，读入的时候注意start_position和end_position是相对于doc_tokens的
+
+![](https://github.com/sherlcok314159/ML/blob/main/nlp/Images/answer.png)
+
+接下来对答案部分进行双重检验，actual_text是根据doc_tokens和始末位置拼接好的内容，然后对orig_answer_text进行空格切分，最后用find方法判断orig_answer_text是否被包含在actual_text里面。
+
+![](https://github.com/sherlcok314159/ML/blob/main/nlp/Images/find.png)
+
+这个是针对is_impossible来说的，如果没有答案，则把始末位置全部变成-1。
+
+![](https://github.com/sherlcok314159/ML/blob/main/nlp/Images/impossible.png)
+
+然后将example变成SquadExample的实例化对象，将example加入大列表——examples并返回。
+
+![](https://github.com/sherlcok314159/ML/blob/main/nlp/Images/example_.png)
