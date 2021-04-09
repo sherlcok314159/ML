@@ -194,3 +194,9 @@ qa里面还有一个is_impossible，用于判断是否有答案
 
 ![](https://github.com/sherlcok314159/ML/blob/main/nlp/Images/tok_.png)
 
+
+计算max_tokens_for_doc，与文本分类类似，需要减去[CLS]和两个[SEP]的位置，这里不同的是还要减去问题的长度，因为这里算的是文本的长度。
+
+tokens = [CLS] query tokens [SEP] context [SEP]
+
+![](https://github.com/sherlcok314159/ML/blob/main/nlp/Images/squad_length.png)
