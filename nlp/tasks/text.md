@@ -30,6 +30,7 @@ https://arxiv.org/abs/1810.04805
         - [MASK机制](#mask)
         - [Q,K,V矩阵构建](#qkv)
     - [损失优化](#loss)
+    - [构建模型](#mode)
     - [其他注意点](#others)
 
 
@@ -452,6 +453,29 @@ attention_mask即为上节我们说的MASK，这里进行拓展一个维度。
 
 ![](https://github.com/sherlcok314159/ML/blob/main/nlp/Images/loss.png)
 
+
+***
+**<div id='mode'>模型构建</div>**
+
+model_fn方法是构建的函数之一，一定一定要小心，虽然上面写着返回给TPUEstimator，可如果你运行过demo的话，输出的很多东西都来源于这个方法。
+
+![](https://github.com/sherlcok314159/ML/blob/main/nlp/Images/model_fn.png)
+
+进入main(_)主方法，需要注意的是，以后我们需要fine-tune，需要把我们自己定义的processor添加进processors。
+
+![](https://github.com/sherlcok314159/ML/blob/main/nlp/Images/my.png)
+
+确认要训练之后，会计算需要一共多少步完成，这里还有个warm-up，意思是一开始呢让learning rate低一下，等到了warm-up proportion之后再还原。
+
+![](https://github.com/sherlcok314159/ML/blob/main/nlp/Images/warm.png)
+
+终于我们开始构建模型了
+
+![](https://github.com/sherlcok314159/ML/blob/main/nlp/Images/model_fn_builder.png)
+
+最终我们构建了estimator用于后期训练，评估和预测
+
+![](https://github.com/sherlcok314159/ML/blob/main/nlp/Images/estimator.png)
 
 ***
 **<div id='others'>其他注意点</div>**

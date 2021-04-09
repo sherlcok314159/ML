@@ -41,6 +41,10 @@ bert模型是可以通用的，但是不同数据需要通过预处理来达到�
 
 然后get_labels方法，里面写具体的labels，这里是0，1，2，那么就是0，1，2，注意不要忘了带上英文引号就行。
 
+最重要的是去main(_)方法下面添加自己定义的数据处理类别
+
+![](https://github.com/sherlcok314159/ML/blob/main/nlp/Images/my.png)
+
 模型去bert官方下载中文的预训练模型，其他的对着改改就好，相信看过我的[文本分类](../tasks/text.md)的剩下的都不需要多说。
 
 跑出来的结果如下，我用的是Tesla K80，白嫖Google Colab的，用时1h17min47s。
