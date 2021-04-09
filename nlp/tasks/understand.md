@@ -183,3 +183,14 @@ qa里面还有一个is_impossible，用于判断是否有答案
 对tok_start_position和tok_end_position进行初始化，记住，这两个是相对于all_doc_tokens来说的，一定要与start_position和end_position区分开来，它们是相对于doc_tokens来说的
 
 ![](https://github.com/sherlcok314159/ML/blob/main/nlp/Images/tok_start.png)
+
+接下来先介绍_improve_answer_span方法，这个方法是用来处理特殊的情况的，举个例子，假如说你的文本是"The Japanese electronics industry is the lagest in the world."，你的问题是"What country is the top exporter of electornics?" 那答案其实应该是Japan，可是呢，你用空格和词切分的时候会发现Japanese已经在词表中可查，这意味着不会对它进行再切分，会直接将它返回，这种情况下可能需要这个方法救场。
+
+![](https://github.com/sherlcok314159/ML/blob/main/nlp/Images/_improve.png)
+
+因为是监督学习，答案已经给出，所以呢，这个方法干的事情就是词切分后的tokens进行再一次切分，如果发现切分之后会有更好的答案，就返回新的始末点，否则就返回原来的。
+
+对tok_start_position和tok_end_position进行进一步赋值
+
+![](https://github.com/sherlcok314159/ML/blob/main/nlp/Images/tok_.png)
+
