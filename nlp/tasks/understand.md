@@ -271,3 +271,52 @@ score_C = min(1,3) + 0.05 = 1.05
 ![](https://github.com/sherlcok314159/ML/blob/main/nlp/Images/optimization.png)
 ***
 
+**<div id='predict'>写入预测</div>**
+
+start_logit & end_logit 代表着未经过softmax的概率，start_logit表示tokens里面以每一个token作为开头的概率，后者类似的。还有一对null_start_logit & null_end_logit，它们两个代表的是SQuAD2.0没有答案的那些，默认全为0。
+
+首先，简单介绍一下_get_best_indexes，这个方法是用来输出由高到低前n_best_size个的概率的索引。
+
+![](https://github.com/sherlcok314159/ML/blob/main/nlp/Images/get_indexes.png)
+
+遍历start_indexes，end_indexes（都是分别经过_get_best_indexes得到），对于答案未缺失的，以具体的logit填入，另外，feature_index代表第几个feature。
+
+![](https://github.com/sherlcok314159/ML/blob/main/nlp/Images/with_prediction.png)
+
+如果答案缺失，则全都为0
+
+![](https://github.com/sherlcok314159/ML/blob/main/nlp/Images/without_prediction.png)
+
+接下来我们进一步转换为具体的文本
+
+![](https://github.com/sherlcok314159/ML/blob/main/nlp/Images/pred.png)
+
+然后进一步清洗数据
+
+![](https://github.com/sherlcok314159/ML/blob/main/nlp/Images/clean_.png)
+
+这样还有个问题，词切分会自动小写，与答案还存在一定的偏移，这里介绍get_final_text方法来解决这一问题，比如：
+
+pred_text = steve smith
+
+orig_text = Steve Smith's
+
+这个方法通俗来讲就是获得orig_text（未经过词切分）上正确的截取片段。
+
+然后将其添加到nbest中
+
+![](https://github.com/sherlcok314159/ML/blob/main/nlp/Images/nbest.png)
+
+同样会存在没有答案的情况
+
+![](https://github.com/sherlcok314159/ML/blob/main/nlp/Images/nbest_.png)
+
+接下来会有一个total_scores，它的元素是start_logit和end_logit相加，注意，它们不是数值，是数组，之后就计算total_scores的交叉熵损失作为概率。
+
+![](https://github.com/sherlcok314159/ML/blob/main/nlp/Images/probs.png)
+
+剩下的部分跟文本分类差不多，这里就此略过。
+
+
+
+
