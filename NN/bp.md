@@ -2,7 +2,7 @@
 
 首先介绍一下链式法则
 
-![](https://github.com/sherlcok314159/ML/blob/main/Images/functions.png)
+
 
 假如我们要求z对x1的偏导数，那么势必得先求z对t1的偏导数，这就是链式法则，一环扣一环
 
