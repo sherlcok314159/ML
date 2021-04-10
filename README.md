@@ -30,6 +30,9 @@
 
 优化方法
 * [Gradient Descent](optimization/GD.md)
+
+误差后向传播
+* [BackPropagation](NN/bp.md)
 ****
 其实神经网络属于机器学习，只是过程具体化有些不同罢了，所以分开处理
 
