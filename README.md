@@ -14,6 +14,7 @@
 
 - [李宏毅](https://www.youtube.com/watch?v=CXgbekl66jc&list=PLJV_el3uVTsPy9oCRY30oBPNLCo89yu49&index=1)（入门极荐，简单易懂，且为中文授课）
 - [吴恩达](https://www.coursera.org/learn/machine-learning/home/welcome)（斯坦福华人教授，业界公认厉害）
+- [Hinton](https://www.youtube.com/watch?v=LOc_y67AzCA&list=PLoRl3Ht4JOcdU872GhiYWf6jwrk_SNhz9&index=14&ab_channel=ColinReckons)（深度学习开山鼻祖）
 
 ****
 ### <div id='basic'>基础知识</div>
