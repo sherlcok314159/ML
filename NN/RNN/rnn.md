@@ -29,11 +29,15 @@
 
 ![](https://github.com/sherlcok314159/ML/blob/main/Images/htt.png)
 
-y_t可以尤其得出：
+y_t可以由此得出：
 
 ![](https://github.com/sherlcok314159/ML/blob/main/Images/y_t.png)
 
 从上述公式中可以看出有不同的W，即不同的权重矩阵，这些矩阵是机器自己去从数据中去学出来，同时也可以是人为设置的。注意，这些不同类之间的矩阵不同，但是如果说是同一个function，那么权重矩阵都是共享的。
+
+传统的DNN，CNN的输入和输出都是固定的向量，而RNN与这些网络的最大不同点是它的输入和输出都是不定长的，具体因不同任务而定。
+
+![](https://github.com/sherlcok314159/ML/blob/main/Images/many_lengths.png)
 
 ***
 ### <div id='problems'>传统困难</div>
