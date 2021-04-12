@@ -19,7 +19,7 @@
 
 ![](https://github.com/sherlcok314159/ML/blob/main/Images/rnn.png)
 
-![](https://github.com/sherlcok314159/ML/blob/main/Images/h_t.png)
+![](https://github.com/sherlcok314159/ML/blob/main/Images/ht.png)
 
 ***
 ### <div id='problems'>传统困难</div>
