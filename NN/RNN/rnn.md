@@ -3,7 +3,7 @@
 章节
 
 - [RNN概述](#summary)
-- [传统困难](#problems)
+- [梯度困区](#problems)
 - [LSTM](#lstm)
 - [应用](#application)
 
@@ -40,7 +40,7 @@ y_t可以由此得出：
 ![](https://github.com/sherlcok314159/ML/blob/main/Images/many_lengths.png)
 
 ***
-### <div id='problems'>传统困难</div>
+### <div id='problems'>梯度困区</div>
 
 1
 ***
