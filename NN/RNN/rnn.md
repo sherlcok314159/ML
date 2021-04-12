@@ -21,6 +21,20 @@
 
 ![](https://github.com/sherlcok314159/ML/blob/main/Images/ht.png)
 
+所以，复杂一点的RNN长这样：
+
+![](https://github.com/sherlcok314159/ML/blob/main/Images/rnn_1.png)
+
+每次输出完一个y，它同时还会有一个h出来，作为下一层的参数一起使用。从这一点来看，RNN跟其他网络不同的一点是前一层的输出同时可以作为后一层的输入，经过一层就会更新一次h，那么，h究竟是如何更新的呢？tanh是一种常用的激活函数，可见[Activation](../activation.md)。
+
+![](https://github.com/sherlcok314159/ML/blob/main/Images/htt.png)
+
+y_t可以尤其得出：
+
+![](https://github.com/sherlcok314159/ML/blob/main/Images/y_t.png)
+
+从上述公式中可以看出有不同的W，即不同的权重矩阵，这些矩阵是机器自己去从数据中去学出来，同时也可以是人为设置的。
+
 ***
 ### <div id='problems'>传统困难</div>
 
