@@ -15,12 +15,14 @@
 
 ![](https://github.com/sherlcok314159/ML/blob/main/Images/network.png)
 
-可以从下图看出，RNN得到一个输出不仅仅靠输入的X，同时还依赖于h，h在RNN中被叫做cell state
+可以从下图看出，RNN得到一个输出不仅仅靠输入的X，同时还依赖于h，h在RNN中被叫做cell state，那么h如何得出呢？
 
 ![](https://github.com/sherlcok314159/ML/blob/main/Images/rnn.png)
 
+![](https://github.com/sherlcok314159/ML/blob/main/Images/h_t.png)
+
 ***
-### <div id='problems'>传统困哪</div>
+### <div id='problems'>传统困难</div>
 
 1
 ***
