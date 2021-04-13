@@ -125,6 +125,9 @@ LSTM和GRU比较有创新的一点就是采用了门结构来控制整个模型�
 
 ![](https://github.com/sherlcok314159/ML/blob/main/Images/final_.png)
 
+接下来将一下各部分的作用以及LSTM的优点及局限性：
+
+
 
 梯度消失导致RNN只能捕获到比较近的信息，也就是tanh压缩之后的信息，而丧失了远距离传过来的信息，导致它并不能处理很长的句子，LSTM只是缓解并没有解决这一问题，说起LSTM的名字也很有趣，Long Short-Term Network，其实只是比较长的短期网络啦。
 ***
