@@ -71,6 +71,8 @@ LSTM和GRU比较有创新的一点就是采用了门结构来控制整个模型�
 
 ![](https://github.com/sherlcok314159/ML/blob/main/Images/f_t.png)
 
+其中两个W都是权重矩阵，两个b都是截距，是通过机器去不断学出来的
+
 ![](https://github.com/sherlcok314159/ML/blob/main/Images/f_t_.png)
 
 
