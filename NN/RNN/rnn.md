@@ -107,7 +107,7 @@ LSTM和GRU比较有创新的一点就是采用了门结构来控制整个模型�
 ![](https://github.com/sherlcok314159/ML/blob/main/Images/o_t_.png)
 
 
-- h_t的输出
+- Hidden State
 
 ![](https://github.com/sherlcok314159/ML/blob/main/Images/h_t.png)
 
