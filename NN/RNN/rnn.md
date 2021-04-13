@@ -91,6 +91,8 @@ LSTM和GRU比较有创新的一点就是采用了门结构来控制整个模型�
 
 - Cell State
 
+![](https://github.com/sherlcok314159/ML/blob/main/Images/c_t_.png)
+
 ![](https://github.com/sherlcok314159/ML/blob/main/Images/c_t.png)
 
 注意这里的是哈达玛积（Hadamard product），是对应位置元素相乘
@@ -98,11 +100,9 @@ LSTM和GRU比较有创新的一点就是采用了门结构来控制整个模型�
 ![](https://github.com/sherlcok314159/ML/blob/main/Images/had_.png)
 
 
-![](https://github.com/sherlcok314159/ML/blob/main/Images/c_t_.png)
-
 - Output Gate
 
-![](https://github.com/sherlcok314159/ML/blob/main/Images/o_t.png)
+![](https://github.com/sherlcok314159/ML/blob/main/Images/o_t__.png)
 
 ![](https://github.com/sherlcok314159/ML/blob/main/Images/o_t_.png)
 
