@@ -52,7 +52,7 @@ y_t可以由此得出：
 
 - 切换激活函数
 
-我们知道在CNN中出现梯度削减的原因是使用了sigmoid函数，
+在[BackPropagation](https://github.com/sherlcok314159/ML/blob/main/NN/bp.md)
 
 ***
 ### <div id='lstm'>LSTM</div>
