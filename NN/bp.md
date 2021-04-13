@@ -8,7 +8,7 @@
 
 ![](https://github.com/sherlcok314159/ML/blob/main/Images/chain_rule.png)
 
-BackPropagation（BP）正是基于链式法则的，接下来用简单的前向传播网络为例来解释。里面有线的神经元代表的sigmoid函数，y_1代表的是经过模型预测出来的，y_1 = w1 * x1 + w2 * x2，而y^1代表的是实际值，最后是预测值与实际值之间的误差——L = 1/2 * (y_1 - y^1)^2。
+BackPropagation（BP）正是基于链式法则的，接下来用简单的前向传播网络为例来解释。里面有线的神经元代表的sigmoid函数，y_1代表的是经过模型预测出来的，y_1 = w1 * x1 + w2 * x2，而y^1代表的是实际值，最后是预测值与实际值之间的误差，l_1 = 1/2 * (y_1 - y^1)^2，l_2同理。总的错误是E = l_1 + l_2。
 
 ![](https://github.com/sherlcok314159/ML/blob/main/Images/bp_.png)
 
