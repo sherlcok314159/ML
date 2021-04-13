@@ -52,11 +52,11 @@ y_t可以由此得出：
 
 - 切换激活函数
 
-在[BackPropagation](https://github.com/sherlcok314159/ML/blob/main/NN/bp.md)，我们已经讲过sigmoid会导致这个问题，所以我们可以切换激活函数，比如为RELU或者RELU的变种。
+在[BackPropagation](https://github.com/sherlcok314159/ML/blob/main/NN/bp.md)，我们已经讲过sigmoid会导致这个问题，同样地Tanh也会导致这个问题，所以我们可以切换激活函数，比如为RELU或者RELU的变种。
 
 - 权重初始化
 
-在RNN中，为了一定程度缓解梯度消失问题，我们可使权重矩阵变为正交矩阵。
+在RNN中，为了一定程度缓解梯度消失问题，我们可使权重矩阵变为正交矩阵，即为单位阵（Identity Matrix）。
 
 - 升级模型
 
@@ -65,7 +65,30 @@ y_t可以由此得出：
 ***
 ### <div id='lstm'>LSTM</div>
 
+LSTM和GRU比较有创新的一点就是采用了门结构来控制整个模型，下面把LSTM切分为4个小结构来具体讲解，分别为忘记（Forget），存储（Store），更新（Update）以及输出（Output）。
 
+- Forget Gate
+
+![](https://github.com/sherlcok314159/ML/blob/main/Images/f_t.png)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+梯度消失导致RNN只能捕获到比较近的信息，也就是tanh压缩之后的信息，而丧失了远距离传过来的信息，导致它并不能处理很长的句子，LSTM只是缓解并没有解决这一问题，说起LSTM的名字也很有趣，Long Short-Term Network，其实只是比较长的短期网络啦。
 ***
 ### <div id='application'>应用</div>
 
