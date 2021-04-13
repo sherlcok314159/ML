@@ -67,6 +67,10 @@ y_t可以由此得出：
 
 LSTM和GRU比较有创新的一点就是采用了门结构来控制整个模型，既然是门，那就可以打开和关闭，如何定义打开还是关闭呢？我们用sigmoid来完成这一点，如果经过sigmoid函数的值大于0.5，我们就打开，小于0.5呢，我们就关闭，下面把LSTM切分为不同的门结构来讲。
 
+![](https://github.com/sherlcok314159/ML/blob/main/Images/final_.png)
+
+我相信你一开始看到这个图是一脸懵逼的，接下来我带你手撕LSTM
+
 - Forget Gate
 
 ![](https://github.com/sherlcok314159/ML/blob/main/Images/f_t.png)
@@ -117,8 +121,9 @@ LSTM和GRU比较有创新的一点就是采用了门结构来控制整个模型�
 
 ![](https://github.com/sherlcok314159/ML/blob/main/Images/final.png)
 
-多层网络长这样：
+最后就长成了一开始的样子：
 
+![](https://github.com/sherlcok314159/ML/blob/main/Images/final_.png)
 
 
 梯度消失导致RNN只能捕获到比较近的信息，也就是tanh压缩之后的信息，而丧失了远距离传过来的信息，导致它并不能处理很长的句子，LSTM只是缓解并没有解决这一问题，说起LSTM的名字也很有趣，Long Short-Term Network，其实只是比较长的短期网络啦。
