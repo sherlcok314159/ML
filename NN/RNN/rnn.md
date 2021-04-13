@@ -54,6 +54,10 @@ y_t可以由此得出：
 
 在[BackPropagation](https://github.com/sherlcok314159/ML/blob/main/NN/bp.md)，我们已经讲过sigmoid会导致这个问题，所以我们可以切换激活函数，比如为RELU或者RELU的变种。
 
+- 权重初始化
+
+在RNN中，为了一定程度缓解梯度消失问题，我们可使权重矩阵变为正交矩阵。
+
 - 升级模型
 
 ***
