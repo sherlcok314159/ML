@@ -1,4 +1,4 @@
-### 后向传播算法（BackPropagation）
+### 反向传播算法（BackPropagation）
 
 首先介绍一下链式法则
 
@@ -39,7 +39,7 @@ BackPropagation（BP）正是基于链式法则的，接下来用简单的前向
 
 除了上述这些，输入还可能对两种可能都造成一定的影响，这可能是为什么Google在transformer中采取了残差相连和归一化（Add & Norm）的方式吧。做残差相连可能是为了为了增大x的值吧，防止过小，归一化的原因应该是防止过大。
 
-接着我们用PyTorch来实操一下后向传播算法，PyTorch可以实现自动微分，requires_grad 的意思是最终对这个tensor所进行的操作，这样我们进行BP的时候，直接用就好。不过默认情况下是False，需要我们手动设置。
+接着我们用PyTorch来实操一下反向传播算法，PyTorch可以实现自动微分，requires_grad 表示这个参数是可学习的，这样我们进行BP的时候，直接用就好。不过默认情况下是False，需要我们手动设置。
 
 ```python
 import torch
