@@ -65,13 +65,13 @@ y_t可以由此得出：
 ***
 ### <div id='lstm'>LSTM</div>
 
-LSTM和GRU比较有创新的一点就是采用了门结构来控制整个模型，下面把LSTM切分为4个小结构来具体讲解，分别为忘记（Forget），存储（Store），更新（Update）以及输出（Output）。
+LSTM和GRU比较有创新的一点就是采用了门结构来控制整个模型，既然是门，那就可以打开和关闭，如何定义打开还是关闭呢？我们用sigmoid来完成这一点，如果经过sigmoid函数的值大于0.5，我们就打开，小于0.5呢，我们就关闭，下面把LSTM切分为不同的门结构来讲。
 
 - Forget Gate
 
 ![](https://github.com/sherlcok314159/ML/blob/main/Images/f_t.png)
 
-其中两个W都是权重矩阵，两个b都是截距，是通过机器去不断学出来的
+其中两个W都是权重矩阵，两个b都是截距，是通过机器去不断学出来的，下文出现的W和b虽然具体内容不同，但是代表的意思是一样的。
 
 ![](https://github.com/sherlcok314159/ML/blob/main/Images/f_t_.png)
 
@@ -81,8 +81,19 @@ LSTM和GRU比较有创新的一点就是采用了门结构来控制整个模型�
 
 ![](https://github.com/sherlcok314159/ML/blob/main/Images/i_t_.png)
 
+- Cell Gate
 
+![](https://github.com/sherlcok314159/ML/blob/main/Images/g_t.png)
 
+需要注意的是，这里的激活函数换成了tanh。
+
+![](https://github.com/sherlcok314159/ML/blob/main/Images/g_t_.png)
+
+- Cell Gate
+
+![](https://github.com/sherlcok314159/ML/blob/main/Images/c_t.png)
+
+![](https://github.com/sherlcok314159/ML/blob/main/Images/c_t_.png)
 
 
 
