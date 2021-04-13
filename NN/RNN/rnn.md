@@ -113,6 +113,9 @@ LSTM和GRU比较有创新的一点就是采用了门结构来控制整个模型�
 
 ![](https://github.com/sherlcok314159/ML/blob/main/Images/h_t_.png)
 
+最后我们完成LSTM一层的搭建
+
+![](https://github.com/sherlcok314159/ML/blob/main/Images/final.png)
 
 
 
