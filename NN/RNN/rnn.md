@@ -60,12 +60,12 @@ y_t可以由此得出：
 
 - 升级模型
 
-在RNN的基础上提出了RNN的变种——GRU和LSTM
+在RNN的基础上提出了RNN的变种——GRU和LSTM，本文将重点围绕LSTM展开。
 
 ***
 ### <div id='lstm'>LSTM</div>
 
-1
+
 ***
 ### <div id='application'>应用</div>
 
