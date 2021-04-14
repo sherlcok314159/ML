@@ -106,14 +106,15 @@ LSTM和GRU比较有创新的一点就是采用了门结构来控制整个模型�
 
 ![](https://github.com/sherlcok314159/ML/blob/main/Images/final_.png)
 
-接下来将一下各部分的作用以及LSTM的优点及局限性：
-
-
-
 梯度消失导致RNN只能捕获到比较近的信息，也就是tanh压缩之后的信息，而丧失了远距离传过来的信息，导致它并不能处理很长的句子，LSTM只是缓解并没有解决这一问题，说起LSTM的名字也很有趣，Long Short-Term Network，其实只是比较长的短期网络啦。
 ***
 
 ### <div id='problems'>梯度困区</div>
+
+RNN通过Hidden State（h_t）路径完成梯度流动：
+
+![](https://github.com/sherlcok314159/ML/blob/main/Images/rnn_ht.png)
+
 
 上述的RNN都是正向的，我们通过梯度下降来找出最优解，在[backpropagation](../bp.md)中讲到，我们要求损失函数关于某个参数的梯度时，需要用到反向传播。我们是基于链式法则来进行反向传播的，而当RNN的网络层数越来越多的时候，链就会越来越长，乘的东西也就越来越多，那么就很容易导致梯度爆炸和梯度消失这两类问题。举个例子，一开始有个数0.1，看起来还行吧，我们把0.1连续乘上三次0.1，0.0001，这个数就已经相当的小了。
 
