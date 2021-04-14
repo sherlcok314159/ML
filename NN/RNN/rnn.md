@@ -99,7 +99,9 @@ LSTM和GRU比较有创新的一点就是采用了门结构来控制整个模型�
 
 ![](https://github.com/sherlcok314159/ML/blob/main/Images/c_t_.png)
 
-注意这里的是哈达玛积（Hadamard product），是对应位置元素相乘
+式子分为两部分，前一部分是说前面的cell state有哪些需要保留，哪些需要遗忘，cell gate用来暂存需要补充到新的c_t的内容。两者相加，便完成了cell state的更新了。
+
+注意这里的是哈达玛积（Hadamard product），是对应位置元素相乘。
 
 ![](https://github.com/sherlcok314159/ML/blob/main/Images/had_.png)
 
