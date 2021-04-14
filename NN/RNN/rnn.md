@@ -160,7 +160,7 @@ r_t被叫做重置门（Reset Gate），z_t被叫做更新门（Update Gate）�
 如何训练呢？首先是Encoder端，用以将序列转换为向量并且提取有效特征，具体来说，每一个时间步长输入多少长度的序列其实是未知的，经过LSTM会转换为(h,c)，直到Encoder端结束输入，最后的状态(h_,c_)作为Decoder的起始状态，记为s_0，Decoder端的第一个输入是[CLS]表示开始，接下来凭借Encoder端的输入开始输出翻译后的结果，翻译完一个之后，它会预测下一个可能是什么，把它转换为向量，向量里面是每一个词的可能性，因为这是监督学习，我们把德语的标签同样转换为向量，然后计算两者之间的交叉熵损失（Cross-Entropy），进而优化我们的损失函数。
 
 
-由于RNN缺乏处理长距离信息的能力，人们提出了注意力机制用以提高它的表现。加了注意力机制的seq2seq模型，这里讲一下与transformer一致的注意力机制。
+由于RNN缺乏处理长距离信息的能力，人们提出了注意力机制用以提高它的表现。加了注意力机制的seq2seq模型，这里讲一下与transformer一致的注意力机制。首先有两个矩阵W_k和W_q，一个表示为要被查的（Key），一个表示去查的（Query），具体可以看[Transformer](https://github.com/sherlcok314159/ML/blob/main/nlp/models/transformer.md)。用s_0和h_i去乘以矩阵q以及k，得到结果后两者做内积，最后用softmax归一化得到关系向量，这样一开始的s_0大概就知道跟哪个最接近，大大增加了翻译的准确度（以下图仍选自CS224N）。
 
 ![](https://github.com/sherlcok314159/ML/blob/main/Images/att.png)
 
