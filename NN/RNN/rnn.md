@@ -4,6 +4,7 @@
 
 - [RNN概述](#summary)
 - [LSTM](#lstm)
+- [GRU](#gru)
 - [梯度困区](#problems)
 - [应用](#application)
 
@@ -106,7 +107,7 @@ LSTM和GRU比较有创新的一点就是采用了门结构来控制整个模型�
 
 ![](https://github.com/sherlcok314159/ML/blob/main/Images/final_.png)
 
-梯度消失导致RNN只能捕获到比较近的信息，也就是tanh压缩之后的信息，而丧失了远距离传过来的信息，导致它并不能处理很长的句子，LSTM只是缓解并没有解决这一问题，说起LSTM的名字也很有趣，Long Short-Term Network，其实只是比较长的短期网络啦。
+
 ***
 
 ### <div id='problems'>梯度困区</div>
@@ -133,13 +134,24 @@ RNN通过Hidden State（h_t）路径完成梯度流动：
 
 当然了，上面这些措施只能是稍作改变，不痛不痒。
 
-为了更好地缓解这些问题，LSTM被提了出来，结构已经介绍过了，其实LSTM绝对不能解决上述梯度问题，最多进行缓解，它可以在一条路径上保持较为稳定的梯度流——Cell State（c_t），其他的路径上同样会有梯度消失的问题，因而不能说解决（公式里的V_t+k代表着f_t里面的输入）。
+为了更好地缓解这些问题，LSTM被提了出来，结构已经介绍过了，其实LSTM绝对不能解决上述梯度问题，最多进行缓解，它可以在一条路径上保持较为稳定的梯度流——Cell State（c_t），其他的路径上同样会有梯度消失的问题，与RNN的原因一样，换句话说，LSTM通过维持一条高速公路来拯救其他路径（公式里的V_t+k代表着f_t里面的输入）。另外，虽然LSTM有高速公路，但仍然不能处理很长距离的句子，说起LSTM的名字也很有趣，Long Short-Term Network，其实只是比较长的短期网络啦，并不是真正能处理很长距离的句子。
 
 ![](https://github.com/sherlcok314159/ML/blob/main/Images/c_t_gd.png)
 
 LSTM可以学习到权重矩阵使得sigmoid出来的值接近于1，因而更好地缓解了梯度下降以及梯度爆炸的问题。
 
 ***
+### <div id='gru'>GRU</div>
+
+其实LSTM是对RNN的改良升级，相对于LSTM来说，门结构变少，即参数量变少，训练起来速度更快，在实际任务中与LSTM相差无几，所以2014年提出之后就逐渐变得流行起来，当然啦，实际任务中肯定两个都训练，择优录取。
+
+![](https://github.com/sherlcok314159/ML/blob/main/Images/gru.png)
+
+![](https://github.com/sherlcok314159/ML/blob/main/Images/gru_.png)
+
+
+***
+
 ### <div id='application'>应用</div>
 
 1
