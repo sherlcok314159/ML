@@ -164,6 +164,7 @@ r_t被叫做重置门（Reset Gate），z_t被叫做更新门（Update Gate）�
 
 ![](https://github.com/sherlcok314159/ML/blob/main/Images/att.png)
 
+![](https://github.com/sherlcok314159/ML/blob/main/Images/atte.png)
 
 ***
 ### <div id='where'>何去何从</div>
