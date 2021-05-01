@@ -1,11 +1,14 @@
 ### Convolutional Neutral Network
 
+
 章节
 
 - [Filter](#filter)
 - [池化](#pooling)
 - [Demo](#demo)
 - [总结](#conclusions)
+- [参考文献](#references)
+
 <!-- - [Seq2Seq模型](#seq)
 - [何去何从](#where)
 - [模型之外](#out) -->
@@ -18,14 +21,15 @@ CNN 一共分为输入，卷积，池化，拉直，softmax，输出
 
 ### <div id='filter'>Filter</div>
 
-CNN常用于图像识别，在深度学习中我们不可能直接将图片输入进去，**向量是机器学习的通行证**，我们将图片转换为像素矩阵再送进去，对于黑白的图片，只有0和1两个像素值，若为彩色的，每一个点会有三个像素值（RGB）。
+CNN常用于图像识别，在深度学习中我们不可能直接将图片输入进去，**向量是机器学习的通行证**，我们将图片转换为像素矩阵再送进去，对于黑白的图片，只有0和1两个像素值，若为彩色的，每一个点会有三个像素值（RGB）
 
-Filter（滤波器）其实就是做矩阵点乘运算，用下面的Toy Example说明：其实就是用filter来与像素矩阵局部做乘积，这里需要引入一个参数（Stride），代表我们每一次滤波器在像素矩阵上移动的步幅，分为水平步幅和垂直步幅。以下图
+互关运算其实就是做矩阵点乘运算，用下面的Toy Example说明：其实就是用kernel(filter)来与像素矩阵局部做乘积，如下图，output的第一个阴影值其实是input和kernel的阴影部分进行矩阵乘法所得
 
 ![](https://github.com/sherlcok314159/ML/blob/main/Images/kernel.png)
 
+接下来引入一个参数（Stride），代表我们每一次滤波器在像素矩阵上移动的步幅，步幅共分为水平步幅和垂直步幅，下图为水平步幅为2，垂直步幅为3的设置
 
-
+![](https://github.com/sherlcok314159/ML/blob/main/Images/stride.png)
 
 
 
