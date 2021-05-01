@@ -20,9 +20,10 @@ CNN 一共分为输入，卷积，池化，拉直，softmax，输出
 
 CNN常用于图像识别，在深度学习中我们不可能直接将图片输入进去，**向量是机器学习的通行证**，我们将图片转换为像素矩阵再送进去，对于黑白的图片，只有0和1两个像素值，若为彩色的，每一个点会有三个像素值（RGB）。
 
-Filter（滤波器）其实就是做矩阵点乘运算，用下面的Toy Example说明：
+Filter（滤波器）其实就是做矩阵点乘运算，用下面的Toy Example说明：其实就是用filter来与像素矩阵局部做乘积，这里需要引入一个参数（Stride），代表我们每一次滤波器在像素矩阵上移动的步幅，分为水平步幅和垂直步幅。以下图
 
-![](https://github.com/sherlcok314159/ML/blob/main/Images/convalution.png)
+![](https://github.com/sherlcok314159/ML/blob/main/Images/kernel.png)
+
 
 
 
