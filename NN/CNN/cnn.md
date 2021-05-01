@@ -1,6 +1,28 @@
-CNN 一共分为输入，卷积，池化，拉直，softmax，输出
+### Convolutional Neutral Network
+
+章节
+
+- [Filter](#filter)
+- [池化](#pooling)
+- [Demo](#demo)
+- [总结](#conclusions)
+<!-- - [Seq2Seq模型](#seq)
+- [何去何从](#where)
+- [模型之外](#out) -->
 
 ![](https://github.com/sherlcok314159/ML/blob/main/Images/cnn.png)
+CNN 一共分为输入，卷积，池化，拉直，softmax，输出
+
+卷积由互关运算（用Filter完成）和激活函数
+
+
+### <div id='filter'>Filter</div>
+
+
+
+
+
+
 
 **为什么CNN可以做影像识别？**
 
