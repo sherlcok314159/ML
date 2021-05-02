@@ -74,62 +74,34 @@ Q & A:
 补充一下，可以给上述池操作加一个Global，这就意味着全局，而不是一个一个的小区域
 
 
-**为什么CNN可以做影像识别？**
+***
 
-***A.*** 其实很多时候，不用看整张图片，看其中一小部分就可以判断这张图是什么了。比如说，判断一张图片里面有没有人，不需要看整张图片，看到人的头或者上半身就已经可以决定这件事情了
+### <div id='demo'>Demo</div>
 
-***B.*** 需要识别的小部分通常分布在不同图片的不同部分，我们通过让不同神经元（neuron）共享权重（weights），即共用一个滤波器（filter）来发现不同图片上的相同部分，即使它们分布在不同位置。这样一来，可以很大程度上减少参数，提高训练速度。
+进行卷积池化这样一组操作多次之后再全部拉直送入全连接网络，最后输出10个值，然后优化它们与真实标签的交叉熵损失，接下来用PyTorch和TensorFlow实操一下
 
+首先先搭建一个简单的PyTorch网络
 
+```python
+class Net(nn.Module):
+   def __init__(self):
+      super().__init__()
+      self.layer = nn.Sequential(
+                   nn.Conv2d(in_channels=1,out_channels=32,kernel_size=3),nn.ReLU(),
+                   nn.MaxPool2d(kernel_size=2),
+                   nn.Conv2d(32,64,2),nn.ReLU(),
+                   nn.MaxPool2d(2,2),
+                   nn.Flatten(),
+                   nn.Linear(64 * 6 * 6,10),nn.Softmax(),
+                   )
 
-接下来，以**影像识别**为例具体介绍一下CNN
+   def forward(self,x):
+      x = self.layer(x)
+      return x
+```
 
-比如我们要识别手写数字，28 * 28辨识率的图片，输入应该是28 * 28 的矩阵，代表图片上每一个地方的像素值，因为是黑白，值为0，1
+PyTorch中输入必须为(1,1,28,28)，这里比tensorflow多了一个1，原因是Torch中有一个group参数，默认为1，所以可以不设置，如果为N，就会把输入分为N个小部分，每一个部分进行卷积，最后再将结果拼接起来
 
-
-实际卷积的时候是拿一个滤波器与代表图片像素的矩阵做乘积然后相加。
-
-
-
-滤波器中的值其实是learn出来的，是一个矩阵，矩阵的规模可以自己设置。
-
-其实就是滤波器在原始矩阵上进行平移，至于一次平移多少（stride），同样是参数可以自己设置。
-
-做好卷积之后原始如果说是28 * 28 的矩阵，经过3 * 3 的滤波器，变成 26 * 26 的矩阵了。
-
-因为是黑白图片，所以一个矩阵就行。（channel = 1）**input_shape = (28,28,1)**，如果是彩色图片，有RGB，所以得有**三个矩阵叠在一起**形成一个**Feature Map**
-
-![](https://github.com/sherlcok314159/ML/blob/main/Images/rgb.png)
-
-------------------------------------------------------------------------[图片来源](https://www.youtube.com/watch?v=FrKWiRv254g&list=PLJV_el3uVTsPy9oCRY30oBPNLCo89yu49&index=19)----------------------------------------------------------------------------
-
-接下来要经过池化（max pooling），池化矩阵的规模同样是自己设置。可以试试 2 * 2。池化所做的跟滤波器一样在矩阵上平移，只不过作用是取最大。
-
-![](https://github.com/sherlcok314159/ML/blob/main/Images/maxpooling.png)
-
-经过池化之后，生成25 * 25的矩阵。
-
-**卷积池化这两个过程可以不断重复多次，来减小取样（downsample）同时保留图片重要特征**
-
-除了Maxpooling,还有其他几种，这里一并介绍
-
-**GlobalMaxPooling**
-
-![](https://github.com/sherlcok314159/ML/blob/main/Images/GlobalMaxPooling.png)
-
-顾名思义，Global意味着全局，整个取一个最大值
-
-**AveragePooling**
-
-![](https://github.com/sherlcok314159/ML/blob/main/Images/AveragePooling.png)
-
-跟上面MaxPooling的操作类似，唯一区别是一个求最大值，一个求平均值
-
-**GlobalAveragePooling**
-
-![](https://github.com/sherlcok314159/ML/blob/main/Images/GlobalAveragePooling.png)
-
-全局求平均值
 
 >We don't minimize total loss to find the best function.
 
