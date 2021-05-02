@@ -50,7 +50,7 @@ y_t可以由此得出：
 
 ![](https://github.com/sherlcok314159/ML/blob/main/Images/bptt.png)
 
-假设![](http://latex.codecogs.com/gif.latex?l_t = (y_t - \hat{y}_t)^2)是第t个时间步长的损失函数，BPTT做的是取两个时间步长，截取片段，然后反向更新参数，比如这里我们需要更新![](http://latex.codecogs.com/gif.latex?W_{hh})：
+假设![](http://latex.codecogs.com/svg.latex?l_t = (y_t - \hat{y}_t)^2)是第t个时间步长的损失函数，BPTT做的是取两个时间步长，截取片段，然后反向更新参数，比如这里我们需要更新![](http://latex.codecogs.com/gif.latex?W_{hh})：
 
 ![](https://github.com/sherlcok314159/ML/blob/main/Images/bptt2.png)
 
