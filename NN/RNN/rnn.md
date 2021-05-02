@@ -3,6 +3,7 @@
 章节
 
 - [RNN概述](#summary)
+- [BPTT & RTRL](#bptt)
 - [LSTM](#lstm)
 - [GRU](#gru)
 - [梯度困区](#problems)
@@ -36,13 +37,20 @@ y_t可以由此得出：
 
 ![](https://github.com/sherlcok314159/ML/blob/main/Images/y_t.png)
 
-从上述公式中可以看出有不同的W，即不同的权重矩阵，这些矩阵是机器自己去从数据中去学出来，同时也可以是人为设置的。注意，这些不同类之间的矩阵不同，但是如果说是同一个function，那么权重矩阵都是共享的。
+从上述公式中可以看出有不同的W，但相同类型之间的W是共享的，比如说下次不同的![](http://latex.codecogs.com/gif.latex?h_t)，即不同的权重矩阵，这些矩阵是机器自己去从数据中去学出来，同时也可以是人为设置的。注意，这些不同类之间的矩阵不同，但是如果说是同一个function，那么权重矩阵都是共享的。
 
 传统的DNN，CNN的输入和输出都是固定的向量，而RNN与这些网络的最大不同点是它的输入和输出都是不定长的，具体因不同任务而定。
 
 ![](https://github.com/sherlcok314159/ML/blob/main/Images/many_lengths.png)
 
 ***
+### <div id='bptt'>BPTT & RTRL</div>
+
+**BPTT(BackPropagation Through Time)**
+
+
+
+
 ### <div id='lstm'>LSTM</div>
 
 LSTM和GRU比较有创新的一点就是采用了门结构来控制整个模型，既然是门，那就可以打开和关闭，如何定义打开还是关闭呢？我们用sigmoid来完成这一点，如果经过sigmoid函数的值越接近0，受到重视的程度就越低，相当于门正在慢慢关闭，越接近于1呢，受到重视的程度就越高，相当于门正在慢慢打开，下面把LSTM切分为不同的门结构来讲。
