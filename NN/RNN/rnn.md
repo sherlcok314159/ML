@@ -37,7 +37,7 @@ y_t可以由此得出：
 
 ![](https://github.com/sherlcok314159/ML/blob/main/Images/y_t.png)
 
-从上述公式中可以看出有不同的W，即不同的权重矩阵，但相同类型之间的W是共享的，比如说下次不同的![](http://latex.codecogs.com/gif.latex?h_t)，![](http://latex.codecogs.com/gif.latex?W_{hy})其实是一样的，这些矩阵是机器自己去从数据中去学出来，同时也可以是人为设置的。
+从上述公式中可以看出有不同的W，即不同的权重矩阵，但相同类型之间的W是共享的，比如说下次不同的![](http://latex.codecogs.com/gif.latex?h_t)，![](http://latex.codecogs.com/svg.latex?W_{hy})其实是一样的，这些矩阵是机器自己去从数据中去学出来，同时也可以是人为设置的。
 
 传统的DNN，CNN的输入和输出都是固定的向量，而RNN与这些网络的最大不同点是它的输入和输出都是不定长的，具体因不同任务而定。
 
@@ -50,7 +50,7 @@ y_t可以由此得出：
 
 ![](https://github.com/sherlcok314159/ML/blob/main/Images/bptt.png)
 
-假设![](http://latex.codecogs.com/svg.latex?l_t = (y_t - \hat{y}_t)^2)是第t个时间步长的损失函数，BPTT做的是取两个时间步长，截取片段，然后反向更新参数，比如这里我们需要更新![](http://latex.codecogs.com/gif.latex?W_{hh})：
+假设![](http://latex.codecogs.com/svg.latex?l_t=(y_t-\\hat{y}_t)^2)是第t个时间步长的损失函数，BPTT做的是取两个时间步长，截取片段，然后反向更新参数，比如这里我们需要更新![](http://latex.codecogs.com/gif.latex?W_{hh})：
 
 ![](https://github.com/sherlcok314159/ML/blob/main/Images/bptt2.png)
 
