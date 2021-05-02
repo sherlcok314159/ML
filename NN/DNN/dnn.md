@@ -74,7 +74,7 @@
 
 > Deep is necessary.
 
-**通用近似原理（Universal Approximation Theorem）**
+**通用近似定理（Universal Approximation Theorem）**
 
 只要有一层隐含层和激活层，就能够近似拟合任意的函数，其实深度学习就是去学习去一个网络来近似出一个函数，从而最大化接近相关变量的概率分布，这也是神经网络的基础。
 
