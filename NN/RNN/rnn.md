@@ -57,9 +57,11 @@ y_t可以由此得出：
 
 ***
 
-**RTRL(Real-Time Recussive Learning)**
+**RTRL(Real-Time Recurssive Learning)**
 
+顾名思义，Real-Time的意思是实时，就是每一个时间步长都更新一次
 
+BPTT和RTRL的区别就是前者是一个片段更新，而后者是每一个步长都更新一次，一般当序列为有限长时我们采用BPTT，这已经成为了RNN的主要架构，RTRL适合无限长的序列
 
 ***
 
