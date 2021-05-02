@@ -37,6 +37,11 @@ CNN常用于图像识别，在深度学习中我们不可能直接将图片输�
 
 ![](https://github.com/sherlcok314159/ML/blob/main/Images/padding.png)
 
+接下来引入通道（channel），或为深度（depth）的介绍，一张彩色照片的深度为3，每一个像素点由3个值组成，我们的filter的输入通道或者说是深度应该和输入的一致，举例来说，一张照片32 * 32 * 3，filter可以设置为3 * 3 * 3，我们刚开始理解了一维的互关运算，三维无非就是filter拿出每一层和输入的每一层做运算，最后再组成一个深度为3的输出，这里stride设置为1，padding也为1，所以输出的shape为30 * 30 * 3。
+
+卷积的时候是用多个filter完成的，一般经过卷积之后的output shape 的输入通道（深度）为filter的数量，下图为输入深度为2的操作，会发现一个filter的输出最终会相加，将它的深度压为1，而不是一开始的输入通道。这是一个filter，多个filter最后放在一起，最后的深度就是filter的数量了。
+
+![](https://github.com/sherlcok314159/ML/blob/main/Images/channel.png)
 
 
 **为什么CNN可以做影像识别？**
