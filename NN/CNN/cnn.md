@@ -288,5 +288,6 @@ plot_(history,"loss")
 
 https://zh-v2.d2l.ai/
 
+https://demo.leemeng.tw/
 
 http://cs231n.stanford.edu
