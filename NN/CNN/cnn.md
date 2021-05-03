@@ -8,7 +8,7 @@
 - [Demo](#demo)
 - [冷知识](#cold)
 - [总结](#conclusions)
-- [参考文献](#references)
+- [参考](#references)
 
 
 
@@ -42,29 +42,37 @@ CNN常用于图像识别，在深度学习中我们不可能直接将图片输�
 
 ![](https://github.com/sherlcok314159/ML/blob/main/Images/channel.png)
 
-Q & A:
+**Q & A:**
 
-1.卷积的意义是什么呢？
+**1.卷积的意义是什么呢？**
 
 其实如果用图片处理上的专业术语，被叫做锐化，卷积其实强调某些特征，然后将特征强化后提取出来，不同的卷积核关注图片上不同的特征，比如有的更关注边缘而有的更关注中心地带等等
 
-2.如何使得不同的卷积核关注不同的地方？
+![](https://github.com/sherlcok314159/ML/blob/main/Images/view_cnn.png)
+
+可以看出，一开始更关注一些比较基础简单的特征，比如边角，后面会越来越关注某个局部甚至是整体
+
+**2.如何使得不同的卷积核关注不同的地方？**
 
 设置filter矩阵的值，比如input shape是4 * 4的，filter是2 * 2，filter是以一个一个小区域为单位，如果说我们想要关注每一个小区域的左上角，那么将filter矩阵的第一个值设为1，其他全为0即可
 
 总结来说，就是通过不断改变filter矩阵的值来关注不同的细节，提取不同的特征
 
-3.filter矩阵里的权重参数是怎么来的？
+**3.filter矩阵里的权重参数是怎么来的？**
 
 首先会初始化权重参数，然后通过梯度下降不断降低loss来获得最好的权重参数
 
-4.参数数量？
+**4.常见参数的默认设置有哪些？**
+
+一般filter的数量（output channels）通常可以设置为2的指数次，如32，64，128，512，这里提供一组比较稳定的搭配（具体还得看任务而定），F（kernel_size/filter_size）= 3，stride = 1，padding = 1；F = 5，stride = 1，Padding = 2;F = 1，S = 1，P = 0
+
+**4.参数数量？**
 
 举例来说，filter的shape为5 * 5 * 3 ，一共6个，stride设置为1，padding设为2，卷积层为(32 * 32 * 6)，注意卷积层这里是代表最后的输出shape，输入shape为 32 * 32 * 3，那么所需要的参数数量为 6 * (5 * 5 * 3 + 1)，里面 +1 的原因是原因是做完点积运算之后会加偏置（bias），当然这个参数是可以设置为没有的
 
-5.1 x 1 卷积的意义是什么？
+**5.1 x 1 卷积的意义是什么？**
 
-filter的shape为1 x 1，假如其他的参数都是默认的，input就设为32 * 32 * 3就好了，那么output shape = (32 - 1) / 1 + 1 = 32，换言之，它并没有改变原来的shape，但是filter的数量可以决定输出通道，所以，1 x 1的卷积目的是改变输出通道。可以对输出通道进行升维或者降维，降维之后乘上的参数数量会减少，训练会更快，内存占用会更少。升维或降维的技术在ResNet中同样运用到啦：
+filter的shape为1 x 1，stride = 1，padding = 0，假如input为32 * 32 * 3，那么output shape = (32 - 1) / 1 + 1 = 32，换言之，它并没有改变原来的shape，但是filter的数量可以决定输出通道，所以，1 x 1的卷积目的是改变输出通道。可以对输出通道进行升维或者降维，降维之后乘上的参数数量会减少，训练会更快，内存占用会更少。升维或降维的技术在ResNet中同样运用到啦：
 
 ![](https://github.com/sherlcok314159/ML/blob/main/Images/1_1.jpg)
 
@@ -272,6 +280,9 @@ plot_(history,"loss")
 
 ***
 
-### <div id='references'>参考文献</div>
+### <div id='references'>参考</div>
 
 https://zh-v2.d2l.ai/
+
+
+http://cs231n.stanford.edu
