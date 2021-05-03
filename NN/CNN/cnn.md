@@ -6,6 +6,7 @@
 - [Filter](#filter)
 - [池化](#pooling)
 - [Demo](#demo)
+- [冷知识](#cold)
 - [总结](#conclusions)
 - [参考文献](#references)
 
@@ -110,6 +111,7 @@ class Net(nn.Module):
 
 PyTorch中输入必须为(1,1,28,28)，这里比tensorflow多了一个1，原因是Torch中有一个group参数，默认为1，所以可以不设置，如果为N，就会把输入分为N个小部分，每一个部分进行卷积，最后再将结果拼接起来
 
+### <div id='cold'>冷知识</div>
 
 >We don't minimize total loss to find the best function.
 
