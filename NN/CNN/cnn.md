@@ -102,11 +102,17 @@ filter的shape为1 x 1，stride = 1，padding = 0，假如input为32 * 32 * 3，
 进行卷积池化这样一组操作多次之后再全部拉直送入全连接网络，最后输出10个值，然后优化它们与真实标签的交叉熵损失，接下来用PyTorch和TensorFlow实操一下
 
 首先先搭建一个简单的PyTorch网络，这里采用Sequential容器写法，当然也可以按照普遍的self.conv1 = ...，按照Sequential写法更加简洁命了，后面前向传播函数也没有采取x = ...不断更新x，而是直接放进layer，遍历每一层即可，简洁干净
-
 ```python
+# 导入库
 import torch
 from torch import nn
+import torchvision
+from torchvision import datasets,transforms
+import torch.nn.functional as F
+import matplotlib.pyplot as plt
+```
 
+```python
 class Net(nn.Module):
    def __init__(self):
       super().__init__()
@@ -196,13 +202,116 @@ print(b.eq(a.view_as(b)).sum().item())
 # 1
 ```
 
+```python
+# 下载训练和测试数据集
 
+# transforms函数可以对下载的数据做一些预处理
+# Compose 指的是将多个transforms操作组合在一起
+# ToTensor 是将[0,255] 范围 转换为[0,1]
+# 灰度图片（channel=1），所以每一个括号内只有一个值，前者代表mean，后者std（标准差）
+# 彩色图片（channel=3），所以每一个括号内有三个值，如
+# transforms.Normalize((0.5,0.5,0.5),(0.5,0.5,0.5))
+transform = transforms.Compose([
+    transforms.ToTensor(),
+    transforms.Normalize((0.5,),(0.5,))
+])
+
+data_train = datasets.MNIST(root="填自己的主路径",
+                            transform=transform,
+                            train=True,
+                            download=True)
+
+data_test = datasets.MNIST(root="填自己的主路径",
+                           transform=transform,
+                           train=False)
+```
+
+```python
+# 加载数据集
+# Load Data
+train_loader = torch.utils.data.DataLoader(dataset=data_train,
+                                                batch_size=64,
+                                                shuffle=True)
+
+test_loader = torch.utils.data.DataLoader(dataset=data_test,
+                                               batch_size=64,
+                                               shuffle=True)
+```
+
+每一次新的batch中都需要梯度清零，否则的话梯度就会跨batch
 
 ```python
 def train(model,device,train_loader,optimizer,epoch):
     model.train()
-    for batch_idx,()
+    for batch_idx,(data,target) in enumerate(train_loader):
+        data,target = data.to(device),target.to(device)
+        optimizer.zero_grad() # 梯度清零
+        output = model(data)
+        loss = F.nll_loss(output,target) # negative likelihood loss
+        loss.backward() # 误差反向传播
+        optimizer.step() # 参数更新
+        if (batch_idx + 1) % 200 == 0:
+            print('Train Epoch: {} [{}/{} ({:.0f}%)]\tLoss: {:.6f}'.format(
+                epoch, batch_idx * len(data), len(train_loader.dataset),
+                100. * batch_idx / len(train_loader), loss.item())) # .item()转换为python值
+    return loss.item()
 ```
+
+因为测试的时候不需要更新参数，所以with torch.no_grad()
+```python
+# 定义测试函数
+def test(model, device, test_loader):
+    model.eval()
+    test_loss,correct = 0 , 0
+    with torch.no_grad(): # 不track梯度
+        for data, target in test_loader:
+            data, target = data.to(device), target.to(device)
+            output = model(data)
+            test_loss += F.nll_loss(output, target, reduction = 'sum') # 将一批的损失相加
+            pred = output.max(1, keepdim = True)[1] # 找到概率最大的下标
+            correct += pred.eq(target.view_as(pred)).sum().item() # equals
+    test_loss /= len(test_loader.dataset)
+    acc = correct / len(test_loader.dataset)
+    print("\nTest set: Average loss: {:.4f}, Accuracy: {} ({:.0f}%) \n".format(
+        test_loss, acc ,
+        100.* correct / len(test_loader.dataset)
+            ))
+    
+    return acc
+```
+
+接下来定义可视化函数
+
+```python
+def visualize(lis,epoch,*label):
+    plt.xlabel("epochs")
+    plt.ylabel(label)
+    plt.plot(epoch,lis)
+    plt.show()
+```
+
+最后进行训练和测试
+
+```python
+BATCH_SIZE = 512 # 大概需要2G的显存
+EPOCHS = 20 # 总共训练批次
+DEVICE = torch.device("cuda" if torch.cuda.is_available() else "cpu") 
+```
+
+```python
+train_ = []
+test_acc = []
+for epoch in range(1,EPOCHS+1):
+    train_loss = train(model,DEVICE,train_loader,optimizer,epoch)
+    acc = test(model,DEVICE,test_loader)
+    train_.append(train_loss)
+    test_acc.append(acc)
+
+visualize(train_,[i for i in range(20)],"loss")
+visualize(test_acc,[i for i in range(20)],"accuracy")
+```
+![](https://github.com/sherlcok314159/ML/blob/main/Images/plt.png)
+
 
 
 ### <div id='cold'>冷知识</div>
