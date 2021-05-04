@@ -432,8 +432,6 @@ plot_(history,"loss")
 如果epoch设为20，就将上述过程重复20遍
 
 ****
->e.g. 实现手写数字集（Mnist）的识别
-
 
 这里再细谈一下batch 和 epoch
 
