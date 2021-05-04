@@ -315,27 +315,7 @@ visualize(test_acc,[i for i in range(20)],"accuracy")
 ![](https://github.com/sherlcok314159/ML/blob/main/Images/plt.png)
 
 
-
-### <div id='cold'>冷知识</div>
-
->We don't minimize total loss to find the best function.
-
-我们采取将数据打乱并分组成一个一个的mini-batch，每个数据所含的数据个数也是可调的。关于epoch
-
-![](https://github.com/sherlcok314159/ML/blob/main/Images/batch.png)
-
-------------------------------------------------------------------------[图片来源](https://www.youtube.com/watch?v=FrKWiRv254g&list=PLJV_el3uVTsPy9oCRY30oBPNLCo89yu49&index=19)----------------------------------------------------------------------------
-
-将一个mini-batch中的loss全部加起来，就更新一次参数。一个epoch就等于将所有的mini-batch都遍历一遍，并且经过一个就更新一次参数。
-
-如果epoch设为20，就将上述过程重复20遍
-
-然后把卷积池化之后的输出全部拉成一个向量接到全连接层（fully-connected feedforward network），就是前面我们讲的[DNN](NN/dnn.md)，最后经过[softmax](../data_process/normalization.md) 输出概率
-
-优化的时候采用的是[Adam](../optimization/GD.md)，损失函数是[交叉熵(cross-entroppy)](../loss/loss_.md)，激活函数选的为[Relu](activation.md)
-
-****
->e.g. 实现手写数字集（Mnist）的识别
+接下来使用tensorflow-gpu 1.14.0再实操一下
 
 ```python
 
@@ -438,11 +418,27 @@ plot_(history,"loss")
 ![](https://github.com/sherlcok314159/ML/blob/main/Images/cnn_loss.png)
 
 
+### <div id='cold'>冷知识</div>
+
+>We don't minimize total loss to find the best function.
+
+我们采取将数据打乱并分组成一个一个的mini-batch，每个数据所含的数据个数也是可调的。关于epoch
+
+![](https://github.com/sherlcok314159/ML/blob/main/Images/batch.png)
+
+
+将一个mini-batch中的loss全部加起来，就更新一次参数。一个epoch就等于将所有的mini-batch都遍历一遍，并且经过一个就更新一次参数。
+
+如果epoch设为20，就将上述过程重复20遍
+
+****
+>e.g. 实现手写数字集（Mnist）的识别
+
+
 这里再细谈一下batch 和 epoch
 
 ![](https://github.com/sherlcok314159/ML/blob/main/Images/speed.png)
 
-------------------------------------------------------------------------[图片来源](https://www.youtube.com/watch?v=FrKWiRv254g&list=PLJV_el3uVTsPy9oCRY30oBPNLCo89yu49&index=19)----------------------------------------------------------------------------
 
 由图可知，当batch数目越多，分的越开，每一个epoch的速度理所应当就会**上升**的，当batch_size = 1的时候，1 epoch 就更新参数50000次 和 batch_size = 10的时候，1 epoch就更新5000次，那么如果更新次数相等的话，batch_size = 1会花**166s**;batch_size = 10每个epoch会花**17s**，总的时间就是**17 * 10 = 170s**。其实batch_size = 1不就是[SGD](../optimization/GD.md)。随机化很不稳定，相对而言，batch_size = 10，收敛的会更稳定，时间和等于1的差不多。那么何乐而不为呢？
 
@@ -464,14 +460,12 @@ plot_(history,"loss")
 
 ![](https://github.com/sherlcok314159/ML/blob/main/Images/fake_digits.png)
 
-------------------------------------------------------------------------[图片来源](https://www.youtube.com/watch?v=FrKWiRv254g&list=PLJV_el3uVTsPy9oCRY30oBPNLCo89yu49&index=19)----------------------------------------------------------------------------
 
 其实这件事情很反直觉，原以为计算机是看一张一张的图片，可是这个很难看出是单个数字而是**数字集**，那么我们试试看最大化像素
 
 
 ![](https://github.com/sherlcok314159/ML/blob/main/Images/cnn_learn_2.png)
 
-------------------------------------------------------------------------[图片来源](https://www.youtube.com/watch?v=FrKWiRv254g&list=PLJV_el3uVTsPy9oCRY30oBPNLCo89yu49&index=19)----------------------------------------------------------------------------
 
 其实左下角的6其实蛮像的耶。
 
@@ -484,3 +478,5 @@ https://zh-v2.d2l.ai/
 https://demo.leemeng.tw/
 
 http://cs231n.stanford.edu
+
+https://www.youtube.com/watch?v=FrKWiRv254g&list=PLJV_el3uVTsPy9oCRY30oBPNLCo89yu49&index=19
