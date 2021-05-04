@@ -99,6 +99,8 @@ filter的shape为1 x 1，stride = 1，padding = 0，假如input为32 * 32 * 3，
 
 ### <div id='demo'>Demo</div>
 
+！！！我的PyTorch完整Demo在[colab](https://colab.research.google.com/drive/1XMlSmiZ4FjHohptX-GSHsT_CFs4EoE6f?usp=sharing)
+
 进行卷积池化这样一组操作多次之后再全部拉直送入全连接网络，最后输出10个值，然后优化它们与真实标签的交叉熵损失，接下来用PyTorch和TensorFlow实操一下
 
 首先先搭建一个简单的PyTorch网络，这里采用Sequential容器写法，当然也可以按照普遍的self.conv1 = ...，按照Sequential写法更加简洁命了，后面前向传播函数也没有采取x = ...不断更新x，而是直接放进layer，遍历每一层即可，简洁干净
