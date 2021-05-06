@@ -148,9 +148,12 @@ itself
 
 如果还有读者不明白Backprogation，建议看[BP](https://github.com/sherlcok314159/ML/blob/main/NN/bp.md)，这里简要说明一下，求后向传播的过程中，设残差相连之后输入的层为L层，那么，肯定要求这一层对残差相连的时候的偏导数，而这时x是作为自变量的，所以对于F(x)+ x，求偏导后x就会变为1，那么无论什么时候都会加上这个常数1，这样会一定程度上缓解梯度消失这个问题。
 
+这里选取的是层归一化（Layer Normalization），用CNN举例，假如我们的输入是![](http://latex.codecogs.com/svg.latex?[N,C,H,W])，分别代表样本数量（每一个神经元对应着一个样本），通道数，高度和宽度，那么LN就是对于单独的每一个样本做归一化，计算![](http://latex.codecogs.com/svg.latex?C*H*W)个值的均值和标准差然后应用到这个样本里面。
+
 归一化的公式如下：
 
-![](https://github.com/sherlcok314159/ML/blob/main/Images/mean_sigmoid.png)
+![](https://github.com/sherlcok314159/ML/blob/main/nlp/Images/ln.png)
+
 
 ***
 
