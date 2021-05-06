@@ -35,7 +35,7 @@
 
 ### <div id='deep'>Neutral Network</div>
 - [BackPropagation](NN/bp.md)
-- [Normalization]()
+- [Normalization](https://github.com/sherlcok314159/ML/blob/main/Book/NLP_Notes.pdf)
 - [Activation](NN/activation.md)
 - [DNN](NN/DNN/dnn.md)
     - [Sentiment Classification in IMDB](NN/DNN/IMDB.md)
