@@ -35,6 +35,7 @@
 
 ### <div id='deep'>Neutral Network</div>
 - [BackPropagation](NN/bp.md)
+- [Normalization]()
 - [Activation](NN/activation.md)
 - [DNN](NN/DNN/dnn.md)
     - [Sentiment Classification in IMDB](NN/DNN/IMDB.md)
