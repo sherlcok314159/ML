@@ -7,7 +7,6 @@
 - [池化](#pooling)
 - [Demo](#demo)
 - [冷知识](#cold)
-- [总结](#conclusions)
 - [参考](#references)
 
 
