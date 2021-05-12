@@ -82,6 +82,8 @@ class DecoderRNN(nn.Module):
 
         self.embedding = nn.Embedding(output_size,hidden_size)
         self.gru = nn.GRU(hidden_size,hidden_size)
+        # input_features ==> hidden_size
+        # output_features ==> output_size
         self.out = nn.Linear(hidden_size, output_size)
         # Log(Softmax(X))
         self.softmax = nn.LogSoftmax(dim=1)
@@ -90,6 +92,9 @@ class DecoderRNN(nn.Module):
         output = self.embedding(input).view(1,1,-1)
         output = F.relu(output)
         output,hidden = self.gru(output,hidden)
+        # output.size() ==> [1,1,hidden_size]
+        # output的第一个1是我们用以适合gru输入扩充的
+        # 所以用output[0]选取前面的
         output = self.softmax(self.out(output[0]))
         return output,hidden
 
