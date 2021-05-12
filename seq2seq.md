@@ -43,12 +43,14 @@ def EncoderRNN(nn.Module):
         self.hidden_size = hidden_size
 
         self.embedding = nn.Embedding(input_size,hidden_size)
+        # gru的输入为三维，两个参数均指的是最后一维的大小
+        # tensor([1,1,hidden_size])
         self.gru = nn.GRU(hidden_size,hidden_size)
 
     def forward(self,input,hidden):
-        # hidden_size = 256
-        # 一次的embedded.size() ==> tensor([1,1,256])
+        # embedded.size() ==> tensor([1,1,hidden_size])
         # -1的好处是机器会自动计算
+        # 这里用view扩维的原因是gru必须接受三维的输入
         embedded = self.embedding(input).view(1,1,-1)
         output = embedded
         output,hidden = self.gru(output,hidden)
@@ -56,7 +58,7 @@ def EncoderRNN(nn.Module):
     
     def initHidden(self):
         # 初始化隐层状态全为0
-        # hidden_state ==> tensor([1,1,256])
+        # hidden_state ==> tensor([1,1,hidden_size])
         return torch.zeros(1,1,self.hidden_size,device=device)
 ```
 
