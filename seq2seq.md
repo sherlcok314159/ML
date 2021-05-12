@@ -66,7 +66,7 @@ def EncoderRNN(nn.Module):
 
 接下来介绍Decoder，在本文中仅使用Encoder中最后一个输出的hidden来作为Decoder的初始的hidden，因为编码器最后一个hidden常常含有整个序列的上下文信息，有时会被称为上下文变量。
 
-这里的第一个文本输入其实是"<bos>"（beginning of setence），与Encoder不同的是，这里经过词嵌入之后还做了relu处理，增强模型非线性的表达能力。
+这里的第一个文本输入其实是\<bos>（beginning of setence），与Encoder不同的是，这里经过词嵌入之后还做了relu处理，增强模型非线性的表达能力。
 
 输入会经过一个softmax来获得一个概率分布，最后取最大概率的那个作为当前预测的结果
 
