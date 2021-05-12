@@ -101,12 +101,12 @@ class DecoderRNN(nn.Module):
         return torch.zeros(1, 1, self.hidden_size, device=device)
 ```
 
-![](https://github.com/sherlcok314159/ML/blob/main/NN/Images/attDecoder.png)
-
 
 在刚刚的基础上进行升级，在Decoder上引入注意力机制，对比一下，没加注意力之前，Decoder是直接接受全部的Encoder输出，而attention加入之后可以更准确地聚焦到Encoder输出的不同部分，具体是用注意力权重矩阵去乘以Encoder的输出向量用以创建加权组合，从而帮助Decoder选择正确的输出。
 
 实现时将Decoder的文本输入和隐藏状态作为输入，分别对应图中的input,prev_hidden（上一个时间步的隐藏状态）。文本输入进来经过词嵌入之后应用了dropout，可以一定程度减少模型过拟合，增强模型的泛化能力。通过前馈层attn之后进行softmax处理再和Encoder的输出矩阵做点乘处理，再拼接起来加一个relu。注意，上一个时间步的隐藏状态会继续作为gru的状态输入。
+
+![](https://github.com/sherlcok314159/ML/blob/main/NN/Images/attDecoder.png)
 
 ```python
 class AttnDecoderRNN(nn.Module):
