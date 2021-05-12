@@ -12,9 +12,9 @@
 ****
 ### <div id='courses'>线上课程</div>
 
-- [李宏毅](https://www.youtube.com/watch?v=CXgbekl66jc&list=PLJV_el3uVTsPy9oCRY30oBPNLCo89yu49&index=1)（入门极荐，简单易懂，且为中文授课）
-- [吴恩达](https://www.coursera.org/learn/machine-learning/home/welcome)（斯坦福华人教授，业界公认厉害）
-- [Hinton](https://www.youtube.com/watch?v=LOc_y67AzCA&list=PLoRl3Ht4JOcdU872GhiYWf6jwrk_SNhz9&index=14&ab_channel=ColinReckons)（深度学习开山鼻祖）
+- [李宏毅](https://www.bilibili.com/video/BV1JE411g7XF?from=search&seid=5913060628821893017)（入门极荐，简单易懂，且为中文授课）
+- [吴恩达](https://www.bilibili.com/video/BV164411b7dx?from=search&seid=3957162850020779432)（斯坦福华人教授，业界公认厉害）
+- [Hinton](https://www.bilibili.com/video/BV1Xf4y117nc?from=search&seid=2370955475461598590)（深度学习开山鼻祖）
 
 ****
 ### <div id='basic'>基础知识</div>
@@ -30,6 +30,7 @@
 
 优化方法
 * [Gradient Descent](optimization/GD.md)
+
 ****
 其实神经网络属于机器学习，只是过程具体化有些不同罢了，所以分开处理
 
