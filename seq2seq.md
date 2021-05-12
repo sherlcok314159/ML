@@ -35,31 +35,31 @@ seq2seq模型中一个一个的单词其实是每一个时间步的输入和输�
 ```python
 # 若无GPU，则CPU
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-def EncoderRNN(nn.Module):
-    def __init__(self,input_size,hidden_size):
+class EncoderRNN(nn.Module):
+    def __init__(self, input_size, hidden_size):
         # 调用父类初始化方法
-        super(EncoderRNN,self).__init__()
+        super(EncoderRNN, self).__init__()
         # 初始化必须的变量
         self.hidden_size = hidden_size
 
-        self.embedding = nn.Embedding(input_size,hidden_size)
-        # gru的输入为三维，两个参数均指的是最后一维的大小
+        self.embedding = nn.Embedding(input_size, hidden_size)        # gru的输入为三维，两个参数均指的是最后一维的大小
         # tensor([1,1,hidden_size])
-        self.gru = nn.GRU(hidden_size,hidden_size)
+        self.gru = nn.GRU(hidden_size, hidden_size)
 
-    def forward(self,input,hidden):
+    def forward(self, input, hidden):
         # embedded.size() ==> tensor([1,1,hidden_size])
         # -1的好处是机器会自动计算
         # 这里用view扩维的原因是gru必须接受三维的输入
-        embedded = self.embedding(input).view(1,1,-1)
-        output = embedded
-        output,hidden = self.gru(output,hidden)
-        return output,hidden
+        embedded = self.embedding(input).view(1, 1, -1)
+        output = embedded        
+        output, hidden = self.gru(output, hidden)
+        return output, hidden
     
     def initHidden(self):
         # 初始化隐层状态全为0
         # hidden ==> tensor([1,1,hidden_size])
-        return torch.zeros(1,1,self.hidden_size,device=device)
+        return torch.zeros(1, 1, self.hidden_size, device=device)
+
 ```
 
 ![](https://github.com/sherlcok314159/ML/blob/main/NN/Images/decoder.png)
@@ -76,28 +76,86 @@ def EncoderRNN(nn.Module):
 
 ```python
 class DecoderRNN(nn.Module):
-    def __init__(self,hidden_size,output_size):
-        super(DecoderRNN,self).__init__()
+    def __init__(self, hidden_size, output_size):
+        super(DecoderRNN, self).__init__()
         self.hidden_size = hidden_size
 
-        self.embedding = nn.Embedding(output_size,hidden_size)
-        self.gru = nn.GRU(hidden_size,hidden_size)
+        self.embedding = nn.Embedding(output_size, hidden_size)
+        self.gru = nn.GRU(hidden_size, hidden_size)
         # input_features ==> hidden_size
         # output_features ==> output_size
-        self.out = nn.Linear(hidden_size, output_size)
-        # Log(Softmax(X))
+        self.out = nn.Linear(hidden_size, output_size)        # Log(Softmax(X))
         self.softmax = nn.LogSoftmax(dim=1)
 
-    def forward(self,input,hidden):
-        output = self.embedding(input).view(1,1,-1)
+    def forward(self, input, hidden):
+        output = self.embedding(input).view(1, 1, -1)
         output = F.relu(output)
-        output,hidden = self.gru(output,hidden)
+        output, hidden = self.gru(output, hidden)
         # output.size() ==> [1,1,hidden_size]
         # output的第一个1是我们用以适合gru输入扩充的
         # 所以用output[0]选取前面的
         output = self.softmax(self.out(output[0]))
-        return output,hidden
+        return output, hidden
 
     def initHidden(self):
-        return torch.zeros(1,1,self.hidden_size,device=device)
+        return torch.zeros(1, 1, self.hidden_size, device=device)
+```
+
+![](https://github.com/sherlcok314159/ML/blob/main/NN/Images/attDecoder.png)
+
+
+在刚刚的基础上进行升级，在Decoder上引入注意力机制，对比一下，没加注意力之前，Decoder是直接接受全部的Encoder输出，而attention加入之后可以更准确地聚焦到Encoder输出的不同部分，具体是用注意力权重矩阵去乘以Encoder的输出向量用以创建加权组合，从而帮助Decoder选择正确的输出。
+
+实现时将Decoder的文本输入和隐藏状态作为输入，分别对应图中的input,prev_hidden（上一个时间步的隐藏状态）。文本输入进来经过词嵌入之后应用了dropout，可以一定程度减少模型过拟合，增强模型的泛化能力。通过前馈层attn之后进行softmax处理再和Encoder的输出矩阵做点乘处理，再拼接起来加一个relu。注意，上一个时间步的隐藏状态会继续作为gru的状态输入。
+
+```python
+class AttnDecoderRNN(nn.Module):
+    def __init__(self, hidden_size, output_size, dropout_p=0.1, max_length=MAX_LENGTH):
+        super(AttnDecoderRNN, self).__init__()
+        self.hidden_size = hidden_size
+        self.output_size = output_size
+        self.dropout_p = dropout_p
+        self.max_length = max_length
+
+        self.embedding = nn.Embedding(self.output_size, self.hidden_size)
+        # 因为会将prev_hidden和embedded在最后一个维度
+        # 即hidden_size，进行拼接，所以要*2
+        # max_length用以统一不同长度的句子分配的注意力
+        # 最大长度句子使用所有注意力权重，较短只用前几个
+        self.attn = nn.Linear(self.hidden_size*2,self.max_length)
+        self.attn = nn.Linear(self.hidden_size * 2, self.max_length)
+        self.attn_combine = nn.Linear(self.hidden_size * 2, self.hidden_size)
+        self.dropout = nn.Dropout(self.dropout_p)
+        self.gru = nn.GRU(self.hidden_size, self.hidden_size)
+        self.out = nn.Linear(self.hidden_size, self.output_size)
+
+    def forward(self, input, hidden, encoder_outputs):
+        embedded = self.embedding(input).view(1, 1, -1)
+        embedded = self.dropout(embedded)
+
+        # 因为第一维只是适应模型输入扩充的
+        # 所以拼接时，只需要取后面两个维度
+        attn_weights = F.softmax(
+            self.attn(torch.cat((embedded[0], hidden[0]), 1)), dim=1)        # bmm ==> batch matrix multiplication
+        # e.g. a.size() ==> tensor([1,2,3])
+        # b.size() ==> tensor([1,3,4])
+        # torch.bmm(a,b).size() ==> tensor([1,2,4])  
+        # 第一维度不变，其他两维就当作矩阵做乘法
+        # unsqueeze(0)用以在在第一维扩充维度
+        # attn_applied赋予encoder_outputs不同部分不同权重
+        attn_applied = torch.bmm(attn_weights.unsqueeze(0),
+                                 encoder_outputs.unsqueeze(0))
+
+        output = torch.cat((embedded[0], attn_applied[0]), 1)
+        output = self.attn_combine(output).unsqueeze(0)
+
+        output = F.relu(output)
+        output, hidden = self.gru(output, hidden)
+
+        output = F.log_softmax(self.out(output[0]), dim=1)
+        return output, hidden, attn_weights
+
+    def initHidden(self):
+        return torch.zeros(1, 1, self.hidden_size, device=device)
+
 ```
