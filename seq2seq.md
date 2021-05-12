@@ -62,6 +62,9 @@ def EncoderRNN(nn.Module):
         return torch.zeros(1,1,self.hidden_size,device=device)
 ```
 
+![](https://github.com/sherlcok314159/ML/blob/main/NN/Images/decoder.png)
+
+接下来介绍Decoder
 
 ```python
 class DecoderRNN(nn.Module):
