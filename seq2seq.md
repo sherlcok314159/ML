@@ -1,6 +1,6 @@
 ### 基于Seq2Seq模型实现法语向英语的翻译
 
-参考文章(https://pytorch123.com/FifthSection/Translation_S2S_Network/)
+
 
 **章节**
 
@@ -11,6 +11,7 @@
 - [模型训练](#train)
 - [评估](#evaluate)
 - [硬train一发](#try)
+- [参考文献](#references)
 
 ***
 **<div id='abstract'>简介</div>**
@@ -547,3 +548,10 @@ attn_decoder1 = AttnDecoderRNN(hidden_size, output_lang.n_words, dropout_p=0.1).
 trainIters(encoder1, attn_decoder1, 75000, print_every=5000)
 
 ```
+***
+**<div id='references'>参考文献</div>**
+
+https://pytorch123.com/FifthSection/Translation_S2S_Network/
+***
+
+相信你看完这个已经对于seq2seq模型以及用代码实现已经有了进一步的了解，本人自认才疏学浅，难免出现谬误，欢迎批评指正。
