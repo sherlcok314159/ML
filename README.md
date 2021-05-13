@@ -4,7 +4,7 @@
 ### 章节
 - [线上课程](#courses)
 - [深度学习](#deep)
-- [NLP](#transformer)
+- [Transformer时代](#transformer)
 - [必备技能](#skills)
 - [问题库](#problems)
 ****
