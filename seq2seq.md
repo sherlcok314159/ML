@@ -9,7 +9,7 @@
 - [文本预处理](#preprocess)
 
 
-
+***
 **<div id='abstract'>简介</div>**
 
 本文基于PyTorch实现seq2seq模型来实现法语向英语的翻译，会带你了解从seq2seq模型的主要原理，在实战中需要对文本的预处理，到训练和可视化一个完整的过程。读完本文，不仅可以通过这个项目来了解PyTorch的语法以及RNN（GRU）的操作，而且可以真正明白seq2seq模型的内涵。
@@ -174,6 +174,7 @@ class AttnDecoderRNN(nn.Module):
         return torch.zeros(1, 1, self.hidden_size, device=device)
 
 ```
+***
 
 了解完模型的主要架构，接下来了解一下模型输入数据的处理
 
@@ -312,3 +313,21 @@ input_lang, output_lang, pairs = prepareData('eng', 'fra', True)
 print(random.choice(pairs))
 ```
 
+接下来创建对句子里的单词的索引，并转为tensor形式
+
+```python
+def indexesFromSentence(lang, sentence):
+    return [lang.word2index[word] for word in sentence.split(' ')]
+
+def tensorFromSentence(lang, sentence):
+    indexes = indexesFromSentence(lang, sentence)
+    indexes.append(EOS_token)
+    return torch.tensor(indexes, dtype=torch.long, device=device).view(-1, 1)
+
+def tensorsFromPair(pair):
+    input_tensor = tensorFromSentence(input_lang, pair[0])
+    target_tensor = tensorFromSentence(output_lang, pair[1])
+    return (input_tensor, target_tensor)
+```
+
+***
