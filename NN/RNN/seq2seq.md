@@ -29,6 +29,8 @@ output = i m not afraid of dying . <EOS>
 input = c est un jeune directeur plein de talent .
 output = he s a fast person . <EOS>
 ```
+
+[数据集](../RNN/eng-fra.txt)，如果你想要自己跑一波demo，[完整代码](../RNN/rnn.py)，别忘了把数据集下载到本地更改路径
 ***
 
 **<div id='seq2seq'>Seq2Seq模型</div>**

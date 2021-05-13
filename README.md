@@ -22,7 +22,7 @@
 - [Normalization](https://github.com/sherlcok314159/ML/blob/main/Book/NLP_Notes.pdf)
 - [Activation](NN/activation.md)
 - [DNN](NN/DNN/dnn.md)
-    - [Sentiment Classification in IMDB](NN/DNN/IMDB.md)
+    - [IMDB影评情感分类](NN/DNN/IMDB.md)
 - [CNN](NN/CNN/cnn.md)
 - [RNN概述](NN/RNN/rnn.md)
     - [单双向RNN](NN/RNN/单向rnn、双向rnn_embedding.py)
