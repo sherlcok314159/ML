@@ -6,6 +6,7 @@
 
 - [简介](#abstract)
 - [Seq2Seq模型](#seq2seq)
+- [文本预处理](#preprocess)
 
 
 
@@ -31,6 +32,20 @@ seq2seq模型中一个一个的单词其实是每一个时间步的输入和输�
 
 所以，Embedding层第一个参数其实是训练集中单词的数量，第二个参数指的是每一个单词拥有多少维的编码。单词索引送进去了，tensor([2])，假设Embedding层参数是(2,4)，则经过词嵌入后的结果是tensor([[0.1,2.1,3.1,0.9]])，会发现第二个size其实是需要嵌入的维度。
 
+包的引入
+
+```python
+from __future__ import unicode_literals, print_function, division
+from io import open
+import unicodedata
+import re
+import random
+
+import torch
+import torch.nn as nn
+from torch import optim
+import torch.nn.functional as F
+```
 
 ```python
 # 若无GPU，则CPU
@@ -66,7 +81,7 @@ class EncoderRNN(nn.Module):
 
 接下来介绍Decoder，在本文中仅使用Encoder中最后一个输出的hidden来作为Decoder的初始的hidden，因为编码器最后一个hidden常常含有整个序列的上下文信息，有时会被称为上下文变量。
 
-这里的第一个文本输入其实是\<bos>（beginning of setence），与Encoder不同的是，这里经过词嵌入之后还做了relu处理，增强模型非线性的表达能力。
+这里的第一个文本输入其实是\<sos>（start of sentence），与Encoder不同的是，这里经过词嵌入之后还做了relu处理，增强模型非线性的表达能力。
 
 输入会经过一个softmax来获得一个概率分布，最后取最大概率的那个作为当前预测的结果
 
@@ -158,4 +173,118 @@ class AttnDecoderRNN(nn.Module):
     def initHidden(self):
         return torch.zeros(1, 1, self.hidden_size, device=device)
 
+```
+
+了解完模型的主要架构，接下来了解一下模型输入数据的处理
+
+**<div id='preprocess'>文本预处理</div>**
+
+> 你训练的模型不过是无限逼近你data所能提供的上界而已
+
+在NLP中，对数据的前期处理也是十分重要的，大的思路就是统一长度，变为数值。
+
+以下两个分别代表一个序列的开始和结束
+
+```python
+SOS_token = 0
+EOS_token = 1
+```
+
+对语言进行初步处理并返回Lang对象
+
+```python
+class Lang:
+    def __init__(self,name):
+        self.name = name
+        # 形如 {"hello" : 3}
+        self.word2index = {}
+        # 统计每一个单词出现的次数
+        self.word2count = {}
+        self.index2word = {0:"SOS",1:"EOS"}
+        # 统计训练集出现的单词数
+        self.n_words = 2 # SOS 和 EOS已经存在了
+
+    def addSentence(self,sentence):
+        # 第一行为 Go.  Va !
+        # 前面是英语，后面是法语，中间用tab分隔
+        for word in sentence.split(" "):
+            self.addWord(word)
+    
+    def addWord(self,word):
+        if word not in self.word2index:
+            self.word2index[word] = self.n_words
+            self.word2count[word] = 1
+            # 用现有的总词数作为新的单词的索引
+            self.index2word[self.n_words] = word
+            self.n_words += 1
+        else:
+            self.word2count[word] += 1
+```
+将unicode字符转换为纯Ascii
+
+```python
+def unicodeToAscii(s):
+    return ''.join(
+        c for c in unicodedata.normalize('NFD', s)
+        if unicodedata.category(c) != 'Mn'
+    )
+```
+
+```python
+def normalizeString(s):
+    # 转码之后变小写切除两边空白
+    s = unicodeToAscill(s.lower().strip())
+    # 匹配.!?，并在前面加空格
+    s = re.sub(r"([.!?])",r" \1",s)
+    # 将非字母和.!?的全部变为空白
+    s = re.sub(r"[^a-zA-Z.!?]+",r" ",s)
+    return s
+```
+```python
+def readLangs(lang1,lang2,reverse=False):
+    print("Reading lines...")
+
+    # 读取文件并分为几行
+    # 每一对句子最后会有个换行符\n
+    # lines ==> ['Go.\tVa !', 'Run!\tCours\u202f!'...]
+    lines = open("填你的数据路径",encoding = "utf-8").read().strip().split("\n")
+
+    # 将每一行拆分成对并进行标准化
+    # pairs ==> [["go .","va !"],...]
+    pairs = [[normalizeString(s) for s in l.split("\t")] for l in lines]
+
+    # 反向对，实例Lang
+    # 源文件是先英语后法语
+    # 换完之后就是先法后英
+    if reverse:
+        pairs = [list(reversed(p)) for p in pairs]
+        input_lang = Lang(lang2)
+        output_lang = Lang(lang1)
+    else:
+        input_lang = Lang(lang1)
+        output_lang = Lang(lang2)
+    
+    return input_lang,output_lang,pairs
+```
+
+对上面处理完的pair对进行两个判断，是否每一个pair长度都小于MAX_LENGTH，第二个pair是否以eng_prefixes开头（本文会进行反转），这样可以减少训练量，加快收敛。
+
+```python
+MAX_LENGTH = 10
+eng_prefixes = (
+    "i am ", "i m ",
+    "he is", "he s ",
+    "she is", "she s ",
+    "you are", "you re ",
+    "we are", "we re ",
+    "they are", "they re "
+)
+
+def filterPair(p):
+    return len(p[0].split(' ')) < MAX_LENGTH and \
+        len(p[1].split(' ')) < MAX_LENGTH and \
+        p[1].startswith(eng_prefixes)
+
+def filterPairs(pairs):
+    return [pair for pair in pairs if filterPair(pair)]
 ```
