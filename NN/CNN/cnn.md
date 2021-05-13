@@ -1,4 +1,4 @@
-### Convolutional Neutral Network
+### Convolutional Neural Network
 
 
 章节
