@@ -626,7 +626,7 @@ attn_decoder1_pretrained.load_state_dict(torch.load("../decoder_parameters"))
 
 # 最后在evaluateAndShowAttention函数里面
 # 将encoder1,attn_decoder1分别改为encoder1_pretrained,attn_decoder1_pretrained
-
+```
 ***
 **<div id='references'>参考文献</div>**
 
