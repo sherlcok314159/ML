@@ -17,8 +17,18 @@
 ***
 **<div id='abstract'>简介</div>**
 
-本文基于PyTorch实现seq2seq模型来实现法语向英语的翻译，会带你了解从seq2seq模型的主要原理，在实战中需要对文本的预处理，到训练和可视化一个完整的过程。读完本文，不仅可以通过这个项目来了解PyTorch的语法以及RNN（GRU）的操作，而且可以真正明白seq2seq模型的内涵。
+本文基于PyTorch实现seq2seq模型来实现法语向英语的翻译，会带你了解从seq2seq模型的主要原理，在实战中需要对文本的预处理，到训练和可视化一个完整的过程。读完本文，不仅可以通过这个项目来了解PyTorch的语法以及RNN（GRU）的操作，而且可以真正明白seq2seq模型的内涵。同时，你也可以实现自己的一个翻译器，效果如下：
 
+```bash
+input = elle a cinq ans de moins que moi .
+output = she is two years younger than me . <EOS>
+input = elle est trop petit .
+output = she s too trusting . <EOS>
+input = je ne crains pas de mourir .
+output = i m not afraid of dying . <EOS>
+input = c est un jeune directeur plein de talent .
+output = he s a fast person . <EOS>
+```
 ***
 
 **<div id='seq2seq'>Seq2Seq模型</div>**
@@ -595,6 +605,8 @@ evaluateAndShowAttention("je ne crains pas de mourir .")
 
 evaluateAndShowAttention("c est un jeune directeur plein de talent .")
 ```
+![](https://github.com/sherlcok314159/ML/blob/main/NN/Images/attention.png)
+
 ***
 
 **<div id='references'>参考文献</div>**
