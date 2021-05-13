@@ -34,7 +34,7 @@
 ****
 其实神经网络属于机器学习，只是过程具体化有些不同罢了，所以分开处理
 
-### <div id='deep'>Neutral Network</div>
+### <div id='deep'>Neural Network</div>
 - [BackPropagation](NN/bp.md)
 - [Normalization](https://github.com/sherlcok314159/ML/blob/main/Book/NLP_Notes.pdf)
 - [Activation](NN/activation.md)
