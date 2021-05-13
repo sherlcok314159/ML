@@ -371,7 +371,6 @@ def timeSince(since,percent):
 
 用来可视化训练
 ```python
-plt.switch_backend('agg')
 def showPlot(points):
     plt.figure()
     fig,ax = plt.subplots()
