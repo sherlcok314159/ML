@@ -45,8 +45,6 @@
 - Bert实战项目
      - [中文情感分类](nlp/practice/sentiment.md)
 
-### <div id='cv'>CV</div>
-
 ### <div id='skills'>必备技能</div>
 
 - [阅读源码](nlp/source_code.md)
