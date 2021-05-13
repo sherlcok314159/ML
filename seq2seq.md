@@ -7,7 +7,7 @@
 - [简介](#abstract)
 - [Seq2Seq模型](#seq2seq)
 - [文本预处理](#preprocess)
-
+- [模型训练](#train)
 
 ***
 **<div id='abstract'>简介</div>**
@@ -331,3 +331,78 @@ def tensorsFromPair(pair):
 ```
 
 ***
+
+**<div id='train'>模型训练</div>**
+
+先介绍teacher_forcing，指的是在Decoder的每一个时间步的文本输入不采取上一个时间步预测出的结果，而是直接用label。可以类比为现实生活中学生这一道题做错了，老师就立马纠正他。这种操作可以加快模型收敛，但是毕竟是老师给的，模型自己学到了什么还得另说。
+
+```python
+teacher_forcing_ratio = 0.5
+```
+
+```python
+def train(input_tensor,target_tensor,encoder,decoder,encoder_optimizer,decoder_optimizer,criterion,max_length=MAX_LENGTH):
+    # 初始化隐藏状态
+    encoder_hidden = encoder.initHidden()
+
+    # 梯度清零
+    encoder_optimizer.zero_grad()
+    decoder_optimizer.zero_grad()
+
+    input_length = input_tensor.size(0)
+    target_length = target_tensor.size(0)
+
+    # 初始化，等会替换
+    encoder_outputs = torch.zeros(max_length,encoder.hidden_size,device=device)
+
+    loss = 0
+     
+    for ei in range(input_length):
+        encoder_output,encoder_hidden = encoder(
+            input_tensor[ei],encoder_hidden)
+        # encoder_output.size() ==> tensor([1,1,hidden_size])
+        encoder_outputs[ei] = encoder_output[0,0]
+    
+    # 输入为<sos>，decoder初始隐藏状态为encoder的
+    decoder_input = torch.tensor([[SOS_token]],device=device)
+
+    decoder_hidden = encoder_hidden
+
+    # 随机决定是否采用teacher_forcing
+    use_teacher_forcing = True if random.random() < teacher_forcing_ratio else False
+
+    if use_teacher_forcing:
+        # 若采用，label作为下一个时间步输入
+        for di in range(target_length):
+            decoder_output,decoder_hidden,decoder_attention = decoder(
+                decoder_input,decoder_hidden,encoder_outputs)
+            loss += criterion(decoder_output,target_tensor[di])
+    else:
+        # 若不用，则用预测出的作为Decoder下一个输入
+        for di in range(target_length):
+            decoder_output,decoder_hidden,decoder_attention = decoder(
+                decoder_input,decoder_hidden,encoder_outputs)
+            # topk代表在所给维度上输出最大值
+            # 参数代表输出前多少个最大值
+            # 若为1，就是最大值
+            # topv,topi 分别为前n个最大值和其对应的索引
+            topv,topi = decoder_output.topk(1)
+            # squeeze()进行降维
+            # detach将与这个变量相关的从计算图中剥离
+            # 从而减少内存的开销
+            decoder_input = topi.squeeze().detach()
+
+            loss += criterion(decoder_output,target_tensor[di])
+            # 若某个时间步输入为<eos>，则停止
+            if decoder_input.item() == EOS_token:
+                break
+    
+    loss.backward()     
+
+    # 参数更新
+    encoder_optimizer.step()
+    decoder_optimizer.step()   
+
+    # 返回平均loss
+    return loss.item() / target_length
+```
