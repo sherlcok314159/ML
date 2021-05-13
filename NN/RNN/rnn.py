@@ -367,7 +367,6 @@ def trainIters(encoder,decoder,n_iters,print_every=1000,plot_every=100,learning_
     showPlot(plot_losses)
 
 import matplotlib.pyplot as plt
-plt.switch_backend('agg')
 import matplotlib.ticker as ticker
 import numpy as np
 
@@ -431,8 +430,10 @@ attn_decoder1 = AttnDecoderRNN(hidden_size, output_lang.n_words, dropout_p=0.1).
 
 trainIters(encoder1, attn_decoder1, 75000, print_every=5000)
 
-#保留网络参数
-save_dir = os.path.join("data", "save")
+#保留网络参数，注意是实例化之后的
+torch.save(encoder1.state_dict(),"encoder_parameters") 
+torch.save(attn_decoder1.state_dict(),"decoder_parameters") 
+
 # 注意力可视化
 def showAttention(input_sentence, output_words, attentions):
     # 用colorbar设置图

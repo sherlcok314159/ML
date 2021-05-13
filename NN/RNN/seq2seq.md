@@ -12,6 +12,7 @@
 - [评估函数](#evaluate)
 - [硬train一发](#try)
 - [结果](#results)
+- [模型保存与加载](#transfer)
 - [参考文献](#references)
 
 ***
@@ -560,14 +561,11 @@ attn_decoder1 = AttnDecoderRNN(hidden_size, output_lang.n_words, dropout_p=0.1).
 
 trainIters(encoder1, attn_decoder1, 75000, print_every=5000)
 
-#保留网络参数
-torch.save(EncoderRNN.state_dict(),"encoder_parameters") 
-torch.save(AttnDecoderRNN.state_dict(),"decoder_parameters") 
 ```
 ***
 **<div id='results'>结果</div>**
 
-接下来可视化注意力，并且试着翻译几个句子
+接下来可视化注意力，并且试着翻译几个句子，如果你想自己尝试，可以添加，只是别忘了需要小写，空格分割
 ```python
 
 # 注意力可视化
@@ -610,7 +608,26 @@ evaluateAndShowAttention("c est un jeune directeur plein de talent .")
 ![](https://github.com/sherlcok314159/ML/blob/main/NN/Images/attention.png)
 
 ***
+**<div id='transfer'>模型保存与加载</div>**
 
+如果要保留模型，下一次直接加载，可以在硬train一发章节最后添加如下代码
+```python
+#保留网络参数，注意是实例化之后的
+torch.save(encoder1.state_dict(),"encoder_parameters") 
+torch.save(attn_decoder1.state_dict(),"decoder_parameters") 
+# 然后下一次加载时，将那里除了hidden_size之外的代码全部注释
+# hidden_size基础实例化会用到
+# 加载参数字典的时候路径具体看
+encoder1_pretrained = EncoderRNN(input_lang.n_words, hidden_size).to(device)
+encoder1_pretrained.load_state_dict(torch.load("../encoder_parameters"))
+
+attn_decoder1_pretrained = AttnDecoderRNN(hidden_size, output_lang.n_words, dropout_p=0.1).to(device)
+attn_decoder1_pretrained.load_state_dict(torch.load("../decoder_parameters"))
+
+# 最后在evaluateAndShowAttention函数里面
+# 将encoder1,attn_decoder1分别改为encoder1_pretrained,attn_decoder1_pretrained
+
+***
 **<div id='references'>参考文献</div>**
 
 https://pytorch123.com/FifthSection/Translation_S2S_Network/
