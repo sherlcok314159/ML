@@ -9,8 +9,9 @@
 - [文本预处理](#preprocess)
 - [辅助函数](#fuzhu)
 - [模型训练](#train)
-- [评估](#evaluate)
+- [评估函数](#evaluate)
 - [硬train一发](#try)
+- [结果](#results)
 - [参考文献](#references)
 
 ***
@@ -241,7 +242,7 @@ def unicodeToAscii(s):
 ```python
 def normalizeString(s):
     # 转码之后变小写切除两边空白
-    s = unicodeToAscill(s.lower().strip())
+    s = unicodeToAscii(s.lower().strip())
     # 匹配.!?，并在前面加空格
     s = re.sub(r"([.!?])",r" \1",s)
     # 将非字母和.!?的全部变为空白
@@ -547,8 +548,55 @@ attn_decoder1 = AttnDecoderRNN(hidden_size, output_lang.n_words, dropout_p=0.1).
 
 trainIters(encoder1, attn_decoder1, 75000, print_every=5000)
 
+#保留网络参数
+torch.save(EncoderRNN.state_dict(),"encoder_parameters") 
+torch.save(AttnDecoderRNN.state_dict(),"decoder_parameters") 
 ```
 ***
+**<div id='results'>结果</div>**
+
+接下来可视化注意力，并且试着翻译几个句子
+```python
+
+# 注意力可视化
+def showAttention(input_sentence, output_words, attentions):
+    # 用colorbar设置图
+    fig = plt.figure()
+    ax = fig.add_subplot(111)
+    # attentions出来之后是tensor形式，需要转换为numpy
+    cax = ax.matshow(attentions.numpy(), cmap='bone')
+    fig.colorbar(cax)
+
+    # 设置坐标
+    ax.set_xticklabels([''] + input_sentence.split(' ') +
+                       ['<EOS>'], rotation=90)
+    ax.set_yticklabels([''] + output_words)
+
+    # 在每个刻度处显示标签，刻度为1的倍数
+    ax.xaxis.set_major_locator(ticker.MultipleLocator(1))
+    ax.yaxis.set_major_locator(ticker.MultipleLocator(1))
+
+    plt.show()
+
+
+def evaluateAndShowAttention(input_sentence):
+    output_words, attentions = evaluate(
+        encoder1, attn_decoder1, input_sentence)
+    print('input =', input_sentence)
+    print('output =', ' '.join(output_words))
+    showAttention(input_sentence, output_words, attentions)
+
+
+evaluateAndShowAttention("elle a cinq ans de moins que moi .")
+
+evaluateAndShowAttention("elle est trop petit .")
+
+evaluateAndShowAttention("je ne crains pas de mourir .")
+
+evaluateAndShowAttention("c est un jeune directeur plein de talent .")
+```
+***
+
 **<div id='references'>参考文献</div>**
 
 https://pytorch123.com/FifthSection/Translation_S2S_Network/
