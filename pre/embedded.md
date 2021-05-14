@@ -66,11 +66,25 @@ skip-gram就是选出中心词来预测其他词出现在它周围的概率，�
 
 ![](https://github.com/sherlcok314159/ML/blob/main/pre/Images/cbow.png)
 
-为了简便，记![](http://latex.codecogs.com/svg.latex?\mathcal{W}_0={w_{o1},\dots,w_{o2m}})
+为了简便，记![](http://latex.codecogs.com/svg.latex?\mathcal{W}_0=\\{w_{o1},\dots,w_{o2m}\\})
 
 所以上面的式子简化为
 
 ![](https://github.com/sherlcok314159/ML/blob/main/pre/Images/cbow_simple.png)
 
-所以，给定时间
+所以，在给定时间步长T下（同skip-gram）：
+
 ![](https://github.com/sherlcok314159/ML/blob/main/pre/Images/cbow_.png)
+
+那么，极大似然概率为
+
+![](https://github.com/sherlcok314159/ML/blob/main/pre/Images/cbow_log.png)
+
+联系上面的式子，进行简化：
+
+![](https://github.com/sherlcok314159/ML/blob/main/pre/Images/cbow_concrete.png)
+
+计算![](http://latex.codecogs.com/svg.latex?P(w_i|w_c)\bar{\mathbf{v}}_{oi})的梯度
+
+![](https://github.com/sherlcok314159/ML/blob/main/pre/Images/last.png)
+
