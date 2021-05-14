@@ -36,3 +36,9 @@ skip-gram就是选出中心词来预测其他词出现在它周围的概率，�
 那么给定一个长度为T，t为每一个时间步，m是context window的大小，那么，将所有概率相乘，并且每一个词都可以作为文本词和中心词，这就意味着每一个词有二维向量，分别对应不同的场景，即为：
 
 ![](https://github.com/sherlcok314159/ML/blob/main/pre/Images/skip_.png)
+
+例如，句子长度为5，m为2，句子仍为"the man loves his car"，在第一个时间步时：
+
+![](https://github.com/sherlcok314159/ML/blob/main/pre/Images/skip_t1.png)
+
+对于时间步小于1和大于T的不予考虑，另外对自身不做softmax概率，那么![](http://latex.codecogs.com/svg.latex?P(w^2|w^1),P(w^3|w^1))分别代表man，loves从the中生成的概率
