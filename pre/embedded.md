@@ -55,7 +55,7 @@ skip-gram就是选出中心词来预测其他词出现在它周围的概率，�
 
 ![](https://github.com/sherlcok314159/ML/blob/main/pre/Images/skip_log_.png)
 
-不难发现，当需要求一个参数的梯度时，整个词表内都要乘一遍，当词表很大的时候，计算会非常耗时
+
 ***
 
 ### <div id='cbow'>CBOW</div>
@@ -87,5 +87,6 @@ skip-gram就是选出中心词来预测其他词出现在它周围的概率，�
 
 计算![](http://latex.codecogs.com/svg.latex?P(w_i|w_c)\bar{\mathbf{v}}_{oi})的梯度
 
-![](https://github.com/sherlcok314159/ML/blob/main/pre/Images/last.png)
+![](https://github.com/sherlcok314159/ML/blob/main/pre/Images/cbow_last.png)
 
+不难发现，当需要求一个参数的梯度时，skip-gram和CBOW都需要将整个词表乘一遍，当词表很大的时候，计算会非常耗时
