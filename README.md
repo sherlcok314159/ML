@@ -38,6 +38,8 @@
 - [Embedding](pre/embedded.md)
 
 
+
+***
 ### <div id='transformer'>Transformer时代</div>
 
 - NLP模型原理讲解
