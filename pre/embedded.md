@@ -55,3 +55,15 @@ skip-gram就是选出中心词来预测其他词出现在它周围的概率，�
 
 ![](https://github.com/sherlcok314159/ML/blob/main/pre/Images/skip_log_.png)
 
+不难发现，当需要求一个参数的梯度时，整个词表内都要乘一遍，当词表很大的时候，计算会非常耗时
+***
+
+### <div id='cbow'>CBOW</div>
+
+其实CBOW和skip-gram最大的不同是前者是由中心词产生周围邻居，而CBOW恰恰相反，由周围词产生中心词。继续上面的例子，"the man loves his car"，那么对应的中心词概率为P(loves|the,man,his,car)
+
+因为中心词数量过多，这里平均处理，相对应的softmax概率即为：
+
+![](https://github.com/sherlcok314159/ML/blob/main/pre/Images/cbow.png)
+
+为了简便，记![](http://latex.codecogs.com/svg.latex?\mathcal{W}_0=\lbracew_{o1},\dots,w_{o2m}\rbrace)
