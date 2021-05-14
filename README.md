@@ -4,6 +4,7 @@
 ### 章节
 - [线上课程](#courses)
 - [深度学习](#deep)
+- [文本预处理](#preprocess)
 - [Transformer时代](#transformer)
 - [必备技能](#skills)
 - [问题库](#problems)
@@ -11,6 +12,7 @@
 ### <div id='courses'>线上课程</div>
 
 - [李宏毅](https://www.bilibili.com/video/BV1JE411g7XF?from=search&seid=5913060628821893017)（入门极荐，简单易懂，且为中文授课）
+- [陈蕴侬](https://www.bilibili.com/video/BV19g4y1b7vx?p=28&spm_id_from=pageDriver)（与李宏毅同为台大老师，偏重应用，范围更广）
 - [吴恩达](https://www.bilibili.com/video/BV164411b7dx?from=search&seid=3957162850020779432)（斯坦福华人教授，业界公认厉害）
 - [Hinton](https://www.bilibili.com/video/BV1Xf4y117nc?from=search&seid=2370955475461598590)（深度学习开山鼻祖）
 
@@ -31,6 +33,10 @@
     - [LSTM之文本生成](NN/RNN/LSTM/文本生成.py)
     - [Seq2Seq翻译模型搭建](NN/RNN/seq2seq.md)
 - [常见优化技巧](NN/problems.md)
+***
+### <div id='preprocess'>文本预处理</div>
+- [Embedding](pre/embedded.md)
+
 
 ### <div id='transformer'>Transformer时代</div>
 
