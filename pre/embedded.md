@@ -6,7 +6,7 @@
 - [skip-gram](#skip)
 - [CBOW](#cbow)
 - [Negative Sample](#ns)
-- [Glov](#gru)
+- [Glov](#glov)
 - [ELMo](#elmo)
 - [bert](#bert)
 - [参考文献](#references)
