@@ -66,7 +66,7 @@ skip-gram就是选出中心词来预测其他词出现在它周围的概率，�
 
 ![](https://github.com/sherlcok314159/ML/blob/main/pre/Images/cbow.png)
 
-为了简便，记![](http://latex.codecogs.com/svg.latex?\mathcal{W}_0=\lbrace\w_{o1},\dots,w_{o2m}\rbrace)
+为了简便，记![](http://latex.codecogs.com/svg.latex?\mathcal{W}_0={w_{o1},\dots,w_{o2m}})
 
 所以上面的式子简化为
 
