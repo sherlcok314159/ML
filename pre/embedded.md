@@ -41,4 +41,17 @@ skip-gram就是选出中心词来预测其他词出现在它周围的概率，�
 
 ![](https://github.com/sherlcok314159/ML/blob/main/pre/Images/skip_t1.png)
 
-对于时间步小于1和大于T的不予考虑，另外对自身不做softmax概率，那么![](http://latex.codecogs.com/svg.latex?P(w^2|w^1),P(w^3|w^1))分别代表man，loves从the中生成的概率
+对于时间步小于1和大于T的不予考虑，另外对自身不做softmax概率，那么![](http://latex.codecogs.com/svg.latex?P(w^2|w^1),P(w^3|w^1))分别代表man，loves从the中生成的概率，在不同时间步上中心词都不同。
+
+极大似然概率被用于训练skip-gram，SGD常用于skip-gram的参数更新
+
+![](https://github.com/sherlcok314159/ML/blob/main/pre/Images/skip_max.png)
+
+联系上面![](http://latex.codecogs.com/svg.latex?P(w_i|w_c))的定义（注意其实w的上标和下标并没有本质区别，上标只是为了更清楚地表示时间步而已）可以得到：
+
+![](https://github.com/sherlcok314159/ML/blob/main/pre/Images/skip_log.png)
+
+接下来我们求![](http://latex.codecogs.com/svg.latex?v_c)的梯度（其实分子和父母的下标应该是一致的，这里处理不是为了分子分母同除，为了区分，所以采用不同下标）：
+
+![](https://github.com/sherlcok314159/ML/blob/main/pre/Images/skip_log_.png)
+
