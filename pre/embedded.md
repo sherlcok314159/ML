@@ -27,6 +27,6 @@
 
 而不同的单词用one-hot做内积之后结果均为0，这样就会丧失词之间的关系
 
-skip-gram就是选出中心词来预测其他词出现在它周围的概率，例如，一个句子是"the man loves his car."，假设"loves"是中心词，引入一个context window的概念，即为周围两侧覆盖的范围，若为2，那么左侧的"the man"和右侧"his car"都会被覆盖到。![](http://latex.codecogs.com/svg.latex?P(the,man,his,car|loves))，意思当中心词为"loves"，那么在context window范围内，它周围词为这些的概率。
+skip-gram就是选出中心词来预测其他词出现在它周围的概率，例如，一个句子是"the man loves his car."，假设"loves"是中心词，引入一个context window的概念，即为周围两侧覆盖的范围，若为2，那么左侧的"the man"和右侧"his car"都会被覆盖到。P(the,man,his,car|loves)意为当中心词为"loves"，那么在context window范围内，它周围词为这些的概率。
 
 假设![](http://latex.codecogs.com/svg.latex?u_i,v_c)
