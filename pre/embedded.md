@@ -51,7 +51,7 @@ skip-gram就是选出中心词来预测其他词出现在它周围的概率，�
 
 ![](https://github.com/sherlcok314159/ML/blob/main/pre/Images/skip_log.png)
 
-接下来我们求![](http://latex.codecogs.com/svg.latex?v_c)的梯度（其实分子和父母的下标应该是一致的，这里处理不是为了分子分母同除，为了区分，所以采用不同下标）：
+接下来我们求![](http://latex.codecogs.com/svg.latex?v_c)的梯度（其实分子和分母的下标应该是一致的，这里处理不是为了分子分母同除，为了区分，所以采用不同下标）：
 
 ![](https://github.com/sherlcok314159/ML/blob/main/pre/Images/skip_log_.png)
 
@@ -85,7 +85,7 @@ skip-gram就是选出中心词来预测其他词出现在它周围的概率，�
 
 ![](https://github.com/sherlcok314159/ML/blob/main/pre/Images/cbow_concrete.png)
 
-计算![](http://latex.codecogs.com/svg.latex?P(w_i|w_c)\bar{\mathbf{v}}_{oi})的梯度
+计算![](http://latex.codecogs.com/svg.latex?\bar{\mathbf{v}}_{oi})的梯度
 
 ![](https://github.com/sherlcok314159/ML/blob/main/pre/Images/cbow_last.png)
 
