@@ -93,6 +93,6 @@ skip-gram就是选出中心词来预测其他词出现在它周围的概率，�
 
 ***
 
-### <div id='cbow'>Negative Sampling</div>
+### <div id='ns'>Negative Sampling</div>
 
-为了解决skip-gram和CBOW都会遍历词表，复杂度为![](http://latex.codecogs.com/svg.latex?\mathbf{O}_n)，其中一个方法是
+为了解决skip-gram和CBOW都会遍历词表，复杂度为![](http://latex.codecogs.com/svg.latex?\mathbf{O}(n))，一个方法是hierarchical softmax，它是通过树的结构让复杂度降至![](http://latex.codecogs.com/svg.latex?\mathbf{O}(logn))
