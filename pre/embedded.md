@@ -135,8 +135,14 @@ Glove的出现结合了这两者的优点
 
 记![](http://latex.codecogs.com/svg.latex?x_{ij})为![](http://latex.codecogs.com/svg.latex?x_i)出现在以![](http://latex.codecogs.com/svg.latex?x_j)为中心词的窗口中的概率，![](http://latex.codecogs.com/svg.latex?u_i,v_j)为文本词和中心词被表示成的向量，其实GloVe用的平方损失![](http://latex.codecogs.com/svg.latex?loss=(logx_{ij}-logexp(u_i^Tv_j))^2=(u_i^Tv_j-logx_{ij})^2)
 
+
+
 然后加上两个标量![](http://latex.codecogs.com/svg.latex?b_j,c_i)分别对应中心词和文本词，每一次损失我们都给它加上一个权重![](http://latex.codecogs.com/svg.latex?f(x_{ij}))（不加的话就全为1）
 
 全部放一起，即为：
 
 ![](https://github.com/sherlcok314159/ML/blob/main/pre/Images/glove.png)
+
+![](http://latex.codecogs.com/svg.latex?f(x_{ij}))是一个线性的函数，![](http://latex.codecogs.com/svg.latex?x_{max})通常设为100
+
+![](https://github.com/sherlcok314159/ML/blob/main/pre/Images/glove_weights.png)
