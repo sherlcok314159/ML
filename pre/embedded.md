@@ -8,7 +8,6 @@
 - [Negative Sample](#ns)
 - [GloVe](#glove)
 - [ELMo](#elmo)
-- [bert](#bert)
 - [参考文献](#references)
 
 ### <div id='summary'>词嵌入概述</div>
@@ -163,6 +162,21 @@ ELMo的使用双向RNN，每一个RNN有两层LSTM，按照上面RNNLM的构想�
 
 ![](https://github.com/sherlcok314159/ML/blob/main/pre/Images/elmo.png)
 
-然后把隐藏层的向量拼接起来，得到两个向量，最后完成的embedding就是这两个向量的加权求和
+然后把隐藏层的向量拼接起来，得到两个向量，最后完成的embedding就是这两个向量的加权求和，权重从何来呢？做好词嵌入后会接下游任务，每一个任务会对这个embedding有一定反馈，根据不同任务的特点以及重要程度，进行加权
 
 ![](https://github.com/sherlcok314159/ML/blob/main/pre/Images/elmo_2.png)
+
+据原论文作者实验得出，通常第一层隐藏层可以捕捉基础的语法，第二层可以捕捉到更高级的语义关系 
+
+ELMo被提出的时候打败上述的所有词嵌入方式，但是好景不长，GPT出来后就被取代了，目前万物皆bert，用bert加下游任务就行fine-tune
+
+当然，bert在本仓库的其他地方已有说明，这里不再赘述
+
+***
+
+### <div id='references'>参考文献</div>
+
+https://d2l.ai/chapter_natural-language-processing-pretraining/glove.html
+
+https://www.bilibili.com/video/BV19g4y1b7vx?p=28&spm_id_from=pageDriver
+
