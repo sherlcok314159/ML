@@ -91,4 +91,8 @@ skip-gram就是选出中心词来预测其他词出现在它周围的概率，�
 
 不难发现，当需要求一个参数的梯度时，skip-gram和CBOW都需要将整个词表乘一遍，当词表很大的时候，计算会非常耗时
 
+***
 
+### <div id='cbow'>Negative Sampling</div>
+
+为了解决skip-gram和CBOW都会遍历词表，复杂度为![](http://latex.codecogs.com/svg.latex?\mathbf{O}_n)，其中一个方法是
