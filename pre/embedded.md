@@ -103,4 +103,11 @@ NS其实是符合直觉的，一开始是遍历整个词表，那么有没有可
 
 ![](https://github.com/sherlcok314159/ML/blob/main/pre/Images/ns.png)
 
+那么，目标函数即为使得这些可能作为邻居的词的概率尽可能变大：
+
 ![](https://github.com/sherlcok314159/ML/blob/main/pre/Images/ns_prod.png)
+
+我们取对数处理
+
+![](https://github.com/sherlcok314159/ML/blob/main/pre/Images/ns_prod_log.png)
+
