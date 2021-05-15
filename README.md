@@ -35,12 +35,14 @@
 - [常见优化技巧](NN/problems.md)
 ***
 ### <div id='preprocess'>文本预处理</div>
-- [Embedding](pre/embedded.md)
+
 
 
 
 ***
 ### <div id='transformer'>Transformer时代</div>
+
+- [文本预处理](nlp/embedded.md)
 
 - NLP模型原理讲解
     - [Transformer](nlp/models/transformer.md)

@@ -1,15 +1,13 @@
 ### Bidirectional Encoder Representations from Transformers
 
 
-参考论文(https://arxiv.org/abs/1810.04805)
-
 **章节**
 - [Encoder](#encoder)
 - [Ways Of Training](#train)
     - [MASK](#mask)
     - [Connect Or Not](#connect)
 - [Reading Comprehension](#comprehension)
-
+- [参考文献](#references)
 
 **<div id='encoder'>Encoder</div>**
 
@@ -32,8 +30,6 @@
 
 ![](https://github.com/sherlcok314159/ML/blob/main/nlp/Images/connect.png)
 
-------------------------------------------------------------------------[图片来源](https://www.bilibili.com/video/BV1NJ411o7u3?p=11)----------------------------------------------------------------------------
-
 
 [CLS]代表分类的结果，对于一个二分类任务就是可以或不可以连在一起（0，1），[SEP]是句子连接符。这个任务就是判断两个句子是否可以合在一起，通过[CLS]输出结果。
 
@@ -46,8 +42,12 @@
 
 ![](https://github.com/sherlcok314159/ML/blob/main/nlp/Images/comprehension.png)
 
-------------------------------------------------------------------------[图片来源](https://www.bilibili.com/video/BV1NJ411o7u3?p=11)----------------------------------------------------------------------------
 
 这里需要额外训练两个辅助向量，因为答案我们需要始末位置，一个是开始，一个是结束。然后拿辅助向量与文章内容做内积，经过softmax得到最终概率，然后输出最相近的作为起始点，同样的得到结束点，然后答案就是始末位置卡住的地方。
 
+***
+**<div id='references'>参考文献</div>**
 
+https://arxiv.org/abs/1810.04805)
+
+https://www.bilibili.com/video/BV1NJ411o7u3?p=11
