@@ -133,5 +133,5 @@ NS其实是符合直觉的，一开始是遍历整个词表，那么有没有可
 
 Glove的出现结合了这两者的优点
 
-记![](http://latex.codecogs.com/svg.latex?x_{ij})为![](http://latex.codecogs.com/svg.latex?x_i)出现在以![](http://latex.codecogs.com/svg.latex?x_j)为中心词的窗口中的概率，![](http://latex.codecogs.com/svg.latex?u_i,v_j)为文本词和中心词被表示成的向量，其实GloVe用的平方损失![](http://latex.codecogs.com/svg.latex?loss=(log\,x_{ij}-log\,u_i^Tv_j)^2)
+记![](http://latex.codecogs.com/svg.latex?x_{ij})为![](http://latex.codecogs.com/svg.latex?x_i)出现在以![](http://latex.codecogs.com/svg.latex?x_j)为中心词的窗口中的概率，![](http://latex.codecogs.com/svg.latex?u_i,v_j)为文本词和中心词被表示成的向量，其实GloVe用的平方损失![](http://latex.codecogs.com/svg.latex?loss=(log\,x_{ij}-log\,exp(u_i^Tv_j))^2)
 
