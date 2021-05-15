@@ -6,7 +6,7 @@
 - [skip-gram](#skip)
 - [CBOW](#cbow)
 - [Negative Sample](#ns)
-- [Glov](#glov)
+- [GloVe](#glove)
 - [ELMo](#elmo)
 - [bert](#bert)
 - [参考文献](#references)
@@ -125,3 +125,13 @@ NS其实是符合直觉的，一开始是遍历整个词表，那么有没有可
 问题来了，![](http://latex.codecogs.com/svg.latex?P(w))是多少呢？其实取样会有个问题，高频词被取样出来的概率会大于低频词，所以就希望能够平衡高频词和低频词之间的比例，原论文提出将每一个词的频率的3/4次方作为每一个词的词频，关于为啥是3/4，这是经验之谈，是通过实验结果找出的，并没有好的理论依托，不过可以通过例子来直观感受
 
 假如一个句子中，loves，his，metal出现的概率分别为0.9，0.09，0.01（即该词出现的次数/总词数），那么变换之后分别是0.92，0.16，0.032，可以发现虽然每一个值都上升了，但是高频词上升的程度远没有低配词来的大，这样就可以一定程度平衡比例
+****
+
+### <div id='glove'>GloVe</div>
+
+经过上述介绍，不难发现skip-gram和CBOW都是通过滑动窗口来捕捉词与词之间的关系，但是没有用到整个序列的统计信息，而且需要用到大量语料进行训练，训练较慢，而如LSA，HAL这类虽然可以较好地用到整个序列的统计信息，训练也较快，但是只能捕捉较为原始的词与词之间的关系。
+
+Glove的出现结合了这两者的优点
+
+记![](http://latex.codecogs.com/svg.latex?x_{ij})为![](http://latex.codecogs.com/svg.latex?x_i)出现在以![](http://latex.codecogs.com/svg.latex?x_j)为中心词的窗口中的概率，![](http://latex.codecogs.com/svg.latex?u_i,v_j)为文本词和中心词被表示成的向量，其实GloVe用的平方损失![](http://latex.codecogs.com/svg.latex?loss=(log\,x_{ij}-log\,u_i^Tv_j)^2)
+
