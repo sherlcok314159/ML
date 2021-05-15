@@ -93,7 +93,7 @@ skip-gram就是选出中心词来预测其他词出现在它周围的概率，�
 
 ***
 
-### <div id='ns'>Negative Sampling</div>
+### <div id='ns'>Negative Sample</div>
 
 为了解决skip-gram和CBOW都会遍历词表，复杂度为![](http://latex.codecogs.com/svg.latex?\mathbf{O}(n))，一个方法是hierarchical softmax，它是通过哈夫曼树让复杂度降至![](http://latex.codecogs.com/svg.latex?\mathbf{O}(logn))，但较为复杂而且也不是普遍应用，这里忽略，详细介绍另一种方法Negative Sampling，下方简写为NS
 
@@ -110,4 +110,9 @@ NS其实是符合直觉的，一开始是遍历整个词表，那么有没有可
 我们取对数处理
 
 ![](https://github.com/sherlcok314159/ML/blob/main/pre/Images/ns_prod_log.png)
+
+意味着我们希望不同的中心词时，邻居出现在它context window的可能性尽可能大，还是"the man loves his car"，这次假设context window大小为1，那么当t=1时，则希望在所有词中"man"出现在它旁边的概率最大，以此类推，t=2，则希望"the"，"loves"出现在它周围的概率最大等等
+
+
+负采样的意思是不仅要让所有在context window里的正样本概率变大，同时从不在window里的词中采样![](http://latex.codecogs.com/svg.latex?\mathcal{K})个词作为噪声词，然后把两个样本概率相乘
 
