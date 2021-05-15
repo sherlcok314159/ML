@@ -157,4 +157,6 @@ Glove的出现结合了这两者的优点
 
 在介绍ELMo之前，先讲讲RNNLM，LM指的是Language Model，是用前面一个词预测它后一个词出现的概率，加上RNN，其实就是在每一个时间步上输入一个词，吐出下一个词，再把输出的词放到下一个时间步的输入，以此类推，整个序列就全部输出，这样可以保证每一个词都携带特定语义，而不是泛泛而谈。
 
+RNN有前向和后向之分，表示就是![](http://latex.codecogs.com/svg.latex?P(w_t|w_1,w_2,\dots,w_{t-1}))和![](http://latex.codecogs.com/svg.latex?P(w_t|w_n,w_{n-1},\dots,w_{t+1}))
+
 ![](https://github.com/sherlcok314159/ML/blob/main/pre/Images/elmo.png)
