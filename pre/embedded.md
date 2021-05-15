@@ -146,3 +146,15 @@ Glove的出现结合了这两者的优点
 ![](http://latex.codecogs.com/svg.latex?f(x_{ij}))是一个线性的函数，![](http://latex.codecogs.com/svg.latex?x_{max})通常设为100
 
 ![](https://github.com/sherlcok314159/ML/blob/main/pre/Images/glove_weights.png)
+
+***
+
+### <div id='elmo'>ELMo</div>
+
+上述介绍的word embedding方法有一个很大的局限，训练好之后一个词的意思就定下来了，可是不同语境的词的意思可能有很大差异，比如telsa可以指科学家，也还可以指电动车公司；不同语境下的语法也是问题，"is playing" 和 "has played"虽然都是play，但是是不同的。
+
+于是，有人就设想，能不能根据具体语境具体化向量呢？
+
+在介绍ELMo之前，先讲讲RNNLM，LM指的是Language Model，是用前面一个词预测它后一个词出现的概率，加上RNN，其实就是在每一个时间步上输入一个词，吐出下一个词，再把输出的词放到下一个时间步的输入，以此类推，整个序列就全部输出，这样可以保证每一个词都携带特定语义，而不是泛泛而谈。
+
+![](https://github.com/sherlcok314159/ML/blob/main/pre/Images/elmo.png)
