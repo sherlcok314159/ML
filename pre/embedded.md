@@ -159,4 +159,10 @@ Glove的出现结合了这两者的优点
 
 RNN有前向和后向之分，表示就是![](http://latex.codecogs.com/svg.latex?P(w_t|w_1,w_2,\dots,w_{t-1}))和![](http://latex.codecogs.com/svg.latex?P(w_t|w_n,w_{n-1},\dots,w_{t+1}))
 
+ELMo的使用双向RNN，每一个RNN有两层LSTM，按照上面RNNLM的构想进行操作，一开始的Embedding是用CNN完成的
+
 ![](https://github.com/sherlcok314159/ML/blob/main/pre/Images/elmo.png)
+
+然后把隐藏层的向量拼接起来，得到两个向量，最后完成的embedding就是这两个向量的加权求和
+
+![](https://github.com/sherlcok314159/ML/blob/main/pre/Images/elmo_2.png)
