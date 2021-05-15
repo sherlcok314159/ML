@@ -118,3 +118,7 @@ NS其实是符合直觉的，一开始是遍历整个词表，那么有没有可
 
 ![](https://github.com/sherlcok314159/ML/blob/main/pre/Images/ns_joint.png)
 
+正负样本符合伯努利分布，即两个相加为1，改写并取对数，极大似然概率如下：
+
+![](https://github.com/sherlcok314159/ML/blob/main/pre/Images/ns_last.png)
+
