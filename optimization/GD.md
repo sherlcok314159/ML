@@ -8,6 +8,7 @@
     - [RMSProp](#rms)
     - [Adam](#adam)
     - [Adagrad](#adag)
+- [参考文献](#references)
 
 一开始挑好模型集合之后，接着定义出一个损失函数，那么机器学习就变成**优化问题**，找出一组参数，使得**Loss**最小。
 
@@ -82,8 +83,6 @@ def BGD(T,lr):
 **<div id='sgd'>Stochastic-Gradient-Descent</div>**
 
 ![](https://github.com/sherlcok314159/ML/blob/main/Images/sgd.png)
-
-------------------------------------------------------------------------[图片来源](https://openlearninglibrary.mit.edu/courses/course-v1:MITx+6.036+1T2019/courseware/Week4/gradient_descent/?activate_block_id=block-v1%3AMITx%2B6.036%2B1T2019%2Btype%40sequential%2Bblock%40gradient_descent)----------------------------------------------------------------------------
 
 **注意**，虽然BGD和SGD看起来很像，但其实BGD是将整个数据看过一遍；而SGD只是从Dataset中Sample出某一个点。所以两者的梯度都不一样，前者梯度会带求和符号，而SGD就单个点的梯度。
 
@@ -165,6 +164,9 @@ def momentum(T,lr,k):
 
 里面还加了一个极小的数，防止分母为0，一般取1.0e-7
 
+****
+
+**<div id='references'>参考文献</div>**
 
 
-
+https://openlearninglibrary.mit.edu/courses/course-v1:MITx+6.036+1T2019/courseware/Week4/gradient_descent/?activate_block_id=block-v1%3AMITx%2B6.036%2B1T2019%2Btype%40sequential%2Bblock%40gradient_descent

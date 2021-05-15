@@ -4,7 +4,6 @@
 ### 章节
 - [线上课程](#courses)
 - [深度学习](#deep)
-- [文本预处理](#preprocess)
 - [Transformer时代](#transformer)
 - [必备技能](#skills)
 - [问题库](#problems)
@@ -33,11 +32,6 @@
     - [LSTM之文本生成](NN/RNN/LSTM/文本生成.py)
     - [Seq2Seq翻译模型搭建](NN/RNN/seq2seq.md)
 - [常见优化技巧](NN/problems.md)
-***
-### <div id='preprocess'>文本预处理</div>
-
-
-
 
 ***
 ### <div id='transformer'>Transformer时代</div>

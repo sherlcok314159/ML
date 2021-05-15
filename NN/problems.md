@@ -1,7 +1,5 @@
 ![](https://github.com/sherlcok314159/ML/blob/main/Images/Recipe_for_DNN.jpg)
 
-------------------------------------------------------------------------[图片来源](https://www.youtube.com/watch?v=xki61j7z-30&list=PLJV_el3uVTsPy9oCRY30oBPNLCo89yu49&index=17&ab_channel=Hung-yiLee)----------------------------------------------------------------------------
-
 
 章节
 - [Train Problems](#train)
@@ -11,6 +9,7 @@
     - [Dropout](#drop)
     - [EarlyStopping](#stop)
     - [Regularization](#regular)
+- [参考文献](#references)
 
 **<div id='train'>训练出问题</div>**
 
@@ -36,7 +35,6 @@ train的结果好，测试的结果烂掉了，那就是过拟合了。同样取
 
 ![](https://github.com/sherlcok314159/ML/blob/main/Images/dropout.png)
 
-------------------------------------------------------------------------[图片来源](https://www.youtube.com/watch?v=xki61j7z-30&list=PLJV_el3uVTsPy9oCRY30oBPNLCo89yu49&index=17&ab_channel=Hung-yiLee)----------------------------------------------------------------------------
 
 由图可知，**不一定所有神经元**都会被训练到，每一个神经元都有p%被去掉，所以训练的时候很有可能就**不是同一个**模型，这或许可以从直觉上解释为什么Dropout**对train反而不友好**，而通过这种去除的方式可以一定程度**防止过拟合**，会让**Test结果好看**一点
 
@@ -46,7 +44,6 @@ train的结果好，测试的结果烂掉了，那就是过拟合了。同样取
 
 ![](https://github.com/sherlcok314159/ML/blob/main/Images/Dropout.jpg)
 
-------------------------------------------------------------------------[图片来源](https://www.youtube.com/watch?v=xki61j7z-30&list=PLJV_el3uVTsPy9oCRY30oBPNLCo89yu49&index=17&ab_channel=Hung-yiLee)----------------------------------------------------------------------------
 
 会发现结果竟然惊人的相同
 
@@ -59,13 +56,11 @@ If a weight = 1 by training,set w = 0.5 for testing.(Dropout rate is 50%.)
 
 ![](https://github.com/sherlcok314159/ML/blob/main/Images/dropout_ensemble.png)
 
-------------------------------------------------------------------------[图片来源](https://www.youtube.com/watch?v=xki61j7z-30&list=PLJV_el3uVTsPy9oCRY30oBPNLCo89yu49&index=17&ab_channel=Hung-yiLee)----------------------------------------------------------------------------
 
 在模型比较复杂的时候，我们常常会从数据集中**Sample**出小部分的data来训练，每次sample出的data训练的结果都不一样，也许单个varriance都比较大，这个时候我们**取个平均**，结果就会好很多，那么，为什么说Dropout与Ensemble有关呢？
 
 ![](https://github.com/sherlcok314159/ML/blob/main/Images/dropout_2.jpg)
 
-------------------------------------------------------------------------[图片来源](https://www.youtube.com/watch?v=xki61j7z-30&list=PLJV_el3uVTsPy9oCRY30oBPNLCo89yu49&index=17&ab_channel=Hung-yiLee)----------------------------------------------------------------------------
 
 虽然batch_size 都为1，但是，每次被训练的神经网络是不一样的，这可以类似地认为从一个大模型里面sample出一个小模型，这里不要与randomly initialize parameters搞混，记得我们在[CNN](CNN/cnn.md)中说过epoch和batch_size。那里只是随机初始化参数。
 
@@ -98,11 +93,8 @@ model.fit(x, y, validation_split=0.2, callbacks=[early_stopping])
 
 ![](https://github.com/sherlcok314159/ML/blob/main/Images/l1.jpg)
 
-------------------------------------------------------------------------[图片来源](https://www.youtube.com/watch?v=xki61j7z-30&list=PLJV_el3uVTsPy9oCRY30oBPNLCo89yu49&index=17&ab_channel=Hung-yiLee)----------------------------------------------------------------------------
 
 ![](https://github.com/sherlcok314159/ML/blob/main/Images/l2.png)
-
-------------------------------------------------------------------------[图片来源](https://www.youtube.com/watch?v=xki61j7z-30&list=PLJV_el3uVTsPy9oCRY30oBPNLCo89yu49&index=17&ab_channel=Hung-yiLee)----------------------------------------------------------------------------
 
 可以看到regularization只跟weights有关，因为**bias**只会涉及到图像**上下移**，不用考虑
 
@@ -151,3 +143,8 @@ def my_regularizer(x):
 ```
 
 若要了解更多，可以去keras官网看一下[具体接口](https://keras.io/api/layers/regularizers/)
+
+***
+**<div id='references'>参考文献</div>**
+
+https://www.youtube.com/watch?v=xki61j7z-30&list=PLJV_el3uVTsPy9oCRY30oBPNLCo89yu49&index=17&ab_channel=Hung-yiLee

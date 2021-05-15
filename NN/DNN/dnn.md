@@ -26,7 +26,6 @@
 
 ![](https://github.com/sherlcok314159/ML/blob/main/Images/neuron_4.png)
 
-------------------------------------------------------------------------[图片来源](https://bnzn2426.tistory.com/category/%EB%A8%B8%EC%8B%A0%EB%9F%AC%EB%8B%9D%26%EB%94%A5%EB%9F%AC%EB%8B%9D%20%EA%B3%B5%EB%B6%80)----------------------------------------------------------------------------
 
 那么，肯定有人问了
 
@@ -58,13 +57,13 @@
 
 ![](https://github.com/sherlcok314159/ML/blob/main/Images/modularization.png)
 
-------------------------------------------------------------------------[图片来源](https://www.youtube.com/watch?v=XsC9byQkUH8&list=PLJV_el3uVTsPy9oCRY30oBPNLCo89yu49&index=20)----------------------------------------------------------------------------
+
 
 这样的话，数据量都是够的，train出的结果不会很糟
 
 ![](https://github.com/sherlcok314159/ML/blob/main/Images/modularization_2.png)
 
-------------------------------------------------------------------------[图片来源](https://www.youtube.com/watch?v=XsC9byQkUH8&list=PLJV_el3uVTsPy9oCRY30oBPNLCo89yu49&index=20)----------------------------------------------------------------------------
+
 
 通过模组化用两层神经网络可以解决数据量不足的问题，这样train出的结果比一层比起来肯定是好的多的
 
@@ -176,3 +175,7 @@ Transform acc,val_acc above into accuracy,val_accuracy
 ```python
 ValueError: Input 0 of layer sequential is incompatible with the layer: expected axis -1 of input shape to have value 28 but received input with shape (128, 784)
 ```
+
+**参考文献：**
+
+https://bnzn2426.tistory.com/category/%EB%A8%B8%EC%8B%A0%EB%9F%AC%EB%8B%9D%26%EB%94%A5%EB%9F%AC%EB%8B%9D%20%EA%B3%B5%EB%B6%80
