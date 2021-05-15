@@ -95,4 +95,12 @@ skip-gram就是选出中心词来预测其他词出现在它周围的概率，�
 
 ### <div id='ns'>Negative Sampling</div>
 
-为了解决skip-gram和CBOW都会遍历词表，复杂度为![](http://latex.codecogs.com/svg.latex?\mathbf{O}(n))，一个方法是hierarchical softmax，它是通过树的结构让复杂度降至![](http://latex.codecogs.com/svg.latex?\mathbf{O}(logn))
+为了解决skip-gram和CBOW都会遍历词表，复杂度为![](http://latex.codecogs.com/svg.latex?\mathbf{O}(n))，一个方法是hierarchical softmax，它是通过哈夫曼树让复杂度降至![](http://latex.codecogs.com/svg.latex?\mathbf{O}(logn))，但较为复杂而且也不是普遍应用，这里忽略，详细介绍另一种方法Negative Sampling，下方简写为NS
+
+NS其实是符合直觉的，一开始是遍历整个词表，那么有没有可能遍历从词表中取样出来的小样本呢？不断学习，不就间接上等于把词表整个遍历了吗？
+
+这里用skip-gram为例，CBOW和它差不多，假设给定一个句子，![](http://latex.codecogs.com/svg.latex?w_c,w_o)分别代表中心词和句子中出现的词，![](http://latex.codecogs.com/svg.latex?v_c,u_o)分别代表它们被表示成的向量，P(D=1)代表正样本，即为![](http://latex.codecogs.com/svg.latex?w_o)出现在中心词的context window里
+
+![](https://github.com/sherlcok314159/ML/blob/main/pre/Images/ns.png)
+
+![](https://github.com/sherlcok314159/ML/blob/main/pre/Images/ns_prod.png)
