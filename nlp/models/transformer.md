@@ -159,9 +159,15 @@ transformer默认的词嵌入维度是512，这里举个特例，假如句子很
 
 ![](https://github.com/sherlcok314159/ML/blob/main/nlp/Images/sin.png)
 
-显然，前期有大量特征会出现重合，且会出现较高频率变换，后期几乎趋于一致，我们其实可以猜想出后面的其实几乎不带有位置信息，
+显然，前期有大量特征会出现重合，且会出现较高频率变换，后期几乎趋于一致（奇数情况也如此），我们其实可以猜想出后面的其实几乎不带有位置信息，下图为奇偶混合的情况，可以看出有很多重合，当i较大时，两者都不带任何信息
+
+![](https://github.com/sherlcok314159/ML/blob/main/nlp/Images/mix.png)
+
+下图为小demo的位置编码的可视化结果
 
 ![](https://github.com/sherlcok314159/ML/blob/main/nlp/Images/positional_encoding.png)
+
+深度是一个词的特征维度，Position代表的是哪一个词，可以看出，当i较小时，特征之间重合较大，而且离得近的位置之间特征变化很快，当i大到一定程度，几乎没有任何区别
 
 ***
 
