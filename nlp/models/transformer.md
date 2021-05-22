@@ -143,7 +143,7 @@ tensor([[ 0.4924,  0.3564,  0.4850],
 
 接下来一步一步推演，首先我们假设公式里把2i去掉，这里换另一个比较长的序列，拿出第1，2，6，7个词，每个词用5维的向量表示，![](http://latex.codecogs.com/svg.latex?p_i)代表一个词
 
-![](https://github.com/sherlcok314159/ML/blob/main/nlp/Images/first.png)
+![](https://github.com/sherlcok314159/ML/blob/main/nlp/Images/begin.png)
 
 正弦图像是具有周期性的，不巧的话就会出现不同的位置是一个值，真是那样的话，位置编码的意义就失去了，如何让不同词之间分开是位置编码的目的，接下来引入i，依照公式，只有i为偶数才为正弦图，引入i之后代表进一步细分，不止是按照一个一个词来分，而是按照词和词嵌入的特征来分，其实可以想想，人其实大多数情况的行为举止都是差不多的，细分才能看出不同，这里用了![](http://latex.codecogs.com/svg.latex?p_0)和![](http://latex.codecogs.com/svg.latex?p_6) 第1，3，5个特征：
 
