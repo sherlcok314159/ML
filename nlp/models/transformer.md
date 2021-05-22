@@ -159,7 +159,9 @@ transformer默认的词嵌入维度是512，这里举个特例，假如句子很
 
 ![](https://github.com/sherlcok314159/ML/blob/main/nlp/Images/sin.png)
 
-显然，前期有大量特征会出现重合，且会出现较高频率变换，后期几乎趋于一致
+显然，前期有大量特征会出现重合，且会出现较高频率变换，后期几乎趋于一致，我们其实可以猜想出后面的其实几乎不带有位置信息，
+
+![](https://github.com/sherlcok314159/ML/blob/main/nlp/Images/positional_encoding.png)
 
 ***
 
