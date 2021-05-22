@@ -33,7 +33,7 @@ print(embed(X).shape)
 
 **<div id='pos'>位置编码</div>**
 
-词嵌入之后紧接着就是位置编码，位置编码用以区分不同词以及同词不同特征之间的关系。代码中需要注意：X_只是初始化的矩阵，并不是输入进来的，完成位置编码之后会加一个dropout。
+词嵌入之后紧接着就是位置编码，位置编码用以区分不同词以及同词不同特征之间的关系。代码中需要注意：X_只是初始化的矩阵，并不是输入进来的；完成位置编码之后会加一个dropout。另外，位置编码是最后加上去的，因此输入输出形状不变。
 
 ```python
 Tensor = torch.Tensor
@@ -66,3 +66,10 @@ def positional_encoding(X, num_features, dropout_p=0.0, max_len=512) -> Tensor:
     X = X + P[:,:X.shape[1],:].to(X.device)
     return dropout(X)
 ```
+***
+
+**<div id='multihead'>多头注意力</div>**
+
+多头注意力分为大概三个部分讲，点积注意力，初始化参数，以及遮挡机制
+
+- 1. 点积注意力
