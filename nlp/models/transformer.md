@@ -151,6 +151,15 @@ tensor([[ 0.4924,  0.3564,  0.4850],
 
 不难发现，不仅不同词之间分开了，同一个词不同的特征之间也能区分出来
 
+当两个参数都变得很大的时候，又会发生什么呢？
+
+transformer默认的词嵌入维度是512，这里举个特例，假如句子很长，以第101个词为例
+
+![](https://github.com/sherlcok314159/ML/blob/main/nlp/Images/special.png)
+
+![](https://github.com/sherlcok314159/ML/blob/main/nlp/Images/sin.png)
+
+显然，前期有大量特征会出现重合，且会出现较高频率变换，后期几乎趋于一致
 
 ***
 
