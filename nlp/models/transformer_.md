@@ -100,8 +100,7 @@ def scaled_dot_product_attention(
     attn = torch.bmm(q, k.transpose(-2,-1))
     if attn_mask is not None:
         attn += attn_mask 
-    # attn means every token in the target sequence to source sequence
-    # -1 means softmax the scores 
+    # attn意味着目标序列的每个词对源语言序列做注意力
     attn = nn.functional.softmax(attn, dim=-1)
     if dropout_p:
         attn = nn.functional.dropout(attn, p=dropout_p)
