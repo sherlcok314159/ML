@@ -73,3 +73,40 @@ def positional_encoding(X, num_features, dropout_p=0.0, max_len=512) -> Tensor:
 多头注意力分为大概三个部分讲，点积注意力，初始化参数，以及遮挡机制
 
 -  点积注意力
+
+```python
+from typing import Optional, Tuple
+def scaled_dot_product_attention(
+    q: Tensor,
+    k: Tensor,
+    v: Tensor,
+    attn_mask: Optional[Tensor] = None,
+    dropout_p: float = 0.0,
+) -> Tuple[Tensor, Tensor]:
+    r'''
+    在query, key, value上计算点积注意力，若有注意力遮盖则使用，并且应用一个概率为dropout_p的dropout
+
+    参数：
+        - q: :math:`(B, Nt, E)` B代表batch size， Nt是目标语言序列长度，E是嵌入后的特征维度
+        - key: :math:`(B, Ns, E)` Ns是源语言序列长度
+        - value: :math:`(B, Ns, E)`与key形状一样
+        - attn_mask: 要么是3D的tensor，形状为:math:`(B, Nt, Ns)`或者2D的tensor，形状如:math:`(Nt, Ns)`
+
+        - Output:注意力值形状为:math:`(B, Nt, E)`;注意力权重为:math:`(B, Nt, Ns)`
+    '''
+    B, Nt, E = q.shape
+    q = q / math.sqrt(E)
+    # (B, Nt, E) x (B, E, Ns) -> (B, Nt, Ns)
+    attn = torch.bmm(q, k.transpose(-2,-1))
+    if attn_mask is not None:
+        attn += attn_mask 
+    # attn means every token in the target sequence to source sequence
+    # -1 means softmax the scores 
+    attn = nn.functional.softmax(attn, dim=-1)
+    if dropout_p:
+        attn = nn.functional.dropout(attn, p=dropout_p)
+    # (B, Nt, Ns) x (B, Ns, E) -> (B, Nt, E)
+    output = torch.bmm(attn, v)
+    return output, attn 
+```
+
