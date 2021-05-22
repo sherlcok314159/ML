@@ -1,8 +1,6 @@
 
 ### Transformer
 
-参考论文(https://arxiv.org/abs/1706.03762)
-
 **章节**
 - [Reasons](#reasons)
 - [Self-Attention](#self_attention)
@@ -14,6 +12,7 @@
 - [Encoder To Decoder](#etd)
 - [Shared Weights](#share)
 - [Effect](#effect)
+- [References](#references)
 
 ![](https://github.com/sherlcok314159/ML/blob/main/nlp/Images/transformer.png)
 
@@ -238,3 +237,12 @@ Feed-Forward Network究竟做了啥呢？
 ![](https://github.com/sherlcok314159/ML/blob/main/nlp/Images/effect.png)
 
 一般来说，维度d肯定比序列长度n大很多，所以每一层的复杂度此模型吊打RNN。模型结果对比没多说的，几乎是碾压式的。
+
+***
+**<div id='references'>References</div>**
+
+https://arxiv.org/abs/1706.03762
+
+https://kazemnejad.com/blog/transformer_architecture_positional_encoding/
+
+https://www.youtube.com/watch?v=dichIcUZfOw&t=3s
