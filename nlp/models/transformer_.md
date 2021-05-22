@@ -72,4 +72,4 @@ def positional_encoding(X, num_features, dropout_p=0.0, max_len=512) -> Tensor:
 
 多头注意力分为大概三个部分讲，点积注意力，初始化参数，以及遮挡机制
 
-- 1. 点积注意力
+-  点积注意力
