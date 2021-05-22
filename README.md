@@ -39,7 +39,8 @@
 - [文本预处理](nlp/embedded.md)
 
 - NLP模型原理讲解
-    - [Transformer](nlp/models/transformer.md)
+    - [Transformer原理篇](nlp/models/transformer.md)
+    - [Transformer代码（PyTorch）](nlp/models/transformer_.md)
     - [Bert](nlp/models/bert.md)
 
 - Bert文本任务源码解读系列
