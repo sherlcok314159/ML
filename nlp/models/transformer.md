@@ -113,9 +113,10 @@ self-attention除了可以捕获到句子语法特征外，还可以在长序列
 
 ![](https://github.com/sherlcok314159/ML/blob/main/nlp/Images/qkv_4.png)
 
-在Transformer中也是如此，不同的Q，K，V矩阵得出的特征关系也不相同，同样，不一定一组Q，K，V提取到的关系能解决问题，所以保险起见，我们用多组。这里可以把一组Q，K，V矩阵类比为一个卷积核，最后再通过全连接层进行拼接降维。
+在Transformer中也是如此，不同的Q，K，V矩阵得出的特征关系也不相同，同样，不一定一组Q，K，V提取到的关系能解决问题，所以保险起见，我们用多组。这里可以把一组Q，K，V矩阵类比为一个卷积核，最后再通过全连接层进行拼接降维。红线和绿线分别代表了两个不同的头在做自注意力时的情况，不难发现，大部分关照的对象还是一样的，只有小部分不同。这也为后面为多头注意力减头提供了灵感。
 
 ![](https://github.com/sherlcok314159/ML/blob/main/nlp/Images/qkv_3.png)
+
 
 ****
 **<div id='positional'>Positional Encoding</div>**
