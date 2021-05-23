@@ -16,7 +16,7 @@
 
 Transformer本质上是一种Encoder，以翻译任务为例，原始数据集是以两种语言组成一行的，在应用时，应是Encoder输入源语言序列，Decoder里面输入需要被转换的语言序列（训练时）。一个文本常有许多序列组成，常见操作为将序列进行一些预处理（如词切分等）变成列表，一个序列的列表的元素通常为词表中不可切分的最小词，整个文本就是一个大列表，元素为一个一个由序列组成的列表。如一个序列经过切分后变为["am", "##ro", "##zi", "accused", "his", "father"]，接下来按照它们在词表中对应的索引进行转换，假设结果如[23, 94, 13, 41, 27, 96]。假如整个文本一共100个句子，那么就有100个列表为它的元素，因为每个序列的长度不一，需要设定最大长度，这里不妨设为128，那么将整个文本转换为数组之后，形状即为100 x 128，这就对应着batch_size和seq_length。
 
-输入之后，紧接着进行词嵌入处理，词嵌入就是将每一个词用预先训练好的向量进行映射，参数为词表的大小和被映射的向量的维度，通俗来说就是向量里面有多少个数。注意，第一个参数是词表的大小，如果你目前有4个词，就填4，你后面万一进入与这4个词不同的词，还需要重新映射，为了统一，一开始的也要重新映射，因此这里填词表总大小。假如我们打算映射到512维（num_features或者num_hiddens），那么，整个文本的形状变为100 x 128 x 512。接下来举个小例子解释一下：假设我们词表一共有10个词，文本里有2个句子，每个句子有4个词，我们想要把每个词映射到8维的向量。于是2，4，8对应于batch_size, seq_length, num_features（本文将batch放在第一维）。
+输入之后，紧接着进行词嵌入处理，词嵌入就是将每一个词用预先训练好的向量进行映射，参数为词表的大小和被映射的向量的维度，通俗来说就是向量里面有多少个数。注意，第一个参数是词表的大小，如果你目前有4个词，就填4，你后面万一进入与这4个词不同的词，还需要重新映射，为了统一，一开始的也要重新映射，因此这里填词表总大小。假如我们打算映射到512维（num_features或者embed_dim），那么，整个文本的形状变为100 x 128 x 512。接下来举个小例子解释一下：假设我们词表一共有10个词，文本里有2个句子，每个句子有4个词，我们想要把每个词映射到8维的向量。于是2，4，8对应于batch_size, seq_length, embed_dim（本文将batch放在第一维）。
 
 另外，一般深度学习任务只改变num_features，所以讲维度一般是针对最后特征所在的维度。
 
@@ -70,7 +70,29 @@ def positional_encoding(X, num_features, dropout_p=0.0, max_len=512) -> Tensor:
 
 **<div id='multihead'>多头注意力</div>**
 
-多头注意力大概分为三个部分讲，点积注意力，初始化参数，以及遮挡机制
+多头注意力大概分为三个部分讲，分别为query，key，value初始化，注意力mask，点积注意力
+
+- q,k,v的产生
+
+query，key，value是源语言序列（本文记为src）乘以对应的矩阵得到的，那么，那些矩阵从何而来（注意，因为大部分代码都是从源码中抽离出来的，因而常带有self等，最后会呈现组成好的，而行文过程中不会将整个结构呈现出来）：
+
+```python
+if self._qkv_same_embed_dim is False:
+    # 初始化前后形状维持不变
+    # (seq_length x embed_dim) x (embed_dim x embed_dim) ==> (seq_length x embed_dim)
+    self.q_proj_weight = Parameter(torch.empty((embed_dim, embed_dim)))
+    self.k_proj_weight = Parameter(torch.empty((embed_dim, self.kdim)))
+    self.v_proj_weight = Parameter(torch.empty((embed_dim, self.vdim)))
+    self.register_parameter('in_proj_weight', None)
+else:
+    self.in_proj_weight = Parameter(torch.empty((3 * embed_dim, embed_dim)))
+    self.register_parameter('q_proj_weight', None)
+    self.register_parameter('k_proj_weight', None)
+    self.register_parameter('v_proj_weight', None)
+```
+torch.empty是按照所给的形状形成对应的tensor，特点是填充的值还未初始化，类比torch.randn（标准正态分布），这就是一种初始化的方式。在PyTorch中，变量类型是tensor的话是无法修改值的，而Parameter()函数可以看作为一种类型转变函数，将不可改值的tensor转换为可训练可修改的模型参数，即与model.parameters绑定在一起，register_parameter的意思是是否将这个参数放到model.parameters，None的意思是没有这个参数。
+
+这里有个if判断，用以判断q,k,v的最后一维是否一致，若一致，则一个大的权重矩阵全部乘然后分割出来，若不是，则各初始化各的，其实初始化是不会改变原来的形状的（如![](http://latex.codecogs.com/svg.latex?q = qW_q + b，见注释）。
 
 -  点积注意力
 
@@ -87,12 +109,12 @@ def scaled_dot_product_attention(
     在query, key, value上计算点积注意力，若有注意力遮盖则使用，并且应用一个概率为dropout_p的dropout
 
     参数：
-        - q: :math:`(B, Nt, E)` B代表batch size， Nt是目标语言序列长度，E是嵌入后的特征维度
-        - key: :math:`(B, Ns, E)` Ns是源语言序列长度
-        - value: :math:`(B, Ns, E)`与key形状一样
-        - attn_mask: 要么是3D的tensor，形状为:math:`(B, Nt, Ns)`或者2D的tensor，形状如:math:`(Nt, Ns)`
+        - q: shape:`(B, Nt, E)` B代表batch size， Nt是目标语言序列长度，E是嵌入后的特征维度
+        - key: shape:`(B, Ns, E)` Ns是源语言序列长度
+        - value: shape:`(B, Ns, E)`与key形状一样
+        - attn_mask: 要么是3D的tensor，形状为:`(B, Nt, Ns)`或者2D的tensor，形状如:`(Nt, Ns)`
 
-        - Output: attention values:math:`(B, Nt, E)`，与q的形状一致;attention weights: math:`(B, Nt, Ns)`
+        - Output: attention values: shape:`(B, Nt, E)`，与q的形状一致;attention weights: shape:`(B, Nt, Ns)`
     
     例子：
         >>> q = torch.randn((2,3,6))
@@ -117,3 +139,4 @@ def scaled_dot_product_attention(
     return output, attn 
 ```
 
+https://www.jianshu.com/p/d8b77cc02410
