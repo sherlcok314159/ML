@@ -77,6 +77,7 @@ def positional_encoding(X, num_features, dropout_p=0.0, max_len=512) -> Tensor:
 query，key，value是源语言序列（本文记为src）乘以对应的矩阵得到的，那么，那些矩阵从何而来（注意，因为大部分代码都是从源码中抽离出来的，因而常带有self等，最后会呈现组成好的，而行文过程中不会将整个结构呈现出来）：
 
 ```python
+from torch.nn.parameter import Parameter
 factory_kwargs = {'device': device, 'dtype': dtype}
 if self._qkv_same_embed_dim is False:
     # 初始化前后形状维持不变
@@ -102,7 +103,36 @@ self._reset_parameters()
 ```
 torch.empty是按照所给的形状形成对应的tensor，特点是填充的值还未初始化，类比torch.randn（标准正态分布），这就是一种初始化的方式。在PyTorch中，变量类型是tensor的话是无法修改值的，而Parameter()函数可以看作为一种类型转变函数，将不可改值的tensor转换为可训练可修改的模型参数，即与model.parameters绑定在一起，register_parameter的意思是是否将这个参数放到model.parameters，None的意思是没有这个参数。每个参数其实还有device和dtype两个属性，因此**factory_kwargs的意思是这两个参数是可变的。
 
-这里有个if判断，用以判断q,k,v的最后一维是否一致，若一致，则一个大的权重矩阵全部乘然后分割出来，若不是，则各初始化各的，其实初始化是不会改变原来的形状的（如![](http://latex.codecogs.com/svg.latex?q=qW_q+b)，见注释）。
+这里有个if判断，用以判断q,k,v的最后一维是否一致，若一致，则一个大的权重矩阵全部乘然后分割出来，若不是，则各初始化各的，其实初始化是不会改变原来的形状的（如![](http://latex.codecogs.com/svg.latex?q=qW_q+b_q)，见注释）。
+
+可以发现最后有一个_reset_parameters()函数，这个是用来初始化参数数值的。xavier_uniform意思是从[连续型均匀分布](https://zh.wikipedia.org/wiki/%E9%80%A3%E7%BA%8C%E5%9E%8B%E5%9D%87%E5%8B%BB%E5%88%86%E5%B8%83)里面随机取样出值来作为初始化的值，xavier_normal_取样的分布是正态分布。正因为初始化值在训练神经网络的时候很重要，所以才需要这两个函数。
+
+constant_意思是用所给值来填充输入的向量。
+
+另外，在PyTorch的源码里，似乎projection代表是一种线性变换的意思，in_proj_bias的意思就是一开始的线性变换的偏置
+
+```python
+from torch.nn.init import xavier_uniform_
+from torch.nn.init import constant_
+from torch.nn.init import xavier_normal_
+
+def _reset_parameters(self):
+    if self._qkv_same_embed_dim:
+        xavier_uniform_(self.in_proj_weight)
+    else:
+        xavier_uniform_(self.q_proj_weight)
+        xavier_uniform_(self.k_proj_weight)
+        xavier_uniform_(self.v_proj_weight)
+    if self.in_proj_bias is not None:
+        constant_(self.in_proj_bias, 0.)
+        constant_(self.out_proj.bias, 0.)
+
+```
+以上便是参数初始化过程，接下来是进行query,key和value的赋值
+
+***
+- q,k,v从何来？
+
 
 
 -  点积注意力
