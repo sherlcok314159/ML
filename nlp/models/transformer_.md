@@ -98,9 +98,10 @@ else:
     self.register_parameter('in_proj_bias', None)
 # 后期会将所有头的注意力拼接在一起然后乘上权重矩阵输出
 # out_proj是为了后期准备的
-self.out_proj = Linear(embed_dim, embed_dim, bias=bias, **factory_kwargs)
+self.out_proj = nn.Linear(embed_dim, embed_dim, bias=bias, **factory_kwargs)
 self._reset_parameters()
 ```
+
 torch.empty是按照所给的形状形成对应的tensor，特点是填充的值还未初始化，类比torch.randn（标准正态分布），这就是一种初始化的方式。在PyTorch中，变量类型是tensor的话是无法修改值的，而Parameter()函数可以看作为一种类型转变函数，将不可改值的tensor转换为可训练可修改的模型参数，即与model.parameters绑定在一起，register_parameter的意思是是否将这个参数放到model.parameters，None的意思是没有这个参数。每个参数其实还有device和dtype两个属性，因此**factory_kwargs的意思是这两个参数是可变的。
 
 这里有个if判断，用以判断q,k,v的最后一维是否一致，若一致，则一个大的权重矩阵全部乘然后分割出来，若不是，则各初始化各的，其实初始化是不会改变原来的形状的（如![](http://latex.codecogs.com/svg.latex?q=qW_q+b_q)，见注释）。
@@ -133,8 +134,66 @@ def _reset_parameters(self):
 ***
 - q,k,v从何来？
 
+对于`nn.functional.linear`函数，其实就是一个线性变换，与`nn.Linear`不同的是，前者可以提供权重矩阵和偏置，执行![](http://latex.codecogs.com/svg.latex?y=xW^T+b)，而后者是可以自由决定输出的维度，因为linear函数多层调用且无太大意义，这里省略。
 
+```python
 
+def _in_projection_packed(
+    q: Tensor,
+    k: Tensor,
+    v: Tensor,
+    w: Tensor,
+    b: Optional[Tensor] = None,
+) -> List[Tensor]:
+    r"""
+    用一个大的权重参数矩阵进行线性变换
+
+    参数:
+        q, k, v: 对自注意来说，三者都是src；对于seq2seq模型，k和v是一致的tensor。
+                 但它们的最后一维(num_features或者叫做embed_dim)都必须保持一致。
+        w: 用以线性变换的大矩阵，按照q,k,v的顺序压在一个tensor里面。
+        b: 用以线性变换的偏置，按照q,k,v的顺序压在一个tensor里面。
+
+    形状:
+        输入:
+        - q: shape:`(..., E)`，E是词嵌入的维度（下面出现的E均为此意）。
+        - k: shape:`(..., E)`
+        - v: shape:`(..., E)`
+        - w: shape:`(E * 3, E)`
+        - b: shape:`E * 3` 
+
+        输出:
+        - 输出列表 :`[q', k', v']`，q,k,v经过线性变换前后的形状都一致。
+    """
+    E = q.size(-1)
+    # 若为自注意，则q = k = v = src，因此它们的引用变量都是src
+    # 即k is v和q is k结果均为True
+    # 若为seq2seq，k = v，因而k is v的结果是True
+    if k is v:
+        if q is k:
+            return nn.functional.linear(q, w, b).chunk(3, dim=-1)
+        else:
+            # seq2seq模型
+            w_q, w_kv = w.split([E, E * 2])
+            if b is None:
+                b_q = b_kv = None
+            else:
+                b_q, b_kv = b.split([E, E * 2])
+            return (nn.functional.linear(q, w_q, b_q),) + nn.functional.linear(k, w_kv, b_kv).chunk(2, dim=-1)
+    else:
+        w_q, w_k, w_v = w.chunk(3)
+        if b is None:
+            b_q = b_k = b_v = None
+        else:
+            b_q, b_k, b_v = b.chunk(3)
+        return nn.functional.linear(q, w_q, b_q), nn.functional.linear(k, w_k, b_k), nn.functional.linear(v, w_v, b_v)
+
+if not use_seperate_proj_weight:
+    q, k, v = _in_projection(query, key, value, q_proj_weight, k_proj_weight, v_proj_weight, b_q, b_k, b_v)
+
+```
+
+***
 -  点积注意力
 
 ```python
