@@ -102,7 +102,7 @@ self._reset_parameters()
 ```
 torch.empty是按照所给的形状形成对应的tensor，特点是填充的值还未初始化，类比torch.randn（标准正态分布），这就是一种初始化的方式。在PyTorch中，变量类型是tensor的话是无法修改值的，而Parameter()函数可以看作为一种类型转变函数，将不可改值的tensor转换为可训练可修改的模型参数，即与model.parameters绑定在一起，register_parameter的意思是是否将这个参数放到model.parameters，None的意思是没有这个参数。每个参数其实还有device和dtype两个属性，因此**factory_kwargs的意思是这两个参数是可变的。
 
-这里有个if判断，用以判断q,k,v的最后一维是否一致，若一致，则一个大的权重矩阵全部乘然后分割出来，若不是，则各初始化各的，其实初始化是不会改变原来的形状的（如![](http://latex.codecogs.com/svg.latex?q=qW_q+b，见注释）。
+这里有个if判断，用以判断q,k,v的最后一维是否一致，若一致，则一个大的权重矩阵全部乘然后分割出来，若不是，则各初始化各的，其实初始化是不会改变原来的形状的（如![](http://latex.codecogs.com/svg.latex?q=qW_q+b)，见注释）。
 
 
 -  点积注意力
