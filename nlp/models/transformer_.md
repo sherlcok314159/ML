@@ -72,7 +72,7 @@ def positional_encoding(X, num_features, dropout_p=0.0, max_len=512) -> Tensor:
 
 多头注意力大概分为三个部分讲，分别为query，key，value初始化，注意力mask，点积注意力
 
-- q,k,v的产生
+- 初始化参数
 
 query，key，value是源语言序列（本文记为src）乘以对应的矩阵得到的，那么，那些矩阵从何而来（注意，因为大部分代码都是从源码中抽离出来的，因而常带有self等，最后会呈现组成好的，而行文过程中不会将整个结构呈现出来）：
 
@@ -98,7 +98,7 @@ else:
 # 后期会将所有头的注意力拼接在一起然后乘上权重矩阵输出
 # out_proj是为了后期准备的
 self.out_proj = Linear(embed_dim, embed_dim, bias=bias, **factory_kwargs)
-
+self._reset_parameters()
 ```
 torch.empty是按照所给的形状形成对应的tensor，特点是填充的值还未初始化，类比torch.randn（标准正态分布），这就是一种初始化的方式。在PyTorch中，变量类型是tensor的话是无法修改值的，而Parameter()函数可以看作为一种类型转变函数，将不可改值的tensor转换为可训练可修改的模型参数，即与model.parameters绑定在一起，register_parameter的意思是是否将这个参数放到model.parameters，None的意思是没有这个参数。每个参数其实还有device和dtype两个属性，因此**factory_kwargs的意思是这两个参数是可变的。
 
