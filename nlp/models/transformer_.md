@@ -70,7 +70,7 @@ def positional_encoding(X, num_features, dropout_p=0.0, max_len=512) -> Tensor:
 
 **<div id='multihead'>多头注意力</div>**
 
-多头注意力分为大概三个部分讲，点积注意力，初始化参数，以及遮挡机制
+多头注意力大概分为三个部分讲，点积注意力，初始化参数，以及遮挡机制
 
 -  点积注意力
 
@@ -92,7 +92,15 @@ def scaled_dot_product_attention(
         - value: :math:`(B, Ns, E)`与key形状一样
         - attn_mask: 要么是3D的tensor，形状为:math:`(B, Nt, Ns)`或者2D的tensor，形状如:math:`(Nt, Ns)`
 
-        - Output:注意力值形状为:math:`(B, Nt, E)`;注意力权重为:math:`(B, Nt, Ns)`
+        - Output: attention values:math:`(B, Nt, E)`，与q的形状一致;attention weights: math:`(B, Nt, Ns)`
+    
+    例子：
+        >>> q = torch.randn((2,3,6))
+        >>> k = torch.randn((2,4,6))
+        >>> v = torch.randn((2,4,6))
+        >>> out = scaled_dot_product_attention(q, k, v)
+        >>> out[0].shape, out[1].shape
+        >>> torch.Size([2, 3, 6]) torch.Size([2, 3, 4])
     '''
     B, Nt, E = q.shape
     q = q / math.sqrt(E)
