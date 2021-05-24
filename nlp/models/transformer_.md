@@ -70,7 +70,7 @@ def positional_encoding(X, num_features, dropout_p=0.0, max_len=512) -> Tensor:
 
 **<div id='multihead'>多头注意力</div>**
 
-多头注意力大概分为三个部分讲，分别为参数初始化，q,k,v从何来，注意力mask，点积注意力
+多头注意力大概分为三个部分讲，分别为参数初始化，q,k,v从何来，遮挡机制，点积注意力
 
 - 初始化参数
 
@@ -193,13 +193,14 @@ q, k, v = _in_projection(query, key, value, q_proj_weight, k_proj_weight, v_proj
 ```
 ***
 
-- 注意力遮挡机制
+- 遮挡机制
 
 对于attn_mask来说，若为2D，形状如`(L, S)`，L和S分别代表着目标语言和源语言序列长度，若为3D,形状如`(N * num_heads, L, S)`，N代表着batch_size，num_heads代表注意力头的数目。若为ByteTensor，非0的位置会被忽略不做注意力；若为BoolTensor，True对应的位置会被忽略；若为数值，则会直接加到attn_weights。
 
 因为在decoder解码的时候，只能看该位置和它之前的，如果看后面就犯规了，所以需要attn_mask遮挡住。
 
 下面函数直接复制PyTorch的，意思是确保不同维度的mask形状正确以及不同类型的转换
+
 
 ```python
 if attn_mask is not None:
@@ -222,6 +223,30 @@ if attn_mask is not None:
     else:
         raise RuntimeError(f"attn_mask's dimension {attn_mask.dim()} is not supported")
 
+```
+与attn_mask不同的是，key_padding_mask是用来遮挡住key里面的值，详细来说应该是`<PAD>`，被忽略的情况与attn_mask一致。
+
+```python
+# 将key_padding_mask值改为布尔值
+if key_padding_mask is not None and key_padding_mask.dtype == torch.uint8:
+    warnings.warn("Byte tensor for key_padding_mask in nn.MultiheadAttention is deprecated. Use bool tensor instead.")
+    key_padding_mask = key_padding_mask.to(torch.bool)
+```
+
+先介绍两个小函数，`logical_or`，输入两个tensor，并对这两个tensor里的值做`逻辑或`运算，只有当两个值均为0的时候才为`False`，其他时候均为`True`，另一个是`masked_fill`，输入是一个mask，和用以填充的值。mask由1，0组成，0的位置值维持不变，1的位置用新值填充。
+```python
+a = torch.tensor([0,1,10,0],dtype=torch.int8)
+b = torch.tensor([4,0,1,0],dtype=torch.int8)
+print(torch.logical_or(a,b))
+# tensor([ True,  True,  True, False])
+```
+
+```python
+r = torch.tensor([[0,0,0,0],[0,0,0,0]])
+mask = torch.tensor([[1,1,1,1],[0,0,0,0]])
+print(r.masked_fill(mask,1))
+# tensor([[1, 1, 1, 1],
+#         [0, 0, 0, 0]])
 ```
 
 
