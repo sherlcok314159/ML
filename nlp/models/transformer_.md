@@ -380,6 +380,7 @@ def multi_head_attention_forward(
         key_padding_mask = key_padding_mask.to(torch.bool)
     
     # reshape q,k,v将Batch放在第一维以适合点积注意力
+    # 同时为多头机制，将不同的头拼在一起组成一层
     q = q.contiguous().view(tgt_len, bsz * num_heads, head_dim).transpose(0, 1)
     k = k.contiguous().view(-1, bsz * num_heads, head_dim).transpose(0, 1)
     v = v.contiguous().view(-1, bsz * num_heads, head_dim).transpose(0, 1)
@@ -412,7 +413,6 @@ def multi_head_attention_forward(
         return attn_output, attn_output_weights.sum(dim=1) / num_heads
     else:
         return attn_output, None
-
 
 ```
 
