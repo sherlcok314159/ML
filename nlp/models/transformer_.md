@@ -6,7 +6,7 @@
 - [词嵌入](#embed)
 - [位置编码](#pos)
 - [多头注意力](#multihead)
-- [残差相连](#add&norm)
+- [搭建Transformer](#build)
 - [总结](#conclusions)
 - [参考文献](#references)
 
@@ -37,12 +37,12 @@ print(embed(X).shape)
 
 ```python
 Tensor = torch.Tensor
-def positional_encoding(X, num_features, dropout_p=0.0, max_len=512) -> Tensor:
+def positional_encoding(X, num_features, dropout_p=0.1, max_len=512) -> Tensor:
     r'''
         给输入加入位置编码
     参数：
         - num_features: 输入进来的维度
-        - dropout_p: dropout的概率，当其为非零元素时执行dropout
+        - dropout_p: dropout的概率，当其为非零时执行dropout
         - max_len: 句子的最大长度，默认512
     
     形状：
@@ -136,7 +136,7 @@ def _reset_parameters(self):
 对于`nn.functional.linear`函数，其实就是一个线性变换，与`nn.Linear`不同的是，前者可以提供权重矩阵和偏置，执行![](http://latex.codecogs.com/svg.latex?y=xW^T+b)，而后者是可以自由决定输出的维度，因为linear函数多层调用且无太大意义，这里省略。
 
 ```python
-
+import torch.nn.functional as F
 def _in_projection_packed(
     q: Tensor,
     k: Tensor,
@@ -170,7 +170,7 @@ def _in_projection_packed(
     # 若为seq2seq，k = v，因而k is v的结果是True
     if k is v:
         if q is k:
-            return nn.functional.linear(q, w, b).chunk(3, dim=-1)
+            return F.linear(q, w, b).chunk(3, dim=-1)
         else:
             # seq2seq模型
             w_q, w_kv = w.split([E, E * 2])
@@ -178,14 +178,14 @@ def _in_projection_packed(
                 b_q = b_kv = None
             else:
                 b_q, b_kv = b.split([E, E * 2])
-            return (nn.functional.linear(q, w_q, b_q),) + nn.functional.linear(k, w_kv, b_kv).chunk(2, dim=-1)
+            return (F.linear(q, w_q, b_q),) + F.linear(k, w_kv, b_kv).chunk(2, dim=-1)
     else:
         w_q, w_k, w_v = w.chunk(3)
         if b is None:
             b_q = b_k = b_v = None
         else:
             b_q, b_k, b_v = b.chunk(3)
-        return nn.functional.linear(q, w_q, b_q), nn.functional.linear(k, w_k, b_k), nn.functional.linear(v, w_v, b_v)
+        return F.linear(q, w_q, b_q), F.linear(k, w_k, b_k), F.linear(v, w_v, b_v)
 
 q, k, v = _in_projection_packed(query, key, value, in_proj_weight, in_proj_bias)
 
@@ -308,9 +308,9 @@ def scaled_dot_product_attention(
     if attn_mask is not None:
         attn += attn_mask 
     # attn意味着目标序列的每个词对源语言序列做注意力
-    attn = nn.functional.softmax(attn, dim=-1)
+    attn = F.softmax(attn, dim=-1)
     if dropout_p:
-        attn = nn.functional.dropout(attn, p=dropout_p)
+        attn = F.dropout(attn, p=dropout_p)
     # (B, Nt, Ns) x (B, Ns, E) -> (B, Nt, E)
     output = torch.bmm(attn, v)
     return output, attn 
@@ -429,7 +429,7 @@ class MultiheadAttention(nn.Module):
         >>> attn_output, attn_output_weights = multihead_attn(query, key, value)
     '''
     def __init__(self, embed_dim, num_heads, dropout=0., bias=True,
-                 kdim=None, vdim=None, batch_first=False, device=None, dtype=None) -> None:
+                 kdim=None, vdim=None, batch_first=False) -> None:
         factory_kwargs = {'device': device, 'dtype': dtype}
         super(MultiheadAttention, self).__init__()
         self.embed_dim = embed_dim
@@ -522,7 +522,68 @@ print(attn_output.shape, attn_output_weights.shape)
 # torch.Size([2, 4, 100])
 # torch.Size([2, 4, 100]) torch.Size([4, 2, 2])
 ```
+***
+**<div id='build'>搭建Transformer</div>**
 
+![](https://github.com/sherlcok314159/ML/blob/main/nlp/Images/encoder.png)
+
+```python
+class TransformerEncoderLayer(nn.Module):
+    r'''
+    参数：
+        d_model: 词嵌入的维度
+        nhead: 多头注意力中平行头的数目
+        dim_feedforward: 全连接层的神经元的数目，又称经过此层输入的维度（Default = 2048）
+        dropout: dropout的概率
+        activation: 两个线性层中间的激活函数，默认relu或gelu
+        lay_norm_eps: layer normalization中的微小量，防止分母为0
+        batch_first: 若`True`，则为(batch, seq, feture)，若为`False`，则为(seq, batch, feature)
+
+    例子：
+        >>> encoder_layer = nn.TransformerEncoderLayer(d_model=512, nhead=8)
+        >>> src = torch.randn((32, 10, 512))
+        >>> out = encoder_layer(src)
+    '''
+
+    def __init__(self, d_model, nhead, dim_feedforward=2048, dropout=0.1, activation="relu",
+                 layer_norm_eps=1e-5, batch_first=False) -> None:
+        super(TransformerEncoderLayer, self).__init__()
+        self.self_attn = MultiheadAttention(d_model, nhead, dropout=dropout, batch_first=batch_first)
+        self.linear1 = nn.Linear(d_model, dim_feedforward)
+        self.dropout = nn.Dropout(dropout)
+        self.linear2 = nn.Linear(dim_feedforward, d_model)
+
+        self.norm1 = nn.LayerNorm(d_model, eps=layer_norm_eps)
+        self.norm2 = nn.LayerNorm(d_model, eps=layer_norm_eps)
+        self.dropout1 = nn.Dropout(dropout)
+        self.dropout2 = nn.Dropout(dropout)
+
+
+    def forward(self, src: Tensor, src_mask: Optional[Tensor] = None, src_key_padding_mask: Optional[Tensor] = None) -> Tensor:
+        src = positional_encoding(src, src.shape[-1])
+        src2 = self.self_attn(src, src, src, attn_mask=src_mask, 
+        key_padding_mask=src_key_padding_mask)[0]
+        src = src + self.dropout1(src2)
+        src = self.norm1(src)
+        src2 = self.linear2(self.dropout(F.relu(self.linear1(src))))
+        src = src + self.dropout(src2)
+        src = self.norm2(src)
+        return src
+
+```
+
+```python
+
+encoder_layer = TransformerEncoderLayer(d_model=512, nhead=8)
+src = torch.randn((32, 10, 512))
+out = encoder_layer(src)
+print(out.shape)
+# torch.Size([32, 10, 512])
+```
+
+
+
+```
 
 
 ***
