@@ -508,6 +508,23 @@ class MultiheadAttention(nn.Module):
             return attn_output, attn_output_weights
 ```
 
+接下来可以实践一下，并且把位置编码加起来，可以发现加入位置编码和进行多头注意力的前后形状都是不会变的
+
+```python
+# 因为batch_first为False,所以src的shape：`(seq, batch, embed_dim)`
+src = torch.randn((2,4,100))
+src = positional_encoding(src,100,0.1)
+print(src.shape)
+multihead_attn = MultiheadAttention(100, 4, 0.1)
+attn_output, attn_output_weights = multihead_attn(src,src,src)
+print(attn_output.shape, attn_output_weights.shape)
+
+# torch.Size([2, 4, 100])
+# torch.Size([2, 4, 100]) torch.Size([4, 2, 2])
+```
+
+
+
 ***
 **<div id='references'>参考文献</div>**
 
