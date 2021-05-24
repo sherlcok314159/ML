@@ -61,7 +61,7 @@ def positional_encoding(X, num_features, dropout_p=0.0, max_len=512) -> Tensor:
     X_ = torch.arange(max_len,dtype=torch.float32).reshape(-1,1) / torch.pow(
         10000,
         torch.arange(0,num_features,2,dtype=torch.float32) /num_features)
-    P[:,:0::2] = torch.sin(X_)
+    P[:,:,0::2] = torch.sin(X_)
     P[:,:,1::2] = torch.cos(X_)
     X = X + P[:,:X.shape[1],:].to(X.device)
     return dropout(X)
@@ -78,31 +78,30 @@ query，key，value是源语言序列（本文记为src）乘以对应的矩阵�
 
 ```python
 from torch.nn.parameter import Parameter
-factory_kwargs = {'device': device, 'dtype': dtype}
 if self._qkv_same_embed_dim is False:
     # 初始化前后形状维持不变
     # (seq_length x embed_dim) x (embed_dim x embed_dim) ==> (seq_length x embed_dim)
-    self.q_proj_weight = Parameter(torch.empty((embed_dim, embed_dim), **factory_kwargs))
-    self.k_proj_weight = Parameter(torch.empty((embed_dim, self.kdim), **factory_kwargs))
-    self.v_proj_weight = Parameter(torch.empty((embed_dim, self.vdim), **factory_kwargs))
+    self.q_proj_weight = Parameter(torch.empty((embed_dim, embed_dim)))
+    self.k_proj_weight = Parameter(torch.empty((embed_dim, self.kdim)))
+    self.v_proj_weight = Parameter(torch.empty((embed_dim, self.vdim)))
     self.register_parameter('in_proj_weight', None)
 else:
-    self.in_proj_weight = Parameter(torch.empty((3 * embed_dim, embed_dim), **factory_kwargs))
+    self.in_proj_weight = Parameter(torch.empty((3 * embed_dim, embed_dim)))
     self.register_parameter('q_proj_weight', None)
     self.register_parameter('k_proj_weight', None)
     self.register_parameter('v_proj_weight', None)
 
 if bias:
-    self.in_proj_bias = Parameter(torch.empty(3 * embed_dim), **factory_kwargs)
+    self.in_proj_bias = Parameter(torch.empty(3 * embed_dim))
 else:
     self.register_parameter('in_proj_bias', None)
 # 后期会将所有头的注意力拼接在一起然后乘上权重矩阵输出
 # out_proj是为了后期准备的
-self.out_proj = nn.Linear(embed_dim, embed_dim, bias=bias, **factory_kwargs)
+self.out_proj = nn.Linear(embed_dim, embed_dim, bias=bias)
 self._reset_parameters()
 ```
 
-torch.empty是按照所给的形状形成对应的tensor，特点是填充的值还未初始化，类比torch.randn（标准正态分布），这就是一种初始化的方式。在PyTorch中，变量类型是tensor的话是无法修改值的，而Parameter()函数可以看作为一种类型转变函数，将不可改值的tensor转换为可训练可修改的模型参数，即与model.parameters绑定在一起，register_parameter的意思是是否将这个参数放到model.parameters，None的意思是没有这个参数。每个参数其实还有device和dtype两个属性，因此**factory_kwargs的意思是这两个参数是可变的。
+torch.empty是按照所给的形状形成对应的tensor，特点是填充的值还未初始化，类比torch.randn（标准正态分布），这就是一种初始化的方式。在PyTorch中，变量类型是tensor的话是无法修改值的，而Parameter()函数可以看作为一种类型转变函数，将不可改值的tensor转换为可训练可修改的模型参数，即与model.parameters绑定在一起，register_parameter的意思是是否将这个参数放到model.parameters，None的意思是没有这个参数。
 
 这里有个if判断，用以判断q,k,v的最后一维是否一致，若一致，则一个大的权重矩阵全部乘然后分割出来，若不是，则各初始化各的，其实初始化是不会改变原来的形状的（如![](http://latex.codecogs.com/svg.latex?q=qW_q+b_q)，见注释）。
 
@@ -445,21 +444,21 @@ class MultiheadAttention(nn.Module):
         assert self.head_dim * num_heads == self.embed_dim, "embed_dim must be divisible by num_heads"
 
         if self._qkv_same_embed_dim is False:
-            self.q_proj_weight = Parameter(torch.empty((embed_dim, embed_dim), **factory_kwargs))
-            self.k_proj_weight = Parameter(torch.empty((embed_dim, self.kdim), **factory_kwargs))
-            self.v_proj_weight = Parameter(torch.empty((embed_dim, self.vdim), **factory_kwargs))
+            self.q_proj_weight = Parameter(torch.empty((embed_dim, embed_dim)))
+            self.k_proj_weight = Parameter(torch.empty((embed_dim, self.kdim)))
+            self.v_proj_weight = Parameter(torch.empty((embed_dim, self.vdim)))
             self.register_parameter('in_proj_weight', None)
         else:
-            self.in_proj_weight = Parameter(torch.empty((3 * embed_dim, embed_dim), **factory_kwargs))
+            self.in_proj_weight = Parameter(torch.empty((3 * embed_dim, embed_dim)))
             self.register_parameter('q_proj_weight', None)
             self.register_parameter('k_proj_weight', None)
             self.register_parameter('v_proj_weight', None)
 
         if bias:
-            self.in_proj_bias = Parameter(torch.empty(3 * embed_dim, **factory_kwargs))
+            self.in_proj_bias = Parameter(torch.empty(3 * embed_dim))
         else:
             self.register_parameter('in_proj_bias', None)
-        self.out_proj = Linear(embed_dim, embed_dim, bias=bias, **factory_kwargs)
+        self.out_proj = Linear(embed_dim, embed_dim, bias=bias)
 
         self._reset_parameters()
 
@@ -487,7 +486,7 @@ class MultiheadAttention(nn.Module):
 
         if not self._qkv_same_embed_dim:
             attn_output, attn_output_weights = F.multi_head_attention_forward(
-                query, key, value, self.embed_dim, self.num_heads,
+                query, key, value, self.num_heads,
                 self.in_proj_weight, self.in_proj_bias,
                 self.dropout, self.out_proj.weight, self.out_proj.bias,
                 training=self.training,
@@ -497,7 +496,7 @@ class MultiheadAttention(nn.Module):
                 v_proj_weight=self.v_proj_weight)
         else:
             attn_output, attn_output_weights = F.multi_head_attention_forward(
-                query, key, value, self.embed_dim, self.num_heads,
+                query, key, value, self.num_heads,
                 self.in_proj_weight, self.in_proj_bias,
                 self.dropout, self.out_proj.weight, self.out_proj.bias,
                 training=self.training,
