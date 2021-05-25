@@ -270,7 +270,7 @@ class MultiheadAttention(nn.Module):
             self.in_proj_bias = Parameter(torch.empty(3 * embed_dim))
         else:
             self.register_parameter('in_proj_bias', None)
-        self.out_proj = Linear(embed_dim, embed_dim, bias=bias)
+        self.out_proj = nn.Linear(embed_dim, embed_dim, bias=bias)
         self._reset_parameters()
 
     def _reset_parameters(self):
@@ -353,7 +353,6 @@ class TransformerEncoderLayer(nn.Module):
 
 
     def forward(self, src: Tensor, src_mask: Optional[Tensor] = None, src_key_padding_mask: Optional[Tensor] = None) -> Tensor:
-        src = positional_encoding(src, src.shape[-1])
         src2 = self.self_attn(src, src, src, attn_mask=src_mask, 
         key_padding_mask=src_key_padding_mask)[0]
         src = src + self.dropout1(src2)
@@ -460,7 +459,7 @@ class TransformerEncoder(nn.Module):
         self.norm = norm
     
     def forward(self, src: Tensor, mask: Optional[Tensor] = None, src_key_padding_mask: Optional[Tensor] = None) -> Tensor:
-        output = src
+        output = positional_encoding(src, src.shape[-1])
         for _ in range(self.num_layers):
             output = self.layer(output, src_mask=mask, src_key_padding_mask=src_key_padding_mask)
         
@@ -621,6 +620,7 @@ class Transformer(nn.Module):
         for p in self.parameters():
             if p.dim() > 1:
                 xavier_uniform_(p)
+
 
 transformer_model = Transformer(nhead=16, num_encoder_layers=12)
 src = torch.rand((10, 32, 512))

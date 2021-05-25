@@ -463,7 +463,7 @@ class MultiheadAttention(nn.Module):
             self.in_proj_bias = Parameter(torch.empty(3 * embed_dim))
         else:
             self.register_parameter('in_proj_bias', None)
-        self.out_proj = Linear(embed_dim, embed_dim, bias=bias)
+        self.out_proj = nn.Linear(embed_dim, embed_dim, bias=bias)
 
         self._reset_parameters()
 
@@ -612,7 +612,7 @@ class TransformerEncoder(nn.Module):
         self.norm = norm
     
     def forward(self, src: Tensor, mask: Optional[Tensor] = None, src_key_padding_mask: Optional[Tensor] = None) -> Tensor:
-        output = src
+        output = positional_encoding(src, src.shape[-1])
         for _ in range(self.num_layers):
             output = self.layer(output, src_mask=mask, src_key_padding_mask=src_key_padding_mask)
         
