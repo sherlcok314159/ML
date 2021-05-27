@@ -36,11 +36,12 @@
 ***
 ### <div id='transformer'>Transformer时代</div>
 
-- [文本预处理](nlp/embedded.md)
+- [词嵌入综述](nlp/embedded.md)
 
-- NLP模型原理讲解
+- NLP模型讲解
     - [Transformer原理篇](nlp/models/transformer.md)
     - [Transformer代码（PyTorch）](nlp/models/transformer_.md)
+    - [Transformer翻译模型（PyTorch）](nlp/models/transformer_translate.md)
     - [Bert](nlp/models/bert.md)
 
 - Bert文本任务源码解读系列
