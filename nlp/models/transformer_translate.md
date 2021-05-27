@@ -18,11 +18,13 @@ import torch.nn as nn
 t = torch.tensor([[2, 3, 4, 1]])
 embed = nn.Embedding(5, 6)
 print(embed(t))
+'''
 tensor([[[-0.5557,  0.9911, -0.2482,  1.5019,  0.9141,  0.0697],
          [-1.5058, -0.4237,  1.1189, -0.7472, -0.9834, -1.2829],
          [-0.8558,  0.4753,  0.0555, -0.3921, -0.0232,  0.2518],
          [-0.3563,  0.7707, -0.8797,  0.6719, -0.4903,  0.0508]]],
        grad_fn=<EmbeddingBackward>)
+'''       
 ```
 
 - PAD MASK
@@ -47,7 +49,8 @@ def get_attn_pad_mask(seq_q, seq_k):
 
 ```python
 q = torch.tensor([[2, 3, 4, 1, 0, 0]])
-print(get_attn_pad_mask(q, q))
+mask = get_attn_pad_mask(q, q) 
+print(mask)
 '''
 tensor([[[False, False, False, False,  True,  True],
          [False, False, False, False,  True,  True],
@@ -60,6 +63,10 @@ tensor([[[False, False, False, False,  True,  True],
 这里有一个容易混淆的点，`get_attn_pad_mask`里的参数只是需要索引转成tensor之后的就可以了，不必经过Embedding层，因为我们获得注意力mask只是想将索引为0的部分给填充掉，况且若经过Embedding之后也找不到0了。而做注意力点积的时候，是需要经过Embedding之后的。
 
 观察下面的示例，不难发现mask里面为`True`的全被填上了`-inf`，这样经过softmax之后值即为0，是不会对结果造成影响的。
+
+attn_mask有两种主流操作，一是先不管，正常进行，在softmax之前masked_fill将`1`和`True`的地方填充为`-inf`；二是一开始先将mask的组成变为`0`和`-inf`，然后直接加上去，加0的地方自然无影响，加`-inf`地方进行softmax之后全为0。
+
+下面为最后填充的做法
 
 ```python
 embed = nn.Embedding(5, 6)
@@ -95,8 +102,82 @@ tensor([[[1.0929e-01, 9.0916e-03, 6.2105e-02, 8.1951e-01, 0.0000e+00,
 '''
 ```
 
+当然也可用第二种方法，因为每次Embedding权重不一，执行了两种操作我分别用了不同的文件来执行，故结果有所不同。
+
+```python
+mask = mask.float().masked_fill(mask == 1, float("-inf")).masked_fill(mask == 0, float(0.0))
+print(mask)
+'''
+tensor([[[0., 0., 0., 0., -inf, -inf],
+         [0., 0., 0., 0., -inf, -inf],
+         [0., 0., 0., 0., -inf, -inf],
+         [0., 0., 0., 0., -inf, -inf],
+         [0., 0., 0., 0., -inf, -inf],
+         [0., 0., 0., 0., -inf, -inf]]])
+'''
+attn += mask
+attn = softmax(attn)
+print(attn)
+'''
+tensor([[[7.2725e-01, 1.4629e-03, 2.6949e-01, 1.7929e-03, 0.0000e+00,
+          0.0000e+00],
+         [1.4819e-01, 6.5444e-03, 1.0565e-05, 8.4526e-01, 0.0000e+00,
+          0.0000e+00],
+         [1.0830e-02, 7.3555e-01, 2.4050e-01, 1.3125e-02, 0.0000e+00,
+          0.0000e+00],
+         [1.0847e-02, 9.8162e-01, 6.8870e-03, 6.4141e-04, 0.0000e+00,
+          0.0000e+00],
+         [1.1121e-01, 7.8785e-01, 5.9839e-05, 1.0088e-01, 0.0000e+00,
+          0.0000e+00],
+         [1.1121e-01, 7.8785e-01, 5.9839e-05, 1.0088e-01, 0.0000e+00,
+          0.0000e+00]]], grad_fn=<SoftmaxBackward>)
+'''
+```
+
 - Position Mask
 
 众所周知，在解码的时候，首先还是对decode_input做自注意处理，这个时候我们需要输入进一个词从而让机器决定下一个可能出现的词，若对decode_input不做处理的话，全部看到就犯规了，等于白训练。
 
-即position mask的作用是若某位置只能关照它和它之前的位置，而不是之后的位置也可以看到。
+即position mask的作用是让某位置只能关照它和它之前的位置，而不是之后的位置也可以看到。
+
+```python
+def generate_square_subsequent_mask(sz: int):
+    mask = (torch.triu(torch.ones(sz, sz)) == 1).transpose(0, 1)
+    mask = mask.float().masked_fill(mask == 0, float('-inf')).masked_fill(mask == 1, float(0.0))
+    return mask
+```
+
+不妨继续上面的例子，q依旧是`[[2, 3, 4, 1, 0, 0]](tensor形式)`，此时q变成了解码器里面的输入，不仅要遮挡住PAD，同时还得让每个位置只能瞻前不能顾后
+
+```python
+position_mask = generate_square_subsequent_mask(q.size[-1])
+print(position_mask)
+'''
+tensor([[0., -inf, -inf, -inf, -inf, -inf],
+        [0., 0., -inf, -inf, -inf, -inf],
+        [0., 0., 0., -inf, -inf, -inf],
+        [0., 0., 0., 0., -inf, -inf],
+        [0., 0., 0., 0., 0., -inf],
+        [0., 0., 0., 0., 0., 0.]])
+'''
+# 整合PAD MASK和位置遮挡
+attn_mask = mask + position_mask
+attn += attn_mask
+attn = softmax(attn)
+print(attn)
+'''
+tensor([[[1.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000],
+         [0.2119, 0.7881, 0.0000, 0.0000, 0.0000, 0.0000],
+         [0.1788, 0.6952, 0.1260, 0.0000, 0.0000, 0.0000],
+         [0.1402, 0.2170, 0.1522, 0.4907, 0.0000, 0.0000],
+         [0.1363, 0.0096, 0.0186, 0.8355, 0.0000, 0.0000],
+         [0.1363, 0.0096, 0.0186, 0.8355, 0.0000, 0.0000]]],
+       grad_fn=<SoftmaxBackward>)
+'''
+```
+
+两种seq2seq模型必备的注意力机制到此为止，接下来讲一下transformer翻译模型的各个模块
+***
+
+### <div id='encode'>Encoder</div>
+
