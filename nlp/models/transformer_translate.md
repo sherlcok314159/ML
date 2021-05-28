@@ -322,7 +322,9 @@ class EncoderLayer(nn.Module):
 
 - DecoderLayer
 
-记得上面的dec_inputs是两种MASK结合一起的，即为`dec_self_attn_mask`，`dec_enc_self_mask`是针对enc_inputs来说的key_padding_mask，与上面的enc_self_attn_mask本质一致，只是shape不一样，一个是`batch_size x enc_size x enc_size`，另一个是`batch_size x dec_size x enc_size`。
+记得上面的dec_inputs是两种MASK结合一起的，即为`dec_self_attn_mask`，`dec_enc_self_mask`是针对enc_inputs来说的key_padding_mask，与上面的enc_self_attn_mask本质一致，只是shape不一样，一个是`[batch_size, enc_size, enc_size]`，另一个是`[batch_size, dec_size, enc_size]`。
+
+dec_inputs首先经过解码器的自注意运算，然后充当query去查enc_outputs
 
 ```python
 class DecoderLayer(nn.Module):
