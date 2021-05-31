@@ -8,6 +8,7 @@
 - [Encoder](#encoder)
 - [模型搭建](#model)
 - [训练函数](#train)
+- [参考文献](#references)
 
 ### <div id='preprocess'>Pipeline构建</div>
 
@@ -165,7 +166,148 @@ print(len(val_pairs))
 
 第一部分我们构建了数据基础处理的流水线，接下来构建可以迭代并且符合PyTorch数据格式的DataLoader。
 
+不同的Field其实是针对不同的数据的，`SRC_TEXT`和`TGT_TEXT`分别针对法语和英语（本次的任务是法译英）
 
+```python
+tokenizer = lambda x: x.split()
+
+SRC_TEXT = Field(sequential=True,
+tokenize=tokenizer,
+# +2 因为<start>和<end>
+fix_length=MAX_LENGTH+2,
+preprocessing=lambda x:["<start>"] + x + ["<end>"])
+
+TGT_TEXT = Field(sequential=True,
+tokenize=tokenizer,
+fix_length=MAX_LENGTH+2,
+preprocessing=lambda x:["<start>"] + x + ["<end>"])
+
+def get_dataset(pairs, src, tgt):
+    # field信息：fields dict([str, Field])
+    fields = [("src",src),("tgt",tgt)]
+    # list(Example)
+    examples = [] 
+    # tqdm用以计时
+    for fra, eng in tqdm(pairs):
+        # 创建Example时会调用field.preprocessing方法
+        examples.append(Example.fromlist([fra,eng],fields))
+    return examples, fields
+```
+
+准备训练和测试数据集
+
+```python
+ds_train = Dataset(*get_dataset(train_pairs, SRC_TEXT, TGT_TEXT))
+ds_val = Dataset(*get_dataset(val_pairs, SRC_TEXT, TGT_TEXT))
+
+print(len(ds_train[0].src), ds_train[0].src)
+print(len(ds_train[0].tgt), ds_train[0].tgt)
+
+# 9 ['<start>', 'tu', 'n', 'es', 'qu', 'un', 'lache', '.', '<end>']
+# 8 ['<start>', 'you', 're', 'just', 'a', 'coward', '.', '<end>']
+```
+
+构建法语词表，这里务必注意`<pad>`是1而非0，`<unk>`表示unknown，即为词表中未出现过的词
+
+```python
+SRC_TEXT.build_vocab(ds_train)
+print(len(SRC_TEXT.vocab))
+print(SRC_TEXT.vocab.itos[0])
+print(SRC_TEXT.vocab.itos[1])
+print(SRC_TEXT.vocab.itos[2])
+print(SRC_TEXT.vocab.itos[3])
+print(SRC_TEXT.vocab.stoi["<start>"])
+print(SRC_TEXT.vocab.stoi["<end>"])
+
+# 3901
+# <unk>
+# <pad>
+# <end>
+# <start>
+# 3
+# 2
+```
+
+模拟decode
+
+```python
+res = []
+for id in [3, 5, 6, 71, 48, 5, 8, 32, 743, 4, 2, 1]:
+    res.append(SRC_TEXT.vocab.itos[id])
+print(" ".join(res)+"\n")
+# <start> je suis fais si je vous l examen . <end> <pad>
+```
+构建英文词表，关于`<unk>`,`<pad>`均与法语词表一致
+
+```python
+TGT_TEXT.build_vocab(ds_train)
+print(len(TGT_TEXT.vocab))
+# 2591
+```
+
+```python
+BATCH_SIZE = 64
+
+# 构建数据管道迭代器
+# split可以分开处理训练和验证集
+# train_iter由许多batch组成
+train_iter, val_iter = Iterator.splits(
+    (ds_train, ds_val),
+    # batch内部对数据是否排序
+    # 上面有ds_train[0].src
+    # 根据每一条数据src的长度进行降序排列
+    sort_within_batch=True,
+    sort_key=lambda x:len(x.src),
+    batch_sizes=(BATCH_SIZE, BATCH_SIZE)
+)
+
+# 查看数据管道信息，会触发postprocessing，如果有的话
+for batch in train_iter:
+    # 注意，这里text第一维是seq_len，而非batch
+    print(batch.src[:,0])
+    print(batch.src.shape, batch.tgt.shape)
+    break
+```
+
+```python
+tensor([3, 29, 17, 33, 82, 31, 381, 363, 3591, 4, 2, 1])
+torch.Size([12, 64]) torch.Size([12, 64])
+```
+
+构建DataLoader
+```python
+class DataLoader:
+    def __init__(self, data_iter):
+        self.data_iter = data_iter
+        self.length = len(data_iter)
+    
+    def __len__(self):
+        return self.length
+    
+    def __iter__(self):
+        # 注意，此处调整text的shape为batch_first
+        for batch in self.data_iter:
+            yield(torch.transpose(batch.src, 0, 1), torch.transpose(batch.tgt, 0, 1))
+
+train_dataloader = DataLoader(train_iter)
+val_dataloader = DataLoader(val_iter)
+```
+
+```python
+# 查看数据管道
+print("len(train_dataloader):",len(train_dataloader))
+for batch_src, batch_tgt in train_dataloader:
+    print(batch_src.shape, batch_tgt.shape)
+    print(batch_src[0], batch_src.dtype)
+    print(batch_tgt[0], batch_tgt.dtype)
+    break
+
+# len(train_dataloader): 133
+# torch.Size([64, 12]) torch.Size([64, 12])
+# tensor([  3,  13,  15,  21,   9,  17,  46,  10, 230,   4,   2,   1]) torch.int64
+# tensor([  3,  14,   6,  10, 210,   4,   2,   1,   1,   1,   1,   1]) torch.int64
+
+```
 
 
 ***
@@ -765,3 +907,10 @@ if __name__ == "__main__":
 # 保留网络参数
 torch.save(model.state_dict(),"transformer_parameters") 
 ```
+
+***
+### <div id='references'>参考文献</div>
+
+[Step By Step](https://blog.csdn.net/xixiaoyaoww/article/details/105683495?ops_request_misc=%257B%2522request%255Fid%2522%253A%2522162246804316780271557962%2522%252C%2522scm%2522%253A%252220140713.130102334.pc%255Fblog.%2522%257D&request_id=162246804316780271557962&biz_id=0&utm_medium=distribute.pc_search_result.none-task-blog-2~blog~first_rank_v2~rank_v29-1-105683495.nonecase&utm_term=%E7%BF%BB%E8%AF%91&spm=1018.2226.3001.4450)
+
+https://blog.csdn.net/u010366748/article/details/111269231
