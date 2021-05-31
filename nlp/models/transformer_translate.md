@@ -2,13 +2,43 @@
 
 章节
 
-- [数据预处理](#preproces)
+- [数据预处理](#preprocess)
+- [DataLoader构建](#build)
 - [MASK机制](#mask)
 - [Encoder](#encoder)
 - [模型搭建](#model)
 - [训练函数](#train)
 
 ### <div id='preprocess'>数据预处理</div>
+
+必备包的导入
+
+```python
+import torch 
+import torchtext
+
+from sklearn.model_selection import train_test_split
+
+import random
+import re 
+from tqdm import tqdm
+import pandas as pd
+import numpy as np 
+from matplotlib import pyplot as plt 
+import unicodedata
+import datetime
+import time
+from torchtext.legacy.data import Field, Dataset, Example, Iterator
+import copy
+import torch.nn as nn 
+import matplotlib.pyplot as plt
+import os 
+import pdb # jupyter调试用，一般不需要
+
+use_cuda = torch.cuda.is_available()
+device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+print("device=",device)
+```
 
 首先用pandas读入：
 
@@ -87,8 +117,54 @@ print(pairs[1])
 # ['run !', 'cours !']
 ```
 
+```python
+# 文件是英译法，我们实现的是法译英，所以进行了reverse，所以pair[1]是英语
+# 为了快速训练，仅保留“我是”“你是”“他是”等简单句子，并且删除原始文本长度大于10个标记的样本
+def filterPair(p):
+    return len(p[0].split(' ')) < MAX_LENGTH and len(p[1].split(' ')) < MAX_LENGTH and \
+           p[0].startswith(eng_prefixes)  # startswith first arg must be str or a tuple of str
+
+
+def filterPairs(pairs):
+    # 过滤，并交换句子顺序，得到法英句子对（之前是英法句子对）
+    return [[pair[1], pair[0]] for pair in pairs if filterPair(pair)]
+
+
+pairs = filterPairs(pairs)
+```
+
+```python
+print('after trimming, pairs num=', len(pairs))
+print(pairs[0])
+print(pairs[1])
+print(random.choice(pairs))
+print(pairs[0:2])
+
+# after trimming, pairs num= 10599
+# ['j ai ans .', 'i m .']
+# ['je vais bien .', 'i m ok .']
+# ['on nous fait chanter .', 'we re being blackmailed .']
+# [['j ai ans .', 'i m .'], ['je vais bien .', 'i m ok .']]
+```
+以上代码的目的是首先对特殊字符进行修正`（i'm ==> i m)`并将字符与字母之间留出空格，其次按照序列长度和特定开头对数据进行筛选以便后期的训练，最终将`pairs`变成大列表，每一个元素即为小列表，小列表第一，二个元素分别为法文和英文序列。
+
+```python
+# 划分数据集： 训练集和验证集
+train_pairs, val_pairs = train_test_split(pairs, test_size=0.2, random_state=1234)
+
+print(len(train_pairs))
+print(len(val_pairs))
+
+# 8479
+# 2120
+```
+
 ***
 
+### <div id='build'>DataLoader构建</div>
+
+
+***
 ### <div id='mask'>MASK机制</div>
 
 源码在[colab](https://colab.research.google.com/drive/1CILp7vwm8bZy6dOnRuwPeujP3-Mdm67z?usp=sharing)上，数据集若要自己下载[data](../RNN/eng-fra.txt)
