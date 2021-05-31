@@ -986,6 +986,7 @@ print(df_history)
 ![](https://github.com/sherlcok314159/ML/blob/main/nlp/Images/res.png)
 
 
+
 接下来把训练结果可视化：
 
 ```python
