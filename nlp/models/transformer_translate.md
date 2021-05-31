@@ -5,8 +5,8 @@
 - [Pipeline构建](#preprocess)
 - [DataLoader构建](#build)
 - [MASK机制](#mask)
-- [Encoder](#encoder)
 - [模型搭建](#model)
+- [自定义学习率](#special)
 - [训练函数](#train)
 - [参考文献](#references)
 
@@ -308,8 +308,6 @@ for batch_src, batch_tgt in train_dataloader:
 # tensor([  3,  14,   6,  10, 210,   4,   2,   1,   1,   1,   1,   1]) torch.int64
 
 ```
-
-
 ***
 ### <div id='mask'>MASK机制</div>
 
@@ -490,14 +488,17 @@ tensor([[[1.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000],
 
 - Positional Encoding
 
+这里我多返回了一个位置矩阵用以后面可视化
+
 ```python
 Tensor = torch.Tensor
-def positional_encoding(X, num_features, dropout_p=0.1, max_len=512) -> Tensor:
+# 给一个tensor所有位置的位置编码
+def positional_encoding(X, num_features, dropout_p=0.1, max_len=128) -> Tensor:
     r'''
         给输入加入位置编码
     参数：
         - num_features: 输入进来的维度
-        - dropout_p: dropout的概率，当其为非零时执行dropout
+        - dropout_p: dropout的概率，当其为非零元素时执行dropout
         - max_len: 句子的最大长度，默认512
     
     形状：
@@ -519,25 +520,45 @@ def positional_encoding(X, num_features, dropout_p=0.1, max_len=512) -> Tensor:
     P[:,:,0::2] = torch.sin(X_)
     P[:,:,1::2] = torch.cos(X_)
     X = X + P[:,:X.shape[1],:].to(X.device)
-    return dropout(X)
+    return dropout(X), P
 ```
+定义可视化注意力图函数
+```python
+def draw_pos_encoding(pos_encoding, d_model):
+    plt.figure()
+    plt.pcolormesh(pos_encoding[0],cmap="RdBu")
+    plt.xlabel("Depth")
+    plt.xlim((0, d_model))
+    plt.ylabel("Position")
+    plt.colorbar()
+    plt.show()
+
+X = torch.randn((2,4,128))
+pos_encoding = positional_encoding(X, 128)
+draw_pos_encoding(pos_encoding[1], 128)
+```
+
+![](https://github.com/sherlcok314159/ML/blob/main/nlp/Images/pos.png)
+
+
 - MASK 
 
 ```python
-# 返回True和False组成的MASK
+# 在NLP中，<PAD>用以填充句子，而这没有携带任何信息，故需要被mask掉
+# 返回True和False组成的mask
 def get_attn_pad_mask(seq_q, seq_k):
     batch_size, len_q = seq_q.size()
     batch_size, len_k = seq_k.size()
-    # eq(zero) is PAD token
-    pad_attn_mask = seq_k.data.eq(0).unsqueeze(1)  # batch_size x 1 x len_k(=len_q), one is masking
-    return pad_attn_mask.expand(batch_size, len_q, len_k)  # batch_size x len_q x len_k
+    # eq(1) 即为<PAD>
+    # 注意torchtext是<pad>为1而非0
+    pad_attn_mask = seq_k.data.eq(1).unsqueeze(1)
+    return pad_attn_mask.expand(batch_size, len_q, len_k)
 
-# 返回0和1组成的MASK
+# 返回1，0组成的mask
 def get_attn_subsequent_mask(seq):
     attn_shape = [seq.size(0), seq.size(1), seq.size(1)]
-    subsequent_mask = np.triu(np.ones(attn_shape), k=1)
-    # 转换为tensor，并且修改数据类型：dtype=torch.uint8
-    subsequent_mask = torch.from_numpy(subsequent_mask).byte()
+    subsequent_mask = torch.triu(torch.ones(attn_shape),1)
+    subsequent_mask = subsequent_mask.byte()
     return subsequent_mask
 ```
 
@@ -547,15 +568,28 @@ def get_attn_subsequent_mask(seq):
 class ScaledDotProductAttention(nn.Module):
     def __init__(self):
         super(ScaledDotProductAttention, self).__init__()
-    
+
     def forward(self, Q, K, V, attn_mask):
-        scores = torch.matmul(Q, K.transpose(-1, -2))
-        # 1的位置全部填上"-inf"
-        scores.masked_fill(attn_mask, float("-inf"))
+        # scores : [batch_size x n_heads x len_q(=len_k) x len_k(=len_q)]
+        scores = torch.matmul(Q, K.transpose(-1, -2)) / np.sqrt(d_k) 
+        # 1的位置全部填充以忽略
+        scores.masked_fill_(attn_mask, -1e9)
         attn = nn.Softmax(dim=-1)(scores)
         context = torch.matmul(attn, V)
         return context, attn
 ```
+
+下面的矩阵初始化以及乘积可能有些迷惑，先看一个引例
+
+```python
+w = nn.Linear(128, 10 * 8)
+q = torch.randn((10, 10, 128))
+# 第一个10不动，(10 x 128) x (128 x 80) => 10 x 80
+# 无转置，其实是q x w
+w(q).shape
+# torch.Size([10, 10, 80])
+```
+
 
 - MultiHeadAttention
 
@@ -570,40 +604,53 @@ class MultiHeadAttention(nn.Module):
         self.layer_norm = nn.LayerNorm(d_model)
 
     def forward(self, Q, K, V, attn_mask):
-        # q: [batch_size x len_q x d_model], k: [batch_size x len_k x d_model], v: [batch_size x len_k x d_model]
+        # Q: [batch_size x len_q x d_model], K: [batch_size x len_k x d_model], V: [batch_size x len_k x d_model]
+
         residual, batch_size = Q, Q.size(0)
+        
         # (B, S, D) -proj-> (B, S, D) -split-> (B, S, H, W) -trans-> (B, H, S, W)
-        q_s = self.W_Q(Q).view(batch_size, -1, n_heads, d_k).transpose(1,2)  # q_s: [batch_size x n_heads x len_q x d_k]
-        k_s = self.W_K(K).view(batch_size, -1, n_heads, d_k).transpose(1,2)  # k_s: [batch_size x n_heads x len_k x d_k]
-        v_s = self.W_V(V).view(batch_size, -1, n_heads, d_v).transpose(1,2)  # v_s: [batch_size x n_heads x len_k x d_v]
-
-        attn_mask = attn_mask.unsqueeze(1).repeat(1, n_heads, 1, 1) # attn_mask : [batch_size x n_heads x len_q x len_k]
-
-        # context: [batch_size x n_heads x len_q x d_v], attn: [batch_size x n_heads x len_q(=len_k) x len_k(=len_q)]
+        # q_s: [batch_size x n_heads x len_q x d_k]
+        q_s = self.W_Q(Q).view(batch_size, -1, n_heads, d_k).transpose(1,2)
+        
+        # k_s: [batch_size x n_heads x len_k x d_k]  
+        k_s = self.W_K(K).view(batch_size, -1, n_heads, d_k).transpose(1,2)
+        
+        # v_s: [batch_size x n_heads x len_k x d_v]  
+        v_s = self.W_V(V).view(batch_size, -1, n_heads, d_v).transpose(1,2)  
+        
+        # attn_mask : [batch_size x n_heads x len_q x len_k]
+        attn_mask = attn_mask.unsqueeze(1).repeat(1, n_heads, 1, 1)
+        
+        # context: [batch_size x n_heads x len_q x d_v]
+        # attn: [batch_size x n_heads x len_q(=len_k) x len_k(=len_q)]
         context, attn = ScaledDotProductAttention()(q_s, k_s, v_s, attn_mask)
-        context = context.transpose(1, 2).contiguous().view(batch_size, -1, n_heads * d_v) # context: [batch_size x len_q x n_heads * d_v]
+        
+        # context: [batch_size x len_q x n_heads * d_v]
+        context = context.transpose(1, 2).contiguous().view(batch_size, -1, n_heads * d_v) 
+        
+        # output: [batch_size x len_q x d_model]
         output = self.linear(context)
-        return self.layer_norm(output + residual), attn # output: [batch_size x len_q x d_model]
+        return self.layer_norm(output + residual), attn 
 ```
 
 
 - PoswiseFeedForwardNet
 
-与以往不同的是，这里用1 x 1的卷积来代替全连接层
 
 ```python
 class PoswiseFeedForwardNet(nn.Module):
     def __init__(self):
         super(PoswiseFeedForwardNet, self).__init__()
-        self.conv1 = nn.Conv1d(in_channels=d_model, out_channels=d_ff, kernel_size=1)
-        self.conv2 = nn.Conv1d(in_channels=d_ff, out_channels=d_model, kernel_size=1)
+        self.linear1 = nn.Linear(d_model, d_ff)
+        self.linear2 = nn.Linear(d_ff, d_model)
         self.layer_norm = nn.LayerNorm(d_model)
-
+        self.dropout = nn.Dropout(0.1)
+    
     def forward(self, inputs):
-        residual = inputs # inputs : [batch_size, len_q, d_model]
-        output = nn.ReLU()(self.conv1(inputs.transpose(1, 2)))
-        output = self.conv2(output).transpose(1, 2)
-        return self.layer_norm(output + residual)
+        residual = inputs 
+        output = self.dropout(nn.ReLU()(self.linear1(inputs)))
+        output = self.layer_norm(self.dropout(self.linear2(output)) + residual)
+        return output
 ```
 
 - EncoderLayer
@@ -618,9 +665,8 @@ class EncoderLayer(nn.Module):
         self.pos_ffn = PoswiseFeedForwardNet()
 
     def forward(self, enc_inputs, enc_self_attn_mask):
-        # 自注意因而q,k,v均为enc_inputs
         enc_outputs, attn = self.enc_self_attn(enc_inputs, enc_inputs, enc_inputs, enc_self_attn_mask) 
-        enc_outputs = self.pos_ffn(enc_outputs) # enc_outputs: [batch_size x len_q x d_model]
+        enc_outputs = self.pos_ffn(enc_outputs)
         return enc_outputs, attn
 ```
 
@@ -655,11 +701,11 @@ class Encoder(nn.Module):
         super(Encoder, self).__init__()
         self.src_emb = nn.Embedding(src_vocab_size, d_model)
         self.layers = nn.ModuleList([EncoderLayer() for _ in range(n_layers)])
+        self.dropout = nn.Dropout(0.1)
 
-    def forward(self, enc_inputs): # enc_inputs : [batch_size x source_len]
-        enc_outputs = self.src_emb(enc_inputs)
-        enc_outputs = positional_encoding(enc_outputs,d_model)
-        enc_self_attn_mask = get_attn_pad_mask(enc_inputs, enc_inputs)
+    def forward(self, enc_inputs):
+        enc_outputs = self.dropout(positional_encoding(self.src_emb(enc_inputs), d_model)[0])
+        enc_self_attn_mask = get_attn_pad_mask(enc_inputs, enc_inputs).to(device)
         enc_self_attns = []
         for layer in self.layers:
             enc_outputs, enc_self_attn = layer(enc_outputs, enc_self_attn_mask)
@@ -675,19 +721,19 @@ class Decoder(nn.Module):
         self.tgt_emb = nn.Embedding(tgt_vocab_size, d_model)
         self.layers = nn.ModuleList([DecoderLayer() for _ in range(n_layers)])
 
-    def forward(self, dec_inputs, enc_inputs, enc_outputs): # dec_inputs : [batch_size x target_len]
-        dec_outputs = self.tgt_emb(dec_inputs)
-        dec_outputs = positional_encoding(dec_outputs,d_model)        
-        dec_self_attn_pad_mask = get_attn_pad_mask(dec_inputs, dec_inputs)
-        dec_self_attn_subsequent_mask = get_attn_subsequent_mask(dec_inputs)
+    def forward(self, dec_inputs, enc_inputs, enc_outputs):
+        dec_outputs = positional_encoding(self.tgt_emb(dec_inputs), d_model)[0]
+        dec_self_attn_pad_mask = get_attn_pad_mask(dec_inputs, dec_inputs).to(device)
+        dec_self_attn_subsequent_mask = get_attn_subsequent_mask(dec_inputs).to(device)
         # torch.gt严格大于
         dec_self_attn_mask = torch.gt((dec_self_attn_pad_mask + dec_self_attn_subsequent_mask), 0)
 
-        dec_enc_attn_mask = get_attn_pad_mask(dec_inputs, enc_inputs)
+        dec_enc_attn_mask = get_attn_pad_mask(dec_inputs, enc_inputs).to(device)
 
         dec_self_attns, dec_enc_attns = [], []
         for layer in self.layers:
-            dec_outputs, dec_self_attn, dec_enc_attn = layer(dec_outputs, enc_outputs, dec_self_attn_mask, dec_enc_attn_mask)
+            dec_outputs, dec_self_attn, dec_enc_attn = layer(dec_outputs, enc_outputs, 
+            dec_self_attn_mask, dec_enc_attn_mask)
             dec_self_attns.append(dec_self_attn)
             dec_enc_attns.append(dec_enc_attn)
         return dec_outputs, dec_self_attns, dec_enc_attns
@@ -697,19 +743,71 @@ class Decoder(nn.Module):
 
 ```python
 class Transformer(nn.Module):
-  
     def __init__(self):
         super(Transformer, self).__init__()
         self.encoder = Encoder()
         self.decoder = Decoder()
         self.projection = nn.Linear(d_model, tgt_vocab_size, bias=False)
-
     def forward(self, enc_inputs, dec_inputs):
         enc_outputs, enc_self_attns = self.encoder(enc_inputs)
         dec_outputs, dec_self_attns, dec_enc_attns = self.decoder(dec_inputs, enc_inputs, enc_outputs)
-        dec_logits = self.projection(dec_outputs) # dec_logits : [batch_size x src_vocab_size x tgt_vocab_size]
-        return dec_logits.view(-1, dec_logits.size(-1)), enc_self_attns, dec_self_attns, dec_enc_attns
+        dec_logits = self.projection(dec_outputs) 
+        return dec_logits, enc_self_attns, dec_self_attns, dec_enc_attns
 ```
+***
+### <div id='special'>自定义学习率</div>
+
+按照论文里面的，我们还需要自定义学习率
+
+![](https://github.com/sherlcok314159/ML/blob/main/nlp/Images/math.png)
+
+```python
+class CustomSchedule(torch.optim.lr_scheduler._LRScheduler):
+    def __init__(self, optimizer, warm_steps=4):
+        self.optimizer = optimizer
+        self.warmup_steps = warm_steps
+
+        super(CustomSchedule, self).__init__(optimizer)
+
+    def get_lr(self):
+        arg1 = self._step_count ** (-0.5)
+        arg2 = self._step_count * (self.warmup_steps ** (-1.5))
+        dynamic_lr = (d_model ** (-0.5)) * min(arg1, arg2)
+        return [dynamic_lr for group in self.optimizer.param_groups]
+```
+
+接下来可视化看一下学习率的变化情况
+
+```python
+# 测试
+import warnings
+warnings.filterwarnings("ignore")
+
+n_layers, d_model, n_heads, d_ff  = 6, 512, 8, 2048
+
+src_vocab_size = len(SRC_TEXT.vocab) 
+tgt_vocab_size = len(TGT_TEXT.vocab) 
+
+d_k = d_v = d_model // n_heads
+
+model = Transformer().to(device)
+optimizer = torch.optim.Adam(model.parameters(), lr=0, betas=(0.9, 0.98), eps=1e-9)
+learning_rate = CustomSchedule(optimizer, warm_steps=4000)
+
+
+lr_list = []
+for i in range(1, 20000):
+    learning_rate.step()
+    lr_list.append(learning_rate.get_lr()[0])
+plt.figure()
+plt.plot(np.arange(1, 20000), lr_list)
+plt.legend(['warmup=4000 steps'])
+plt.ylabel("Learning Rate")
+plt.xlabel("Train Step")
+plt.show()
+```
+
+![](https://github.com/sherlcok314159/ML/blob/main/nlp/Images/lr.png)
 
 关于数据处理，因为数据集与RNN的seq2seq翻译模型一致，所以处理方式几乎相同，除了多了个`<PAD>`，这里不再赘述，同样这里只是Demo级，选取了特定前缀以及特定最大长度的。
 
