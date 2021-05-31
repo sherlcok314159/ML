@@ -983,8 +983,7 @@ print(df_history)
 
 截取部分，如下：
 
-![](https://github.com/sherlcok314159/ML/blob/main/nlp/Images/res.png)
-
+![](https://github.com/sherlcok314159/ML/blob/main/nlp/Images/show.png)
 
 
 接下来把训练结果可视化：
@@ -1140,7 +1139,7 @@ batch_translate(sentence_pairs)
 ```
 截取部分
 
-![](https://github.com/sherlcok314159/ML/blob/main/nlp/Images/2.png)
+![](https://github.com/sherlcok314159/ML/blob/main/nlp/Images/res.png)
 
 最终可视化注意力权重
 
@@ -1248,7 +1247,7 @@ class PoswiseFeedForwardNet(nn.Module):
 
 ![](https://github.com/sherlcok314159/ML/blob/main/nlp/Images/2.png)
 
-![](https://github.com/sherlcok314159/ML/blob/main/nlp/Images/conv1.png)
+![](https://github.com/sherlcok314159/ML/blob/main/nlp/Images/cov1.png)
 
 ![](https://github.com/sherlcok314159/ML/blob/main/nlp/Images/conv2.png)
 
