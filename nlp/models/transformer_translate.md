@@ -13,7 +13,7 @@
 - [讨论](#discuss)
     - 卷积代替全连接？
     - Bert作为Encoder?
-    - 注意力头剪枝?
+    - 多头注意力真的那么有效？
     - epoch越多越好？
 - [参考文献](#references)
 
@@ -1254,6 +1254,22 @@ class PoswiseFeedForwardNet(nn.Module):
 - Bert作为Encoder?
 
 写完transformer的教程本打算直接硬上bert来train一发，看了论文才发现事情没那么简单。ICLR2020这篇Incorporating BERT into Neural Machine Translation（参考文献第二个）详细讲了这件事，总结来说就是一般情况使用bert结果不会好反倒糟，不值得花气力，当然，如果要在词料丰富和词料贫乏的语言之间构造翻译器，那么bert作为encoder可能有奇效。
+
+- 多头注意力真的那么有效？
+
+为了验证多头注意力是否真的像论文说的那么有效，这里将注意力头数目改为1
+
+![](https://github.com/sherlcok314159/ML/blob/main/nlp/Images/one_head.png)
+
+![](https://github.com/sherlcok314159/ML/blob/main/nlp/Images/one_head_1.png)
+
+![](https://github.com/sherlcok314159/ML/blob/main/nlp/Images/one_head_2.png)
+
+看一下注意力权重图，不难发现其实
+
+![](https://github.com/sherlcok314159/ML/blob/main/nlp/Images/one.png)
+
+![](https://github.com/sherlcok314159/ML/blob/main/nlp/Images/one_2.png)
 
 - epoch越多越好？
 
