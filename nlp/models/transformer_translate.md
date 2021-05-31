@@ -11,9 +11,10 @@
 - [模型训练](#train)
 - [评估](#eval)
 - [讨论](#discuss)
-    - [卷积代替全连接？](#conv)
-    - [Bert作为Encoder？](#bert)
-    - [注意力头剪枝](#prune)
+    - 卷积代替全连接？
+    - Bert作为Encoder?
+    - 注意力头剪枝?
+    - epoch越多越好？
 - [参考文献](#references)
 
 源码在[colab](https://colab.research.google.com/drive/1CILp7vwm8bZy6dOnRuwPeujP3-Mdm67z?usp=sharing)上，数据集若要自己下载[data](../RNN/eng-fra.txt)
@@ -1221,10 +1222,52 @@ translate(sentence_pairs[2], plot=2)
 
 接下来列举了一些有趣的讨论：
 
+- 卷积代替全连接？
 
+这里使用的是1 x 1的卷积，不会改变shape，只会改变通道数，具体关于这方面的阐述，请移步[CNN](https://github.com/sherlcok314159/ML/blob/main/NN/CNN/cnn.md)，这样的话就是不同通道之间进行线性组合，如原来的通道数由2变为1，则原来两个相加，卷积的时候也是进行矩阵乘法运算。全连接层也是乘上参数矩阵，这两者应该差不多，详见下方：
+
+```python
+class PoswiseFeedForwardNet(nn.Module):
+    def __init__(self):
+        super(PoswiseFeedForwardNet, self).__init__()
+        self.conv1 = nn.Conv1d(in_channels=d_model, out_channels=d_ff, kernel_size=1)
+        self.conv2 = nn.Conv1d(in_channels=d_ff, out_channels=d_model, kernel_size=1)
+        self.layer_norm = nn.LayerNorm(d_model)
+
+    def forward(self, inputs):
+        residual = inputs # inputs : [batch_size, len_q, d_model]
+        output = nn.ReLU()(self.conv1(inputs.transpose(1, 2)))
+        output = self.conv2(output).transpose(1, 2)
+        return self.layer_norm(output + residual)
+```
+
+以下是我训练的结果，其实结果证明确实是差不多的，前两张为全连接层
+
+![](https://github.com/sherlcok314159/ML/blob/main/nlp/Images/1.png)
+
+![](https://github.com/sherlcok314159/ML/blob/main/nlp/Images/2.png)
+
+![](https://github.com/sherlcok314159/ML/blob/main/nlp/Images/conv1.png)
+
+![](https://github.com/sherlcok314159/ML/blob/main/nlp/Images/conv2.png)
+
+- Bert作为Encoder?
+
+写完transformer的教程本打算直接硬上bert来train一发，看了论文才发现事情没那么简单。ICLR2020这篇Incorporating BERT into Neural Machine Translation（参考文献第二个）详细讲了这件事，总结来说就是一般情况使用bert结果不会好反倒糟，不值得花气力，当然，如果要在词料丰富和词料贫乏的语言之间构造翻译器，那么bert作为encoder可能有奇效。
+
+- epoch越多越好？
+
+我设了两组对照，分别为20和40，两组的原因是40中包括了其他大于20的
+
+
+![](https://github.com/sherlcok314159/ML/blob/main/nlp/Images/20.png)
+
+![](https://github.com/sherlcok314159/ML/blob/main/nlp/Images/40.png)
 
 ***
 ### <div id='references'>参考文献</div>
+
+https://arxiv.org/pdf/2002.06823.pdf
 
 [Step By Step](https://blog.csdn.net/xixiaoyaoww/article/details/105683495?ops_request_misc=%257B%2522request%255Fid%2522%253A%2522162246804316780271557962%2522%252C%2522scm%2522%253A%252220140713.130102334.pc%255Fblog.%2522%257D&request_id=162246804316780271557962&biz_id=0&utm_medium=distribute.pc_search_result.none-task-blog-2~blog~first_rank_v2~rank_v29-1-105683495.nonecase&utm_term=%E7%BF%BB%E8%AF%91&spm=1018.2226.3001.4450)
 
