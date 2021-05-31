@@ -1257,7 +1257,7 @@ class PoswiseFeedForwardNet(nn.Module):
 
 - 多头注意力真的那么有效？
 
-为了验证多头注意力是否真的像论文说的那么有效，这里将注意力头数目改为1
+为了验证多头注意力是否真的像论文说的那么有效，这里将注意力头数目改为1，其实光一个头也可以有不错的结果，多头注意力不是很强，强的是注意力机制
 
 ![](https://github.com/sherlcok314159/ML/blob/main/nlp/Images/one_head.png)
 
@@ -1265,7 +1265,7 @@ class PoswiseFeedForwardNet(nn.Module):
 
 ![](https://github.com/sherlcok314159/ML/blob/main/nlp/Images/one_head_2.png)
 
-看一下注意力权重图，不难发现其实
+看一下注意力权重图，不难发现其实关照的和上面多头的差不多
 
 ![](https://github.com/sherlcok314159/ML/blob/main/nlp/Images/one.png)
 
