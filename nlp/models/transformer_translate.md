@@ -9,7 +9,7 @@
 
 ### <div id='mask'>MASK机制</div>
 
-源码在[colab](https://colab.research.google.com/drive/1kMj7KLhaaGySGwIz1k8CedH0i5JJW57t?usp=sharing)上，数据集若要自己下载[data](../RNN/eng-fra.txt)
+源码在[colab](https://colab.research.google.com/drive/1CILp7vwm8bZy6dOnRuwPeujP3-Mdm67z?usp=sharing)上，数据集若要自己下载[data](../RNN/eng-fra.txt)
 
 原始的句子首先需要转换为词表中的索引，然后进入词嵌入层。举个例子，假如某个时间步长上输入句子为`"I love u"`，src_vocab（源语言词表）为`{"SOS":0,"EOS":1,"I":2,"love":3,"u":4}`，`SOS`和`EOS`代表句子的开头和末尾，那么输入句子变为`[[2, 3, 4, 1]]`，接下来进入词嵌入层，目前我们的词表只有5个词，所以`embed = nn.Embedding(5, 6)`，用一个6维向量表示每一个词，如下所示：
 
