@@ -2,14 +2,14 @@
 
 章节
 
-- [数据预处理](#preprocess)
+- [Pipeline构建](#preprocess)
 - [DataLoader构建](#build)
 - [MASK机制](#mask)
 - [Encoder](#encoder)
 - [模型搭建](#model)
 - [训练函数](#train)
 
-### <div id='preprocess'>数据预处理</div>
+### <div id='preprocess'>Pipeline构建</div>
 
 必备包的导入
 
@@ -162,6 +162,10 @@ print(len(val_pairs))
 ***
 
 ### <div id='build'>DataLoader构建</div>
+
+第一部分我们构建了数据基础处理的流水线，接下来构建可以迭代并且符合PyTorch数据格式的DataLoader。
+
+
 
 
 ***
