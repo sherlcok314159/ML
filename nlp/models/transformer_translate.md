@@ -2,10 +2,92 @@
 
 章节
 
+- [数据预处理](#preproces)
 - [MASK机制](#mask)
 - [Encoder](#encoder)
 - [模型搭建](#model)
 - [训练函数](#train)
+
+### <div id='preprocess'>数据预处理</div>
+
+首先用pandas读入：
+
+```python
+data_df = pd.read_csv("./eng-fra.txt",encoding="utf-8",sep="\t",header=None,names=["eng","fra"],index_col=False)
+
+print(data_df.shape)
+print(data_df.values.shape)
+print(data_df.values[0])
+print(data_df.values[0].shape)
+data_df.head()
+
+# (135842, 2)
+# (135842, 2)
+# ['Go.' 'Va !']
+# (2,)
+'''
+	eng	fra
+0	Go.	Va !
+1	Run!	Cours !
+2	Run!	Courez !
+3	Wow!	Ça alors !
+4	Fire!	Au feu !
+'''
+```
+详见注释
+
+```python
+# 数据预处理
+# 将unicode字符串转化为ASCII码：
+def unicodeToAscii(s):
+    return ''.join(c for c in unicodedata.normalize('NFD', s) if unicodedata.category(c) != 'Mn')
+
+
+# 规范化字符串
+def normalizeString(s):
+    # print(s) # list  ['Go.']
+    # s = s[0]
+    s = s.lower().strip()
+    s = unicodeToAscii(s)
+    s = re.sub(r"([.!?])", r" \1", s)  # \1表示group(1)即第一个匹配到的 即匹配到'.'或者'!'或者'?'后，一律替换成'空格.'或者'空格!'或者'空格？'
+    s = re.sub(r"[^a-zA-Z.!?]+", r" ", s)  # 非字母以及非.!?的其他任何字符 一律被替换成空格
+    s = re.sub(r'[\s]+', " ", s)  # 将出现的多个空格，都使用一个空格代替。例如：w='abc  1   23  1' 处理后：w='abc 1 23 1'
+    return s
+```
+
+```python
+print(normalizeString('Va !'))
+print(normalizeString('Go.'))
+
+# va !
+# go .
+```
+
+
+```python
+MAX_LENGTH = 10
+
+eng_prefixes = (  # 之前normalizeString()已经对撇号等进行了过滤，以及清洗，小写化等
+    "i am ", "i m ",
+    "he is", "he s ",
+    "she is", "she s ",
+    "you are", "you re ",
+    "we are", "we re ",
+    "they are", "they re "
+)
+
+# print(eng_prefixes)
+pairs = [[normalizeString(s) for s in line] for line in data_df.values]
+print('pairs num=', len(pairs))
+print(pairs[0])
+print(pairs[1])
+
+# pairs num= 135842
+# ['go .', 'va !']
+# ['run !', 'cours !']
+```
+
+***
 
 ### <div id='mask'>MASK机制</div>
 
