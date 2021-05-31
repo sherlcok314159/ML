@@ -7,8 +7,12 @@
 - [MASK机制](#mask)
 - [模型搭建](#model)
 - [自定义学习率](#special)
-- [训练函数](#train)
+- [train和validation](#mix)
+- [模型训练](#train)
+- [评估](#eval)
 - [参考文献](#references)
+
+源码在[colab](https://colab.research.google.com/drive/1CILp7vwm8bZy6dOnRuwPeujP3-Mdm67z?usp=sharing)上，数据集若要自己下载[data](../RNN/eng-fra.txt)
 
 ### <div id='preprocess'>Pipeline构建</div>
 
@@ -311,8 +315,6 @@ for batch_src, batch_tgt in train_dataloader:
 ***
 ### <div id='mask'>MASK机制</div>
 
-源码在[colab](https://colab.research.google.com/drive/1CILp7vwm8bZy6dOnRuwPeujP3-Mdm67z?usp=sharing)上，数据集若要自己下载[data](../RNN/eng-fra.txt)
-
 原始的句子首先需要转换为词表中的索引，然后进入词嵌入层。举个例子，假如某个时间步长上输入句子为`"I love u"`，src_vocab（源语言词表）为`{"SOS":0,"EOS":1,"I":2,"love":3,"u":4}`，`SOS`和`EOS`代表句子的开头和末尾，那么输入句子变为`[[2, 3, 4, 1]]`，接下来进入词嵌入层，目前我们的词表只有5个词，所以`embed = nn.Embedding(5, 6)`，用一个6维向量表示每一个词，如下所示：
 
 ```python
@@ -543,6 +545,8 @@ draw_pos_encoding(pos_encoding[1], 128)
 
 - MASK 
 
+上述的讲解以及大多数情况pad mask均为0，这里torchtext是1，尤其小心！
+
 ```python
 # 在NLP中，<PAD>用以填充句子，而这没有携带任何信息，故需要被mask掉
 # 返回True和False组成的mask
@@ -757,7 +761,7 @@ class Transformer(nn.Module):
 ***
 ### <div id='special'>自定义学习率</div>
 
-按照论文里面的，我们还需要自定义学习率
+按照论文里面的，我们还需要自定义学习率，不难发现一开始学习率上升比较快，后期学习率缓慢下降，最终趋于平衡
 
 ![](https://github.com/sherlcok314159/ML/blob/main/nlp/Images/math.png)
 
@@ -809,202 +813,391 @@ plt.show()
 
 ![](https://github.com/sherlcok314159/ML/blob/main/nlp/Images/lr.png)
 
-关于数据处理，因为数据集与RNN的seq2seq翻译模型一致，所以处理方式几乎相同，除了多了个`<PAD>`，这里不再赘述，同样这里只是Demo级，选取了特定前缀以及特定最大长度的。
+***
+### <div id='mix'>train和validation</div>
+
+先是train_step，详见注释
 
 ```python
-SOS_token = 1
-EOS_token = 2
+def train_step(inp,tgt,criterion):
+    # 采取teacher_forcing，将上一个时间步的标签直接输入模型
+    tgt_input = tgt[:,:-1]
+    tgt_real = tgt[:,1:]
 
+    # to(device)不能少，否则默认cpu
+    inp = inp.to(device)
+    tgt_input = tgt_input.to(device)
+    tgt_real = tgt_real.to(device)
 
-class Lang:
-    def __init__(self,name):
-        self.name = name
-        # 形如 {"hello" : 3}
-        self.word2index = {"PAD":0,"SOS":1,"EOS":2}
-        # 统计每一个单词出现的次数
-        self.word2count = {}
-        # self.index2word = {0:"SOS",1:"EOS"}
-        self.index2word = {0:"PAD",1:"SOS",2:"EOS"}
-        # 统计训练集出现的单词数
-        # self.n_words = 2 # SOS 和 EOS已经存在了
-        self.n_words = 3
+    model.train()
+    optimizer.zero_grad()
 
-    def addSentence(self,sentence):
-        # 第一行为 Go.  Va !
-        # 前面是英语，后面是法语，中间用tab分隔
-        for word in sentence.split(" "):
-            self.addWord(word)
-    
-    def addWord(self,word):
-        if word not in self.word2index:
-            self.word2index[word] = self.n_words
-            self.word2count[word] = 1
-            # 用现有的总词数作为新的单词的索引
-            self.index2word[self.n_words] = word
-            self.n_words += 1
-        else:
-            self.word2count[word] += 1
+    # pred ==> [bz, seq_len, vocab_size]
+    # tgt_real ==> [bz, seq_len]
+    pred, enc_self_attns, dec_self_attns, dec_enc_attns = model(inp, tgt_input)
+    # pdb.set_trace()
+    # transformed_pred ==> [bz x seq_len, vocab_size]
+    # transformed_tgt_real ==> [bz x seq_len, ]
+    loss = criterion(pred.view(-1, pred.size(-1)), tgt_real.contiguous().view(-1))
+    # sum()不能忘，item()只能转换标量值为python值而非向量
+    loss_ = loss.sum().item()
+
+    # pred_ ==> [bz, seq_len]
+    pred_ = pred.argmax(dim=-1)
+    acc = pred_.eq(tgt_real)
+    # acc计算比例需要算占总比多少
+    # 画图时必须要item()
+    acc = (acc.sum()/ tgt.size(0)/ tgt.size(1)).item()
+
+    loss.backward()
+    optimizer.step()
+
+    return loss_, acc 
 ```
+
+注意这个是随机的，所以每一次的结果都不一样
+
 ```python
-# 将Unicode字符串转换为纯ASCII, 感谢https://stackoverflow.com/a/518232/2809427
-def unicodeToAscii(s):
-    return ''.join(
-        c for c in unicodedata.normalize('NFD', s)
-        if unicodedata.category(c) != 'Mn'
-    )
+# 检查train_step()的效果
+criterion = nn.CrossEntropyLoss()
+batch_src, batch_tgt = next(iter(train_dataloader))
+train_step(batch_src, batch_tgt, criterion)
 
-# 小写，修剪和删除非字母字符
-
-
-def normalizeString(s):
-    # 转码之后变小写切除两边空白
-    s = unicodeToAscii(s.lower().strip())
-    # 匹配.!?，并在前面加空格
-    s = re.sub(r"([.!?])",r" \1",s)
-    # 将非字母和.!?的全部变为空白
-    s = re.sub(r"[^a-zA-Z.!?]+",r" ",s)
-    return s
-
-def readLangs(lang1,lang2,reverse=False):
-    print("Reading lines...")
-
-    # 读取文件并分为几行
-    # 每一对句子最后会有个换行符\n
-    # lines ==> ['Go.\tVa !', 'Run!\tCours\u202f!'...]
-    lines = open("填自己的文件路径",encoding = "utf-8").read().strip().split("\n")
-
-    # 将每一行拆分成对并进行标准化
-    # pairs ==> [["go .","va !"],...]
-    pairs = [[normalizeString(s) for s in l.split("\t")] for l in lines]
-
-    # 反向对，实例Lang
-    # 源文件是先英语后法语
-    # 换完之后就是先法后英
-    if reverse:
-        pairs = [list(reversed(p)) for p in pairs]
-        input_lang = Lang(lang2)
-        output_lang = Lang(lang1)
-    else:
-        input_lang = Lang(lang1)
-        output_lang = Lang(lang2)
-    
-    return input_lang,output_lang,pairs
+# (8.144109725952148, 0.0)
 ```
+
 ```python
-MAX_LENGTH = 10
-eng_prefixes = (
-    "i am ", "i m ",
-    "he is", "he s ",
-    "she is", "she s ",
-    "you are", "you re ",
-    "we are", "we re ",
-    "they are", "they re "
-)
+def validation_step(inp, tgt, criterion):
+    tgt_input = tgt[:,:-1]
+    tgt_real = tgt[:,1:]
 
+    inp = inp.to(device)
+    tgt_input = tgt_input.to(device)
+    tgt_real = tgt_real.to(device)
 
-def filterPair(p):
-    return len(p[0].split(' ')) < MAX_LENGTH and \
-        len(p[1].split(' ')) < MAX_LENGTH and \
-        p[1].startswith(eng_prefixes)
+    model.eval()
 
+    with torch.no_grad():
+        pred, _, _, _ = model(inp, tgt_input)
+        val_loss = criterion(pred.view(-1, pred.size(-1)), tgt_real.contiguous().view(-1))
+        val_loss = val_loss.sum().item()
 
-# 留下符合条件的
-def filterPairs(pairs):
-    return [pair for pair in pairs if filterPair(pair)]
-
-def prepareData(lang1, lang2, reverse=False):
-    input_lang, output_lang, pairs = readLangs(lang1, lang2, reverse)
-    print("Read %s sentence pairs" % len(pairs))
-    pairs = filterPairs(pairs)
-    print("Trimmed to %s sentence pairs" % len(pairs))
-    print("Counting words...")
-    for pair in pairs:
-        input_lang.addSentence(pair[0])
-        output_lang.addSentence(pair[1])
-    print("Counted words:")
-    print(input_lang.name, input_lang.n_words)
-    print(output_lang.name, output_lang.n_words)
-    return input_lang, output_lang, pairs
-
-input_lang, output_lang, pairs = prepareData('eng', 'fra', True)
-# 随机输出pair对
-print(random.choice(pairs))
-print(input_lang.n_words)
-print(output_lang.n_words)
-```
-```python
-def indexesFromSentence(lang, sentence):
-    return [lang.word2index[word] for word in sentence.split(' ')]
-
-def pad(X):
-    if len(X) < MAX_LENGTH:
-        X = X + [0] * (MAX_LENGTH - len(X))
-    return X
-
-def tensorFromSentence(lang, sentence):
-    indexes = indexesFromSentence(lang, sentence)
-    indexes.append(EOS_token)
-    indexes = pad(indexes)
-    return torch.tensor(indexes, dtype=torch.long).view(-1, 1)
-
-def tensorsFromPair(pair):
-    input_tensor = tensorFromSentence(input_lang, pair[0]).transpose(0,1)
-    target_tensor = tensorFromSentence(output_lang, pair[1]).transpose(0,1)
-    return (input_tensor, target_tensor)
+        pred_ = pred.argmax(dim=-1)
+        val_acc = pred_.eq(tgt_real)
+        val_acc = (val_acc.sum()/ tgt.size(0)/ tgt.size(1)).item()
+    return val_loss, val_acc
 ```
 
 ***
-### <div id='train'>训练函数</div>
-
-train函数指的是一个句子对的训练函数，这里将loss变为20个epoch相加而来然后总的传播一次参数，相对来说更省时
+### <div id='train'>模型训练</div>
 
 ```python
-def train(enc_inputs,dec_inputs,tgt_inputs ,criterion):
-  loss = 0
-  for epoch in range(20):
-      optimizer.zero_grad()
-      outputs, enc_self_attns, dec_self_attns, dec_enc_attns = model(enc_inputs, dec_inputs)
-      loss += criterion(outputs,tgt_inputs.contiguous().view(-1))
-  loss.backward()
-  optimizer.step()
-  return loss.item() / tgt_inputs.shape[1]
+EPOCHS = 20
+
+print_trainstep_every = 50
+
+lr_scheduler = CustomSchedule(optimizer, warm_steps=4000)
+
+# 存储数据
+df_history = pd.DataFrame(columns=["epoch","loss","acc","val_loss","val_acc"])
+
+# 打印时间
+def printbar():
+    nowtime = datetime.datetime.now().strftime('%Y-%m_%d %H:%M:%S')
+    print('\n' + "=========="*4 + '%s'%nowtime + "=========="*4)
 ```
-注意Decoder的输入是`<SOS>`，每次单独句子对的训练都会先将dec_inputs置为`<SOS>`
 
 ```python
-if __name__ == "__main__":
-  src_vocab = input_lang.word2index
-  src_vocab_size = input_lang.n_words
+save_dir = "train"
+def train_model(epochs, train_dataloader, val_dataloader, print_every):
+    starttime = time.time()
+    print('\n' + "=========="*4 + "start training" + "=========="*4)
+    best_acc = 0.81
+    for epoch in range(1, epochs + 1):
 
-  tgt_vocab = output_lang.word2index
-  tgt_vocab_size = output_lang.n_words
-   
-  d_model = 512  # Embedding Size
-  d_ff = 2048  # FeedForward dimension
-  d_k = d_v = 64  # dimension of K(=Q), V
-  n_layers = 6  # number of Encoder of Decoder Layer
-  n_heads = 8  # number of heads in Multi-Head Attention
-  
-  model = Transformer()
-  criterion = nn.CrossEntropyLoss()
-  optimizer = optim.Adam(model.parameters(), lr=0.001)
+        loss_sum = 0
+        acc_sum = 0
 
-  n_iters = 75000
+        for step, (inp, tgt) in enumerate(train_dataloader, start=1):
+            loss, acc = train_step(inp, tgt, criterion)
+            loss_sum += loss
+            acc_sum += acc 
 
-  dec_inputs = torch.tensor([pad([0])])
-  training_pairs = [tensorsFromPair(random.choice(pairs)) for i in range(n_iters)]
-  for iter in range(1,n_iters + 1):
-
-      training_pair = training_pairs[iter-1]
-      input_tensor = training_pair[0]
-      target_tensor = training_pair[1]
-      loss = train(input_tensor, dec_inputs, target_tensor, criterion)
-
-      if iter % 10 == 0:
-          print(loss)
-# 保留网络参数
-torch.save(model.state_dict(),"transformer_parameters") 
+            # 打印batch级别信息
+            if step % print_every == 0:
+                print('*' * 8, f'[step = {step}] loss: {loss_sum / step:.3f}, {"acc"}: {acc_sum / step:.3f}')
+            
+            # 更新学习率
+            lr_scheduler.step()
+        # 一个epoch结束，做一次验证
+        val_loss_sum = 0
+        val_acc_sum = 0
+        for val_step, (inp, tgt) in enumerate(val_dataloader, start=1):
+            val_loss, val_acc = validation_step(inp, tgt, criterion)
+            val_loss_sum += val_loss
+            val_acc_sum += val_acc 
+        
+        # 记录收集一个epoch的信息
+        # 与列对应
+        # epoch从0开始
+        record = (epoch, loss_sum/step, acc_sum/step, val_loss_sum/val_step, val_acc_sum/val_step) 
+        df_history.loc[epoch-1] = record
+        # 打印epoch级别的日志
+        print('EPOCH = {} loss: {:.3f}, {}: {:.3f}, val_loss: {:.3f}, val_{}: {:.3f}'.format(
+        record[0], record[1], "acc", record[2], record[3], "acc", record[4]))
+        printbar()
+        current_acc_avg = val_acc_sum / val_step 
+        # 若大于基础正确率，则保存
+        if current_acc_avg > best_acc:
+            best_acc = current_acc_avg
+            checkpoint = save_dir + '{:03d}_{:.2f}_ckpt.tar'.format(epoch, current_acc_avg)
+            
+            # 若只是普通保存，则只会保留基础网络结构而非具体参数
+            model_sd = copy.deepcopy(model.state_dict())
+            torch.save({
+                'loss': loss_sum / step,
+                'epoch': epoch,
+                'net': model_sd,
+                'opt': optimizer.state_dict(),
+                'lr_scheduler': lr_scheduler.state_dict()
+            }, checkpoint)
+        print('finishing training...')
+    
+    # 时间记录
+    endtime = time.time()
+    time_elapsed = endtime - starttime
+    print('Training complete in {:.0f}m {:.0f}s'.format(time_elapsed // 60, time_elapsed % 60))
+    return df_history
 ```
+
+```python
+# 开始训练
+df_history = train_model(EPOCHS, train_dataloader, val_dataloader, print_trainstep_every)
+print(df_history)
+```
+
+截取部分，如下：
+
+![](https://github.com/sherlcok314159/ML/blob/main/nlp/Images/show.png)
+
+
+接下来把训练结果可视化：
+
+```python
+def plot_metric(df_history, metric):
+    plt.figure()
+
+    train_metrics = df_history[metric]
+    val_metrics = df_history["val_" + metric]
+
+    # epochs变为列表，才能画
+    epochs = range(1, len(train_metrics) + 1)
+
+    plt.plot(epochs, train_metrics, "bo--")
+    plt.plot(epochs, val_metrics, "ro--")
+
+    plt.title("Training and validation " + metric)
+    plt.xlabel("Epochs")
+    plt.ylabel(metric)
+    plt.legend(["train_" + metric,"val_" + metric])
+    plt.savefig(metric + " conv" + ".png")
+    plt.show()
+
+plot_metric(df_history, "loss")
+plot_metric(df_history, "acc")
+```
+
+![](https://github.com/sherlcok314159/ML/blob/main/nlp/Images/1.png)
+
+![](https://github.com/sherlcok314159/ML/blob/main/nlp/Images/2.png)
+
+***
+### <div id='eval'>评估</div>
+
+加载模型
+
+```python
+# 具体看保存哪个，需要自行修改
+checkpoint = "/content/train015_0.82_ckpt.tar"
+print("checkpoint:",checkpoint)
+
+ckpt = torch.load(checkpoint)
+
+transformer_sd = ckpt["net"]
+
+reload_model = Transformer().to(device)
+reload_model.load_state_dict(transformer_sd)
+```
+
+```python
+def tokenizer_encode(tokenize, sentence, vocab):
+    sentence = normalizeString(sentence)
+
+    sentence = tokenize(sentence)
+    sentence = ["<start>"] + sentence + ["<end>"]
+    sentence_ids = [vocab.stoi[token] for token in sentence]
+    return sentence_ids
+
+def tokenizer_decode(sentence_ids, vocab):
+    sentence = [vocab.itos[id] for id in sentence_ids if id < len(vocab)]
+    return " ".join(sentence)
+```
+
+```python
+# 只有一个句子，不需要加pad
+s = 'je pars en vacances pour quelques jours .'
+print(tokenizer_encode(tokenizer, s, SRC_TEXT.vocab))
+
+s_ids = [3, 5, 251, 17, 365, 35, 492, 390, 4, 2]
+print(tokenizer_decode(s_ids, SRC_TEXT.vocab))
+print(tokenizer_decode(s_ids, TGT_TEXT.vocab))
+
+# [3, 5, 251, 17, 365, 35, 492, 390, 4, 2]
+# <start> je pars en vacances pour quelques jours . <end>
+# <start> i tennis very forgetful me helping bed . <end>
+```
+评估函数
+
+```python
+def evaluate(inp_sentence):
+    reload_model.eval()
+    
+    inp_sentence_ids = tokenizer_encode(tokenizer, inp_sentence, SRC_TEXT.vocab)
+    # =>[b=1, inp_seq_len=10]
+    encoder_input = torch.tensor(inp_sentence_ids).unsqueeze(dim=0)
+
+    # 预估时一句对一句，decode_input为<start>
+    decoder_input = [TGT_TEXT.vocab.stoi["<start>"]]
+    # =>[b=1, inp_seq_len=1]    
+    decoder_input = torch.tensor(decoder_input).unsqueeze(0)
+
+    encoder_input = encoder_input.to(device)
+    decoder_input = decoder_input.to(device)
+
+    with torch.no_grad():
+        for i in range(MAX_LENGTH + 2):
+            # pred ==> [b=1, 1(len_q), tgt_vocab_size]
+            pred, enc_self_attns, dec_self_attns, dec_enc_attns = reload_model(encoder_input, decoder_input)
+            # 最后一个词
+            # pdb.set_trace()
+            pred = pred[:,-1:,:]
+            # pred_ids ==> [1,1]
+            pred_ids = torch.argmax(pred, dim=-1)
+
+            if pred_ids.squeeze().item() == TGT_TEXT.vocab.stoi["<end>"]:
+              return decoder_input.squeeze(dim=0), dec_enc_attns
+            
+            # [b=1, tgt_seq_len=1] ==> [b=1, tgt_seq_len=2]
+            # deocder_input不断变长
+            decoder_input = torch.cat([decoder_input, pred_ids],dim=-1)
+    return decoder_input.squeeze(dim=0), dec_enc_attns
+```
+
+```python
+s = 'je pars en vacances pour quelques jours .'
+s_targ = 'i m taking a couple of days off .'
+pred_result, attention_weights = evaluate(s)
+pred_sentence = tokenizer_decode(pred_result, TGT_TEXT.vocab)
+print('real target:', s_targ)
+print('pred_sentence:', pred_sentence)
+
+# real target: i m taking a couple of days off .
+# pred_sentence: <start> i m taking a couple of days off .
+```
+
+```python
+# 批量翻译
+sentence_pairs = [
+    ['je pars en vacances pour quelques jours .', 'i m taking a couple of days off .'],
+    ['je ne me panique pas .', 'i m not panicking .'],
+    ['je recherche un assistant .', 'i am looking for an assistant .'],
+    ['je suis loin de chez moi .', 'i m a long way from home .'],
+    ['vous etes en retard .', 'you re very late .'],
+    ['j ai soif .', 'i am thirsty .'],
+    ['je suis fou de vous .', 'i m crazy about you .'],
+    ['vous etes vilain .', 'you are naughty .'],
+    ['il est vieux et laid .', 'he s old and ugly .'],
+    ['je suis terrifiee .', 'i m terrified .'],
+]
+
+
+def batch_translate(sentence_pairs):
+    for pair in sentence_pairs:
+        print('input:', pair[0])
+        print('target:', pair[1])
+        pred_result, _ = evaluate(pair[0])
+        pred_sentence = tokenizer_decode(pred_result, TGT_TEXT.vocab)
+        print('pred:', pred_sentence)
+        print('')
+
+batch_translate(sentence_pairs)
+```
+截取部分
+
+![](https://github.com/sherlcok314159/ML/blob/main/nlp/Images/2.png)
+
+最终可视化注意力权重
+
+```python
+# 可视化attenton 这里我们只展示...block2的attention，即[b, num_heads, tgt_seq_len, inp_seq_len]
+# attention: {'decoder_layer{i + 1}_block1': [b, num_heads, tgt_seq_len, tgt_seq_len],
+#             'decoder_layer{i + 1}_block2': [b, num_heads, tgt_seq_len, inp_seq_len], ...}
+# sentence: [seq_len]，例如：'je recherche un assistant .'
+# pred_result: [seq_len]，例如：'<start> i m looking for an assistant .'
+# layer: 表示模型decoder的N层decoder-layer的第几层的attention，形如'decoder_layer{i}_block1'或'decoder_layer{i}_block2'
+def plot_attention_weights(attention, sentence, pred_sentence, layer):
+    sentence = sentence.split()
+    pred_sentence = pred_sentence.split()
+    # pdb.set_trace()
+    fig = plt.figure(figsize=(16, 8))
+
+    # block2 attention[layer] => [b=1, num_heads, targ_seq_len, inp_seq_len]
+    # attention为列表，长度为层数6
+    attention = torch.squeeze(attention[layer], dim=0) # => [num_heads, targ_seq_len, inp_seq_len]
+
+    for head in range(attention.shape[0]):
+        # 111是单个整数编码的子绘图网格参数。例如，“111”表示“1×1网格，第一子图”，“234”表示“2×3网格，第四子图”
+
+        ax = fig.add_subplot(2, 4, head + 1)  
+        cax = ax.matshow(attention[head].cpu(), cmap='viridis')  # 绘制网格热图，注意力权重
+        # fig.colorbar(cax)#给子图添加colorbar（颜色条或渐变色条）
+
+        fontdict = {'fontsize': 10}
+
+        # 设置轴刻度线
+        ax.set_xticks(range(len(sentence)+2))  # 算上start和end
+        ax.set_yticks(range(len(pred_sentence)))
+
+        ax.set_ylim(len(pred_sentence) - 1.5, -0.5)  # 设定y座标轴的范围
+
+        # 设置轴
+        ax.set_xticklabels(['<start>']+sentence+['<end>'], fontdict=fontdict, rotation=90)  # 顺时间旋转90度
+        ax.set_yticklabels(pred_sentence, fontdict=fontdict)
+
+        ax.set_xlabel('Head {}'.format(head + 1))
+    plt.tight_layout()
+    plt.show()
+
+
+def translate(sentence_pair, plot=None):
+    print('input:', sentence_pair[0])
+    print('target:', sentence_pair[1])
+    pred_result, attention_weights = evaluate(sentence_pair[0])
+    # print('attention_weights:', attention_weights[0])
+    # pdb.set_trace()
+    pred_sentence = tokenizer_decode(pred_result, TGT_TEXT.vocab)
+    print('pred:', pred_sentence)
+    print('')
+
+    if plot:
+        plot_attention_weights(attention_weights, sentence_pair[0], pred_sentence, plot)
+
+
+translate(sentence_pairs[0], plot=1)
+translate(sentence_pairs[2], plot=2)
+```
+
+![](https://github.com/sherlcok314159/ML/blob/main/nlp/Images/attn.png)
 
 ***
 ### <div id='references'>参考文献</div>
