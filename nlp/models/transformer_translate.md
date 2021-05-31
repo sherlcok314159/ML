@@ -1257,7 +1257,7 @@ class PoswiseFeedForwardNet(nn.Module):
 
 - epoch越多越好？
 
-我设了两组对照，分别为20和40，两组的原因是40中包括了其他大于20的
+我设了两组对照，分别为20和40，两组的原因是40中包括了其他大于20的，其实到20差不多已经饱和了，为了节省时间，还是设置20来的划算
 
 
 ![](https://github.com/sherlcok314159/ML/blob/main/nlp/Images/20.png)
