@@ -983,7 +983,7 @@ print(df_history)
 
 截取部分，如下：
 
-![](https://github.com/sherlcok314159/ML/blob/main/nlp/Images/show.png)
+![](https://github.com/sherlcok314159/ML/blob/main/nlp/Images/res.png)
 
 
 接下来把训练结果可视化：
