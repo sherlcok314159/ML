@@ -1197,7 +1197,21 @@ translate(sentence_pairs[0], plot=1)
 translate(sentence_pairs[2], plot=2)
 ```
 
+```python
+# input: je pars en vacances pour quelques jours .
+# target: i m taking a couple of days off .
+# pred: <start> i m taking a couple of days off .
+```
 ![](https://github.com/sherlcok314159/ML/blob/main/nlp/Images/attn.png)
+
+```python
+# input: je recherche un assistant .
+# target: i am looking for an assistant .
+# pred: <start> i am looking for an assistant .
+```
+
+![](https://github.com/sherlcok314159/ML/blob/main/nlp/Images/attn_.png)
+
 
 ***
 ### <div id='references'>参考文献</div>
