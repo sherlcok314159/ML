@@ -10,6 +10,10 @@
 - [train和validation](#mix)
 - [模型训练](#train)
 - [评估](#eval)
+- [讨论](#discuss)
+    - [卷积代替全连接？](#conv)
+    - [Bert作为Encoder？](#bert)
+    - [注意力头剪枝](#prune)
 - [参考文献](#references)
 
 源码在[colab](https://colab.research.google.com/drive/1CILp7vwm8bZy6dOnRuwPeujP3-Mdm67z?usp=sharing)上，数据集若要自己下载[data](../RNN/eng-fra.txt)
@@ -1211,6 +1215,12 @@ translate(sentence_pairs[2], plot=2)
 ```
 
 ![](https://github.com/sherlcok314159/ML/blob/main/nlp/Images/attn_.png)
+
+***
+### <div id='discuss'>讨论</div>
+
+接下来列举了一些有趣的讨论：
+
 
 
 ***
