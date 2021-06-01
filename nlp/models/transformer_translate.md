@@ -1277,11 +1277,13 @@ class PoswiseFeedForwardNet(nn.Module):
 
 
 ![](https://github.com/sherlcok314159/ML/blob/main/nlp/Images/20.png)
-
+ 
 ![](https://github.com/sherlcok314159/ML/blob/main/nlp/Images/40.png)
 
 ***
 ### <div id='references'>参考文献</div>
+
+https://arxiv.org/abs/1409.0473
 
 https://arxiv.org/pdf/2002.06823.pdf
 
