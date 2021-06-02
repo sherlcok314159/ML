@@ -131,7 +131,7 @@ class Net(nn.Module):
       return x
 ```
 
-PyTorch中输入必须为(1,1,28,28)，这里比tensorflow多了一个1，原因是Torch中有一个group参数，默认为1，所以可以不设置，如果为N，就会把输入分为N个小部分，每一个部分进行卷积，最后再将结果拼接起来
+PyTorch中输入必须为(1,1,28,28)，这里比tensorflow多了一个1，这个1指的就是batch_size，这里`batch_first`为`True`，即若值为N，就会把输入分为N个小部分，每一个部分进行卷积，最后再将结果拼接起来
 
 
 搭建好网络之后，建议先检验一下网络和优化器参数
