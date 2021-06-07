@@ -228,14 +228,20 @@ data_test = datasets.MNIST(root="填自己的主路径",
 ```
 
 ```python
+BATCH_SIZE = 64 
+EPOCHS = 20 # 总共训练批次
+DEVICE = torch.device("cuda" if torch.cuda.is_available() else "cpu") 
+```
+
+```python
 # 加载数据集
 # Load Data
 train_loader = torch.utils.data.DataLoader(dataset=data_train,
-                                                batch_size=64,
+                                                batch_size=BATCH_SIZE,
                                                 shuffle=True)
 
 test_loader = torch.utils.data.DataLoader(dataset=data_test,
-                                               batch_size=64,
+                                               batch_size=BATCH_SIZE,
                                                shuffle=True)
 ```
 
@@ -293,11 +299,6 @@ def visualize(lis,epoch,*label):
 
 最后进行训练和测试
 
-```python
-BATCH_SIZE = 512 # 大概需要2G的显存
-EPOCHS = 20 # 总共训练批次
-DEVICE = torch.device("cuda" if torch.cuda.is_available() else "cpu") 
-```
 
 ```python
 train_ = []
