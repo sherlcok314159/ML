@@ -6,8 +6,6 @@
 - [处理文件](#file)
 
 
-
-
 **<div id='colab'>Colab——深度学习</div>**
 
 - 切换tensorflow版本：
@@ -49,6 +47,32 @@ print(tensorflow.__version__) #验证版本
 %debug print(i)
 ```
 ![](https://github.com/sherlcok314159/ML/blob/main/Images/debug.png)
+
+- 定位到自己云盘
+
+```python
+from google.colab import drive
+drive.mount("/content/drive")
+```
+
+- 把云盘某文件夹当做工作区
+
+```bash
+!cd /content/drive/MyDrive/R-transformer
+```
+
+```python
+import os
+path = "/content/drive/MyDrive/R-transformer"
+os.chdir(path)
+os.listdir(path)
+```
+
+- 终端运行Python文件
+
+```bash
+python file.py
+```
 
 ***
 
