@@ -74,6 +74,10 @@ os.listdir(path)
 python file.py
 ```
 
+- bash报错
+
+bash不能留空
+
 ***
 
 **<div id='file'>文件处理</div>**
