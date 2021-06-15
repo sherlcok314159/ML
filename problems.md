@@ -80,6 +80,11 @@ bash不能留空
 
 ***
 
+- 检测 GPU运行时间和内存
+```
+%load_ext scalene
+```
+
 **<div id='file'>文件处理</div>**
 
 - json文件结构不清楚，可以在vscode中格式化文档，用json美化拓展
