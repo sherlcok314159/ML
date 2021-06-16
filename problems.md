@@ -89,6 +89,11 @@ bash xxx.sh
 ```bash
 pip3 install --user 包名
 ```
+
+- bash运行报错，默认Linux执行bash是python2
+```
+python3 main.py
+```
 ***
 
 - 检测 GPU运行时间和内存
