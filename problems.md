@@ -94,6 +94,12 @@ pip3 install --user 包名
 ```
 python3 main.py
 ```
+
+- pip批量安装
+
+```bash
+pip3 install --user -r requirements.txt
+```
 ***
 
 - 检测 GPU运行时间和内存
