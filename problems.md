@@ -78,6 +78,17 @@ python file.py
 
 bash不能留空
 
+- 终端运行bash文件
+
+```bash
+bash xxx.sh
+```
+
+- "Consider using the `--user` option or check the permissions."
+
+```bash
+pip3 install --user 包名
+```
 ***
 
 - 检测 GPU运行时间和内存
