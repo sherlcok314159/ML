@@ -100,7 +100,20 @@ python3 main.py
 ```bash
 pip3 install --user -r requirements.txt
 ```
+
+- pip全局设定清华源
+
+```bash
+pip config set global.index-url https://pypi.tuna.tsinghua.edu.cn/simple
+```
+
+临时使用：
+```bash
+pip install -i https://pypi.tuna.tsinghua.edu.cn/simple pip -U
+```
 ***
+
+
 
 - 检测 GPU运行时间和内存
 ```
