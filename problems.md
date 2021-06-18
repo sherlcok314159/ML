@@ -123,3 +123,8 @@ pip install -i https://pypi.tuna.tsinghua.edu.cn/simple pip -U
 **<div id='file'>文件处理</div>**
 
 - json文件结构不清楚，可以在vscode中格式化文档，用json美化拓展
+
+- Ubuntu 直接解压zip文件会出现中文乱码现象，用下列命令：
+```bash
+unzip -O CP936 xxx.zip
+```
