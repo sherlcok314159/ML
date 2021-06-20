@@ -128,3 +128,13 @@ pip install -i https://pypi.tuna.tsinghua.edu.cn/simple pip -U
 ```bash
 unzip -O CP936 xxx.zip
 ```
+
+- 生成该环境所有包
+
+```bash
+pip freeze > requirements.txt
+```
+
+- 中文乱码问题
+
+试试转换编码（UTF-8/GB-18030/GBK）
