@@ -176,5 +176,19 @@ class MyDataset(Dataset):
 ***
 ### <div id='dataloader'>DataLoader</div>
 
+```python
+from torch.utils.data import DataLoader
+from tqdm import tqdm
+
+train_set = MyDataset(your_file)
+train_dataloader = DataLoader(train_set, batch_size=64, shuffle=True)
+
+# 方便计时
+for batch in tqdm(train_dataloader, desc="Training"):
+    model.train()
+    guid, text_a, text_b, label = batch[0], batch[1], batch[2], batch[3]
+    # 后续操作
+
+```
 
 
