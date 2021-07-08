@@ -1,6 +1,6 @@
 实战中数据往往不会像教程中的那样已经处理好，直接套模型就好，其实往往在数据的处理以及加载上花较多的时间，本文介绍如何预处理文本数据。
 
-目录
+**目录**
 
 - [读取数据](#load)
 - [去除\n, \t, \r](#clean)
@@ -14,7 +14,7 @@
 
 ![](https://github.com/sherlcok314159/ML/blob/main/Images/example.png)
 
-可以读取csv的方法大致分为`open()`和`pandas.read_csv()`两种，下面介绍两种方法的优缺点：
+可以读取csv的方法大致分为`open()`和`pandas.read_csv()`两种，下面介绍两种方法的优点：
 
 一般用`open`会与`csv.reader()`组合起来，每一行对应一个小列表，最终用大列表储存，好处是方便遍历
 
@@ -34,11 +34,43 @@ for line in read_csv(your_file):
 body
 ```
 
+第二种是通过pandas进行读取，读取后是DataFrame对象
 
+```python
+import pandas as pd
+train = pd.read_csv(your_file, sep="\t", encoding="utf-8")
 
-with open(your_file, "r", encoding="utf-8") as f:
-    for line in f:
-        print(line)
+print(type(train))
+<class 'pandas.core.frame.DataFrame'>
+print(train.head())
+# 打印文件前几行
+print(train.describe())
+# 对各列数据进行统计
+```
+
+![](https://github.com/sherlcok314159/ML/blob/main/Images/show.png)
+
+若想访问某一列的值，索引就是列名：
+
+```python
+print(train["doctype"])
+```
+
+而且这个可以直接用来matplotlib画图，如：
+
+```python
+import matplotlib.pyplot as plt
+plt.hist(train["doctype"])
+plt.show()
+```
+
+同时，你还可以对于特定列的特定值进行过滤与替换
+
+```python
+# 定义新的一列new，为doctype列每一个值加1得到
+train["new"] = train["doctype"].apply(lambda x : x+ 1)
+# 选取doctype等于0的
+train.loc[train["doctype"] == 0]
 ```
 
 ***
