@@ -4,7 +4,8 @@
 
 - [读取数据](#load)
 - [清洗数据](#clean)
-- []
+- [Dataset对象](#dataset)
+- [DataLoader](#dataloader)
 
 ### <div id='load'>读取数据</div>
 
@@ -54,6 +55,12 @@ print(train.describe())
 
 ```python
 print(train["doctype"])
+```
+
+读取某一列特定位置的值，`.values`是全部的值
+
+```python
+train["doctype"].values[2]
 ```
 
 而且这个可以直接用来matplotlib画图，如：
@@ -137,6 +144,37 @@ print(string)
 
 "今天学文本处理很开心 明天要去学校开会 回家得好好学习"
 ```
-
-
 ***
+### <div id='dataset'>Dataset对象</div>
+
+假如一开始的csv用来做多文本分类，`doctype`为标签，需要将`title`和`body`拼接起来作为`text_a`，`text_b`为`None`。一般`__init__`是将文件读取进来，也可以加点预处理步骤。`__len__`就是单纯返回数据集长度。`__getitem`有一个参数`idx`代表每次的索引，这个函数的作用是每次迭代时返回需要的信息。
+
+```python
+from torch.utils.data import Dataset
+import pandas as pd
+import csv
+
+def read_csv(your_file):
+    with open(your_file, "r", encoding="utf-8") as f:
+        return list(csv.reader(f, delimiter="\t"))
+
+# 自定义自己的数据集
+class MyDataset(Dataset):
+    def __init__(self, path):
+        self.file = read_csv(path)
+
+    def __len__(self):
+        return len(self.file)
+    
+    def __getitem__(self, idx):
+        guid = self.file[idx][0]
+        text_a = self.file[idx][1] + self.file[idx][2]
+        text_b = None
+        label = self.file[idx][-1]
+        return guid, text_a, text_b, label
+```
+***
+### <div id='dataloader'>DataLoader</div>
+
+
+
