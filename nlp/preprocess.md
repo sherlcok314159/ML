@@ -16,14 +16,30 @@
 
 可以读取csv的方法大致分为`open()`和`pandas.read_csv()`两种，下面介绍两种方法的优缺点：
 
-
+一般用`open`会与`csv.reader()`组合起来，每一行对应一个小列表，最终用大列表储存，好处是方便遍历
 
 ```python
+def read_csv(your_file):
+    with open(your_file, "r", encoding="utf-8") as f:
+        return list(csv.reader(f, delimiter="\t"))
+
+Example:
+
+for line in read_csv(your_file):
+    print(line)
+    print(line[2])
+    break
+
+['id', 'title', 'body', 'category', 'doctype']
+body
+```
+
+
+
 with open(your_file, "r", encoding="utf-8") as f:
     for line in f:
         print(line)
 ```
-
 
 ***
 ### <div id='clean'>去除\n, \t, \r</div>
