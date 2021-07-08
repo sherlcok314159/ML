@@ -176,6 +176,8 @@ class MyDataset(Dataset):
 ***
 ### <div id='dataloader'>DataLoader</div>
 
+DataLoader的作用是能够迭代地读取上面我们自定义的数据集然后用以训练和评估。
+
 ```python
 from torch.utils.data import DataLoader
 from tqdm import tqdm
