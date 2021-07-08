@@ -6,6 +6,7 @@
 - [线上课程](#courses)
 - [深度学习](#deep)
 - [Transformer时代](#transformer)
+- [进阶篇](#further)
 - [必备技能](#skills)
 - [问题库](#problems)
 ****
@@ -33,6 +34,7 @@
     - [LSTM之文本生成](NN/RNN/LSTM/文本生成.py)
     - [Seq2Seq翻译模型搭建](NN/RNN/seq2seq.md)
 - [常见优化技巧](NN/problems.md)
+- [Numpy](data_process/numpy.md)
 
 ***
 ### <div id='transformer'>Transformer时代</div>
@@ -52,11 +54,18 @@
 - Bert实战项目
      - [中文情感分类](nlp/practice/sentiment.md)
 
+***
+### <div id='further'>进阶篇</div>
+
+- [数据预处理](nlp/preprocess.md)
+- [加载数据](nlp/load_data.md)
+
+***
 ### <div id='skills'>必备技能</div>
 
-- [阅读源码](nlp/source_code.md)
-- [迅速上手项目](nlp/fast.md)
-- [Numpy](data_process/numpy.md)
+
+- [上手项目&源码阅读](nlp/fast.md)
+
 
 ### <div id='problems'>问题库</div>
 
