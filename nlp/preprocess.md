@@ -2,13 +2,33 @@
 
 目录
 
+- [读取数据](#load)
 - [去除\n, \t, \r](#clean)
 - []
 
+### <div id='load'>读取数据</div>
 
+- 读取csv
+
+首先，选择的csv文件视图如下：
+
+![](https://github.com/sherlcok314159/ML/blob/main/Images/example.png)
+
+可以读取csv的方法大致分为`open()`和`pandas.read_csv()`两种，下面介绍两种方法的优缺点：
+
+
+
+```python
+with open(your_file, "r", encoding="utf-8") as f:
+    for line in f:
+        print(line)
+```
+
+
+***
 ### <div id='clean'>去除\n, \t, \r</div>
 
-原始的文本控制符：（`"\n"`），制表符（`\t`）和回车（`\r`）以及一些非法字符会影响模型对数据的读入，因而需要去除。
+原始的文本控制符：（`\n`），制表符（`\t`）和回车（`\r`）以及一些非法字符会影响模型对数据的读入，因而需要去除。
 
 
 ```python
