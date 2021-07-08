@@ -8,9 +8,9 @@
 
 ### <div id='load'>读取数据</div>
 
-- 读取csv
+- 读取csv/tsv
 
-首先，选择的csv文件视图如下：
+首先，选择的csv文件视图如下，以`\t`作为分隔符：
 
 ![](https://github.com/sherlcok314159/ML/blob/main/Images/example.png)
 
@@ -72,6 +72,15 @@ train["new"] = train["doctype"].apply(lambda x : x+ 1)
 # 选取doctype等于0的
 train.loc[train["doctype"] == 0]
 ```
+
+- 读取json文件
+
+这里介绍两种json文件的读取
+
+第一种为每一行为一个大字典，每一个字典的组成如下：
+
+`{"id":xx, "title":xx, "body":xx, "category":xx, "doctype":xx}`
+
 
 ***
 ### <div id='clean'>去除\n, \t, \r</div>
