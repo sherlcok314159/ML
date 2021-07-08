@@ -113,8 +113,6 @@ pip install -i https://pypi.tuna.tsinghua.edu.cn/simple pip -U
 ```
 ***
 
-
-
 - 检测 GPU运行时间和内存
 ```
 %load_ext scalene
@@ -138,3 +136,7 @@ pip freeze > requirements.txt
 - 中文乱码问题
 
 试试转换编码（UTF-8/GB-18030/GBK）
+
+- 程序报错
+
+利用try-except语句或者编辑器自带的debug工具
