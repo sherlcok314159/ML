@@ -58,7 +58,7 @@
 ### <div id='further'>进阶篇</div>
 
 - [数据预处理](nlp/preprocess.md)
-- [加载数据](nlp/load_data.md)
+
 
 ***
 ### <div id='skills'>必备技能</div>
