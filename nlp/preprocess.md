@@ -75,12 +75,17 @@ train.loc[train["doctype"] == 0]
 
 - 读取json文件
 
-这里介绍两种json文件的读取
-
-第一种为每一行为一个大字典，每一个字典的组成如下：
+这里介绍json文件的读取，每一行为一个大字典，每一个字典的组成如下：
 
 `{"id":xx, "title":xx, "body":xx, "category":xx, "doctype":xx}`
 
+```python
+from pandas import DataFrame
+def read_json(your_file):
+    data = [json.loads(line) for line in open(your_file, "r", encoding="utf-8")]
+    data_ = DataFrame(data)
+    data_.to_csv("example.csv", index=False, sep="\t")
+```
 
 ***
 ### <div id='clean'>去除\n, \t, \r</div>
