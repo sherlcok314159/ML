@@ -140,3 +140,11 @@ pip freeze > requirements.txt
 - 程序报错
 
 利用try-except语句或者编辑器自带的debug工具
+
+- Expected object of scalar type Float but got scalar type Double for argument #3 'weight' in call to _thnn_nll_loss_forward
+
+```python
+weight = np.ones(39,dtype=np.float32)
+```
+
+float32和float64（`FLOAT`）并不等价
