@@ -148,3 +148,10 @@ weight = np.ones(39,dtype=np.float32)
 ```
 
 float32和float64（`FLOAT`）并不等价
+
+
+- curl命令出现无法获取内容或需要权限
+
+```bash
+sudo curl url
+```
