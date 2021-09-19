@@ -155,3 +155,8 @@ float32和float64（`FLOAT`）并不等价
 ```bash
 sudo curl url
 ```
+
+- json.loads单引号报错，直接用
+```python
+js = json.loads(json.dumps(eval(s)))
+```
