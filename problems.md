@@ -160,3 +160,8 @@ sudo curl url
 ```python
 js = json.loads(json.dumps(eval(s)))
 ```
+
+- 引用包出错
+```python
+from pysrc.Config import *
+```
