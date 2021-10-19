@@ -165,3 +165,9 @@ js = json.loads(json.dumps(eval(s)))
 ```python
 from pysrc.Config import *
 ```
+
+- pandas读取文件
+
+```python
+data = pd.read_csv(path, header=None, sep="\t")
+```
