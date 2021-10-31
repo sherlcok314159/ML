@@ -171,3 +171,14 @@ from pysrc.Config import *
 ```python
 data = pd.read_csv(path, header=None, sep="\t")
 ```
+- pip 找不到
+
+尝试更新Pip
+```bash
+pip install --upgrade pip
+```
+
+- 一个Pip源没有的时候
+```bash
+pip install --upgrade pip -i http://pypi.douban.com/simple/ --trusted-host pypi.douban.com
+```
