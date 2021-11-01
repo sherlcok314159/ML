@@ -182,3 +182,13 @@ pip install --upgrade pip
 ```bash
 pip install --upgrade pip -i http://pypi.douban.com/simple/ --trusted-host pypi.douban.com
 ```
+- from_pretrained()报
+
+```python
+UnicodeDecodeError: 'utf-8' codec can't decode byte 0x80 in position 0: invalid start byte
+```
+不指定具体路径即可
+
+```python
+model = xxx.from_pretrained(dir)
+```
