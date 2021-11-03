@@ -192,3 +192,8 @@ UnicodeDecodeError: 'utf-8' codec can't decode byte 0x80 in position 0: invalid 
 ```python
 model = xxx.from_pretrained(dir)
 ```
+- 写入json
+```python
+with open("test.json", "w) as f:
+  json.dump("{}", f)
+```
