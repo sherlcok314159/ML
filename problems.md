@@ -197,3 +197,10 @@ model = xxx.from_pretrained(dir)
 with open("test.json", "w) as f:
   json.dump("{}", f)
 ```
+
+- latex 两列
+
+```python
+\begin{figure*}
+
+\end{figure*}
