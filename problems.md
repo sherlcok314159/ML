@@ -204,6 +204,7 @@ with open("test.json", "w) as f:
 \begin{figure*}
 
 \end{figure*}
+```
 
 - matplotlib保存图片不清晰
 ```python
