@@ -204,3 +204,9 @@ with open("test.json", "w) as f:
 \begin{figure*}
 
 \end{figure*}
+
+- matplotlib保存图片不清晰
+```python
+plt.savefig('output.png', dpi=500, bbox_inches='tight')
+plt.show() ## show()一定要在后面，否则会空白
+```
