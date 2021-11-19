@@ -211,3 +211,13 @@ with open("test.json", "w) as f:
 plt.savefig('output.png', dpi=500, bbox_inches='tight')
 plt.show() ## show()一定要在后面，否则会空白
 ```
+
+- zsh 安装后conda不能正常使用
+
+```python
+vim ~/.zshrc
+
+export PATH=/home/username/anaconda3/bin:$PATH
+
+source ~/.zshrc
+```
