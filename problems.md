@@ -246,3 +246,12 @@ source ~/.zshrc
 ```python
 \setlength{\belowcaptionskip}{0.2cm}
 ```
+
+- latex斜体公理
+```python
+\newtheorem{assump}{Assumption}
+
+\begin{assump}
+xxx
+\end{assump}
+```
