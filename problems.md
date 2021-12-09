@@ -255,3 +255,9 @@ source ~/.zshrc
 xxx
 \end{assump}
 ```
+
+- latex 共一
+
+```python
+\equalcontrib
+```
