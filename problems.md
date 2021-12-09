@@ -221,3 +221,28 @@ export PATH=/home/username/anaconda3/bin:$PATH
 
 source ~/.zshrc
 ```
+
+- latex 左引号(``)
+
+- latex 索引排序
+
+```python
+\bibliographystyle{unsrt}
+```
+- latex bib排序
+
+```python
+1. 创建.bib文件
+2. 开头：
+\usepackage{cite}
+\begin{document}
+3. 
+\bibliographystyle{unsrt/plain}
+\bibliography{UN}
+```
+
+- latex表格宽度
+
+```python
+\setlength{\belowcaptionskip}{0.2cm}
+```
