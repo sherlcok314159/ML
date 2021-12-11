@@ -133,6 +133,14 @@ unzip -O CP936 xxx.zip
 pip freeze > requirements.txt
 ```
 
+- 生成某个项目的包
+
+```
+pip install pipreqs
+cd 根目录
+pipreqs ./ --encoding=utf8 --force
+```
+
 - 中文乱码问题
 
 试试转换编码（UTF-8/GB-18030/GBK）
