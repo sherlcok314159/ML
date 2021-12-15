@@ -127,6 +127,13 @@ pip install -i https://pypi.tuna.tsinghua.edu.cn/simple pip -U
 unzip -O CP936 xxx.zip
 ```
 
+- Ubuntu解压.rar文件
+
+```
+sudo apt-get install unrar
+unrar e filename
+```
+
 - 生成该环境所有包
 
 ```bash
