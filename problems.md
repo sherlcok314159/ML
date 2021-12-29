@@ -276,3 +276,9 @@ xxx
 ```python
 \equalcontrib
 ```
+
+- word打印图片吞图
+
+```
+插入而非复制图片
+```
