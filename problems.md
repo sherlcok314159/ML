@@ -282,3 +282,9 @@ xxx
 ```
 插入而非复制图片
 ```
+
+- ubuntu查看所有已安装包
+
+```bash
+apt list --installed
+```
