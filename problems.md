@@ -305,3 +305,9 @@ export https_proxy=""
 export ftp_proxy=""
 export NO_PROXY=""
 ```
+
+- Ubuntu查看某个文件内容
+
+```
+cat file
+```
