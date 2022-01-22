@@ -288,3 +288,20 @@ xxx
 ```bash
 apt list --installed
 ```
+- ubuntu查看某个目录或包大小
+
+```
+du -sh directory/file
+```
+
+- ubuntu查看代理设置
+```
+env|grep -i proxy
+```
+若不能上网，直接将所有proxy置为零即可
+```
+export http_proxy=""
+export https_proxy=""
+export ftp_proxy=""
+export NO_PROXY=""
+```
