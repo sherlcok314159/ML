@@ -478,3 +478,5 @@ https://demo.leemeng.tw/
 http://cs231n.stanford.edu
 
 https://www.youtube.com/watch?v=FrKWiRv254g&list=PLJV_el3uVTsPy9oCRY30oBPNLCo89yu49&index=19
+
+https://cs.stanford.edu/people/karpathy/convnetjs/demo/cifar10.html
